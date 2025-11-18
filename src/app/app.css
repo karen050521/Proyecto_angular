@@ -1,0 +1,75 @@
+/* Contenido principal con margen adaptable al sidebar */
+.main-content {
+  padding: 2rem;
+  transition: margin-left 220ms ease;
+  min-height: 100vh;
+  background: var(--bg-secondary);
+  position: relative;
+  z-index: 1;
+}
+
+.main-content h1,
+.main-content .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Pantallas pequeñas (móviles < 768px): sin margen porque sidebar es overlay */
+.main-content.sidebar-mobile {
+  margin-left: 0;
+}
+
+/* Pantallas medianas y grandes (>= 768px): margen según estado del sidebar */
+@media (min-width: 768px) {
+  /* Sidebar abierto: margen completo */
+  .main-content.sidebar-open {
+    margin-left: 240px;
+  }
+
+  /* Sidebar colapsado: margen reducido */
+  .main-content.sidebar-closed {
+    margin-left: 72px;
+  }
+}
+
+/* Container con límite de ancho */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h1 {
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* Mejora para pantallas muy grandes */
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1400px;
+  }
+}
+
+/* Responsive mejorado para tablets */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .main-content {
+    padding: 1.5rem;
+  }
+  
+  h1 {
+    font-size: 1.75rem;
+  }
+}
+
+/* Responsive para móviles */
+@media (max-width: 767px) {
+  .main-content {
+    padding: 1rem;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+}

@@ -1,1 +1,117 @@
-<p>slide-bar works!</p>
+<!-- Botón hamburguesa flotante para móviles -->
+<button class="mobile-toggle-btn" 
+        *ngIf="isMobile" 
+        (click)="toggle()" 
+        [attr.aria-label]="isOpen ? 'Cerrar menú' : 'Abrir menú'" 
+        type="button">
+  <i class="bi" [class.bi-list]="!isOpen" [class.bi-x-lg]="isOpen" aria-hidden="true"></i>
+</button>
+
+<!-- Sidebar responsive con iconos Bootstrap -->
+<nav class="sidebar" 
+     [class.open]="isOpen" 
+     [class.mobile]="isMobile" 
+     [style.display]="!isMobile || isOpen ? 'flex' : 'none'"
+     role="navigation" 
+     aria-label="Menú principal">
+  <div class="sidebar-header">
+    <button class="toggle-btn" 
+            *ngIf="!isMobile"
+            (click)="toggle()" 
+            aria-label="Colapsar/expandir menú" 
+            type="button">
+      <i class="bi bi-list" aria-hidden="true"></i>
+    </button>
+    <div class="brand">
+      <i class="bi bi-bicycle"></i>
+      <span>Domicilios</span>
+    </div>
+  </div>
+
+  <ul class="menu">
+    <li>
+      <a href="#" 
+         [class.active]="activeSection === 'inicio'"
+         (click)="setActiveSection('inicio'); $event.preventDefault()">
+        <i class="bi bi-house-door"></i>
+        <span class="label">Inicio</span>
+      </a>
+    </li>
+    <li>
+      <a href="#" 
+         [class.active]="activeSection === 'dashboard'"
+         (click)="setActiveSection('dashboard'); $event.preventDefault()">
+        <i class="bi bi-graph-up"></i>
+        <span class="label">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a href="#" 
+         [class.active]="activeSection === 'restaurantes'"
+         (click)="setActiveSection('restaurantes'); $event.preventDefault()">
+        <i class="bi bi-shop"></i>
+        <span class="label">Restaurantes</span>
+      </a>
+    </li>
+    <li>
+      <a href="#" 
+         [class.active]="activeSection === 'pedidos'"
+         (click)="setActiveSection('pedidos'); $event.preventDefault()">
+        <i class="bi bi-cart"></i>
+        <span class="label">Pedidos</span>
+      </a>
+    </li>
+    <li>
+      <a href="#" 
+         [class.active]="activeSection === 'clientes'"
+         (click)="setActiveSection('clientes'); $event.preventDefault()">
+        <i class="bi bi-people"></i>
+        <span class="label">Clientes</span>
+      </a>
+    </li>
+    <li>
+      <a href="#" 
+         [class.active]="activeSection === 'conductores'"
+         (click)="setActiveSection('conductores'); $event.preventDefault()">
+        <i class="bi bi-person-badge"></i>
+        <span class="label">Conductores</span>
+      </a>
+    </li>
+    <li>
+      <a href="#" 
+         [class.active]="activeSection === 'motos'"
+         (click)="setActiveSection('motos'); $event.preventDefault()">
+        <i class="bi bi-scooter"></i>
+        <span class="label">Motos</span>
+      </a>
+    </li>
+    <li>
+      <a href="#" 
+         [class.active]="activeSection === 'configuracion'"
+         (click)="setActiveSection('configuracion'); $event.preventDefault()">
+        <i class="bi bi-gear"></i>
+        <span class="label">Configuración</span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="sidebar-footer">
+    <!-- Botón para cambiar tema -->
+    <button class="theme-toggle" 
+            (click)="themeService.toggleTheme()" 
+            [attr.aria-label]="themeService.isDark() ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+            type="button">
+      <i class="bi" [class.bi-sun-fill]="themeService.isDark()" [class.bi-moon-fill]="!themeService.isDark()"></i>
+      <span class="label">{{ themeService.isDark() ? 'Modo Claro' : 'Modo Oscuro' }}</span>
+    </button>
+    
+    <!-- Botón salir -->
+    <a href="#" (click)="$event.preventDefault()">
+      <i class="bi bi-box-arrow-right"></i>
+      <span>Salir</span>
+    </a>
+  </div>
+</nav>
+
+<!-- Overlay para móviles -->
+<div class="overlay" *ngIf="isOpen && isMobile" (click)="close()" aria-hidden="true"></div>

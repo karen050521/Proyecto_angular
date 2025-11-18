@@ -1,0 +1,334 @@
+﻿/* Variables CSS */
+:host {
+  --sidebar-width: 240px;
+  --sidebar-collapsed: 72px;
+  --sidebar-bg: var(--sidebar-bg);
+  --sidebar-text: var(--sidebar-text);
+  --accent: var(--sidebar-accent);
+  --hover-bg: var(--sidebar-hover);
+}
+
+/* Botón hamburguesa flotante para móviles - adaptado a tema */
+.mobile-toggle-btn {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1100;
+  background: var(--accent);
+  border: none;
+  color: white;
+  font-size: 1.75rem;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.mobile-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.mobile-toggle-btn:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.mobile-toggle-btn i {
+  font-size: 1.5rem;
+  color: white;
+}
+
+/* Modo claro - botón más visible */
+:host-context(html.light) .mobile-toggle-btn {
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+:host-context(html.light) .mobile-toggle-btn:hover {
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+/* Sidebar principal */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: var(--sidebar-width);
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  display: flex;
+  flex-direction: column;
+  transition: width 220ms ease, transform 220ms ease;
+  z-index: 1060;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.sidebar:not(.mobile):not(.open) {
+  width: var(--sidebar-collapsed);
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 64px;
+}
+
+.toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--sidebar-text);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background 150ms ease;
+  flex-shrink: 0;
+}
+
+.toggle-btn:hover {
+  background: var(--hover-bg);
+}
+
+.toggle-btn:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  white-space: nowrap;
+  transition: opacity 180ms ease;
+}
+
+.brand i {
+  font-size: 1.5rem;
+  color: var(--accent);
+}
+
+.sidebar:not(.mobile):not(.open) .brand span {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.menu {
+  list-style: none;
+  margin: 1rem 0;
+  padding: 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.menu li {
+  margin: 0.25rem 0.5rem;
+}
+
+.menu a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 150ms ease, transform 100ms ease, border-left 150ms ease;
+  white-space: nowrap;
+  position: relative;
+  border-left: 3px solid transparent;
+}
+
+.menu a:hover {
+  background: var(--hover-bg);
+  transform: translateX(2px);
+}
+
+.menu a:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.menu a.active {
+  background: var(--hover-bg);
+  border-left-color: var(--accent);
+  font-weight: 600;
+}
+
+.menu a.active i {
+  filter: brightness(1.2);
+}
+
+.menu a.active .label {
+  color: var(--accent);
+}
+
+.menu a i {
+  font-size: 1.2rem;
+  width: 24px;
+  text-align: center;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.menu a .label {
+  transition: opacity 180ms ease;
+}
+
+.sidebar:not(.mobile):not(.open) .menu a .label {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: none;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 150ms ease;
+  cursor: pointer;
+  font-size: 1rem;
+  text-align: left;
+  width: 100%;
+}
+
+.theme-toggle:hover {
+  background: var(--hover-bg);
+}
+
+.theme-toggle i {
+  font-size: 1.2rem;
+  color: #fbbf24;
+  width: 24px;
+  flex-shrink: 0;
+}
+
+.sidebar-footer a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 150ms ease;
+}
+
+.sidebar-footer a:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.sidebar-footer a i {
+  font-size: 1.2rem;
+  color: #ef4444;
+  width: 24px;
+  flex-shrink: 0;
+}
+
+.sidebar:not(.mobile):not(.open) .theme-toggle .label,
+.sidebar:not(.mobile):not(.open) .sidebar-footer a span {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.overlay {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .sidebar.mobile {
+    transform: translateX(-100%);
+    width: var(--sidebar-width);
+    visibility: hidden;
+  }
+
+  .sidebar.mobile.open {
+    transform: translateX(0);
+    visibility: visible;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .sidebar {
+    width: var(--sidebar-width);
+  }
+
+  .sidebar:not(.mobile):not(.open) {
+    width: var(--sidebar-collapsed);
+  }
+}
+
+@media (min-width: 1025px) {
+  .sidebar {
+    width: var(--sidebar-width);
+  }
+
+  .sidebar:not(.mobile):not(.open) {
+    width: var(--sidebar-collapsed);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .menu a,
+  .toggle-btn,
+  .mobile-toggle-btn,
+  .overlay {
+    transition: none;
+    animation: none;
+  }
+}
+
+.menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.menu::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.menu::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}

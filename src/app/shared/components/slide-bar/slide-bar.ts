@@ -1,11 +1,77 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, OnInit, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-slide-bar',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './slide-bar.html',
   styleUrl: './slide-bar.css',
 })
-export class SlideBar {
+export class SlideBar implements OnInit {
+  isOpen = true;
+  isMobile = false;
+  private wasMobile = false;
+  activeSection = 'inicio'; // Sección activa por defecto
 
+  @Output() sidebarStateChange = new EventEmitter<{ isOpen: boolean; isMobile: boolean }>();
+
+  constructor(public themeService: ThemeService) {}
+
+  ngOnInit(): void {
+    this.checkScreenSize();
+    this.wasMobile = this.isMobile;
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize(): void {
+    const currentIsMobile = window.innerWidth < 768;
+    
+    // Solo cambiar el estado si realmente cambió el modo (mobile <-> desktop)
+    if (currentIsMobile !== this.wasMobile) {
+      this.isMobile = currentIsMobile;
+      
+      // Ajustar estado inicial según el nuevo modo
+      if (this.isMobile) {
+        this.isOpen = false; // Cerrado en móvil
+      } else {
+        this.isOpen = true; // Abierto en desktop
+      }
+      
+      this.wasMobile = this.isMobile;
+      this.emitState();
+    } else {
+      // Solo actualizar la variable sin cambiar isOpen
+      this.isMobile = currentIsMobile;
+    }
+  }
+
+  toggle(): void {
+    console.log('Toggle clicked - Before:', { isOpen: this.isOpen, isMobile: this.isMobile });
+    this.isOpen = !this.isOpen;
+    console.log('Toggle clicked - After:', { isOpen: this.isOpen, isMobile: this.isMobile });
+    this.emitState();
+  }
+
+  close(): void {
+    console.log('Close clicked:', { isOpen: this.isOpen, isMobile: this.isMobile });
+    if (this.isMobile) {
+      this.isOpen = false;
+      this.emitState();
+    }
+  }
+
+  setActiveSection(section: string): void {
+    this.activeSection = section;
+    this.close();
+  }
+
+  private emitState(): void {
+    this.sidebarStateChange.emit({ isOpen: this.isOpen, isMobile: this.isMobile });
+  }
 }
