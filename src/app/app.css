@@ -4,19 +4,18 @@
   transition: margin-left 220ms ease;
   min-height: 100vh;
   background: var(--bg-secondary);
-  position: relative;
-  z-index: 1;
-}
-
-.main-content h1,
-.main-content .container {
-  position: relative;
-  z-index: 1;
 }
 
 /* Pantallas pequeñas (móviles < 768px): sin margen porque sidebar es overlay */
 .main-content.sidebar-mobile {
   margin-left: 0;
+}
+
+/* Cuando el sidebar está abierto en móvil, ocultar el contenido para evitar sobreposición de títulos */
+.main-content.sidebar-mobile-open {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 200ms ease, visibility 200ms ease;
 }
 
 /* Pantallas medianas y grandes (>= 768px): margen según estado del sidebar */

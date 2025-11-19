@@ -3,7 +3,8 @@
 <main class="main-content" 
       [class.sidebar-open]="sidebarOpen && !sidebarMobile"
       [class.sidebar-closed]="!sidebarOpen && !sidebarMobile"
-      [class.sidebar-mobile]="sidebarMobile">
+      [class.sidebar-mobile]="sidebarMobile"
+      [class.sidebar-mobile-open]="sidebarMobile && sidebarOpen">
   <div class="container">
     <h1>{{ title() }}</h1>
     <router-outlet />
