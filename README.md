@@ -57,3 +57,23 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+
+## para que el chatbot funcione hay que poner en el terminal:
+
+node src/app/infrastructure/gemini/gemini.js
+
+no olvide instalar la dependencia: 
+
+npm install express cors body-parser @google/generative-ai
+
+## Jarvy creo el navbar (header con boton de chat, chat funcinando, icono listo para mostar la imagen de perfil del usuario una vez ingrese, Botón cerrar sesión) 
+
+## Tarea Karen:
+
+1. aplicar estilos (según lo tenga planeado en general) con:
+header.Component.css
+chat.component.css
+
+2. Decidir si quiere el botón de cerrar sesión en el Header o sidebar
+

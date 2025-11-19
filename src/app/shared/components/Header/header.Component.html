@@ -1,0 +1,18 @@
+<header>
+  <div class="flex items-center">
+    <!-- Botón menú solo visible si showMenuButton -->
+    <button *ngIf="showMenuButton" (click)="onDrawerToggle()" class="mr-2 md:hidden">
+      <!-- icono Menu (puedes implementar como SVG aquí) -->
+      <span class="material-icons">menu</span>
+    </button>
+    <a routerLink="/dashboard" class="cursor-pointer no-underline text-gray-900 font-bold text-lg md:text-xl">
+      BienvenidX, entregas sin límites
+    </a>
+  </div>
+  <div class="flex items-center gap-4">
+    <app-user-avatar [src]="photoURL" [size]="42"></app-user-avatar>
+    <app-chat-toggle-button [toggleChat]="toggleChat"></app-chat-toggle-button>
+    <app-logout-button></app-logout-button>
+  </div>
+  <app-chat-modal *ngIf="showChat" [toggleChat]="toggleChat"></app-chat-modal>
+</header>

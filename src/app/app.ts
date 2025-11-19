@@ -1,11 +1,12 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SlideBar } from './shared/components/slide-bar/slide-bar';
+import { HeaderComponent } from './shared/components/Header/header.Component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SlideBar],
+  imports: [RouterOutlet, SlideBar, HeaderComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
