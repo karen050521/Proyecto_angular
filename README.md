@@ -65,7 +65,18 @@ node src/app/infrastructure/gemini/gemini.js
 
 no olvide instalar la dependencia: 
 
-npm install express cors body-parser @google/generative-ai
+npm install express cors body-parser @google/generative-ai.
+
+Todo lo que agregue esta en:
+
+--components
+  --Chat
+  --Header
+
+--Infrastructure
+  --Gemini  
+
+* app.ts (agregue los componentes creados HeaderComponent)  
 
 ## Jarvy creo el navbar (header con boton de chat, chat funcinando, icono listo para mostar la imagen de perfil del usuario una vez ingrese, Botón cerrar sesión) 
 
