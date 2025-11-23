@@ -1,23 +1,20 @@
-import { Component, signal, ViewChild } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { Component, signal, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { SlideBar } from './shared/components/slide-bar/slide-bar';
 import { HeaderComponent } from './shared/components/Header/header.Component';
-import { FloatingChatComponent } from './shared/components/floating-chat/floating-chat';
+import { SlideBar } from './shared/components/slide-bar/slide-bar';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, SlideBar, HeaderComponent, FloatingChatComponent, HttpClientModule],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
 export class App {
   protected readonly title = signal('Plataforma de Domicilios');
-  
-  @ViewChild(SlideBar) slideBar!: SlideBar;
-  
-  sidebarOpen = false; // Cerrado por defecto
+
+  sidebarOpen = true;
   sidebarMobile = false;
 
   onSidebarStateChange(state: { isOpen: boolean; isMobile: boolean }): void {

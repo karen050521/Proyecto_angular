@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
-@import "bootstrap-icons/font/bootstrap-icons.css";
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+@import 'leaflet/dist/leaflet.css';
 
 /* ===== VARIABLES DE TEMA ===== */
 :root {
@@ -11,7 +12,7 @@
   --text-secondary: #6b7280;
   --border-color: #e5e7eb;
   --shadow: rgba(0, 0, 0, 0.1);
-  
+
   /* Sidebar específico */
   --sidebar-bg: #1f2937;
   --sidebar-text: #f9fafb;
@@ -28,7 +29,7 @@ html.dark {
   --text-secondary: #9ca3af;
   --border-color: #374151;
   --shadow: rgba(0, 0, 0, 0.3);
-  
+
   /* Sidebar en modo oscuro (más oscuro) */
   --sidebar-bg: #0f172a;
   --sidebar-text: #f9fafb;
@@ -45,7 +46,7 @@ html.light {
   --text-secondary: #6b7280;
   --border-color: #e5e7eb;
   --shadow: rgba(0, 0, 0, 0.1);
-  
+
   /* Sidebar en modo claro */
   --sidebar-bg: #1f2937;
   --sidebar-text: #f9fafb;
@@ -73,3 +74,4 @@ body {
   transition-duration: 200ms;
   transition-timing-function: ease-in-out;
 }
+

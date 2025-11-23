@@ -1,0 +1,9 @@
+/* estilos para el mapa (añadir al final del archivo) */
+:host { display: block; }
+.map-host {
+  width: 100%;
+  height: 400px; /* ajustar según necesidad */
+  min-height: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+}

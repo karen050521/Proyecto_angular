@@ -1,23 +1,25 @@
-<app-header 
+<app-header
   [class.sidebar-collapsed]="!sidebarOpen || sidebarMobile"
   [isMobile]="sidebarMobile"
   [sidebarOpen]="sidebarOpen"
   (toggleSidebar)="toggleSidebar()"
-  (goToHome)="goToHome()">
+  (goToHome)="goToHome()"
+>
 </app-header>
 
-<app-slide-bar 
-  #sidebar
-  (sidebarStateChange)="onSidebarStateChange($event)">
-</app-slide-bar>
+<app-slide-bar #sidebar (sidebarStateChange)="onSidebarStateChange($event)"> </app-slide-bar>
 
-<main class="main-content" 
-      [class.sidebar-open]="sidebarOpen && !sidebarMobile"
-      [class.sidebar-closed]="!sidebarOpen && !sidebarMobile"
-      [class.sidebar-mobile]="sidebarMobile"
-      [class.sidebar-mobile-open]="sidebarMobile && sidebarOpen">
+<main
+  class="main-content"
+  [class.sidebar-open]="sidebarOpen && !sidebarMobile"
+  [class.sidebar-closed]="!sidebarOpen && !sidebarMobile"
+  [class.sidebar-mobile]="sidebarMobile"
+  [class.sidebar-mobile-open]="sidebarMobile && sidebarOpen"
+>
   <div class="container">
     <router-outlet />
+    <!-- Mapa de Manizales BORRAR, ESTÁ AQUÍ PARA PRUEBAS, DEFINIR UBICACION FINAL -->
+    <app-map-consumer></app-map-consumer>
   </div>
 </main>
 
