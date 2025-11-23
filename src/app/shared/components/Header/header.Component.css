@@ -1,11 +1,662 @@
-header {
-	position: relative;
-	z-index: 10;
-	width: 100%;
-	background: var(--bg-primary);
-	box-shadow: 0 2px 8px 0 var(--shadow);
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 0.5rem 1rem;
+/* Variables CSS - Congruentes con el slide-bar */
+:host {
+  --navbar-height: 70px;
+  --navbar-bg: var(--bg-primary);
+  --navbar-text: var(--text-primary);
+  --accent: var(--sidebar-accent);
+  --hover-bg: var(--sidebar-hover);
+  --sidebar-width: 240px;
+  --sidebar-collapsed: 72px;
+}
+
+/* ============================================
+   NAVBAR PRINCIPAL - Fijo con todo el ancho
+   ============================================ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--navbar-height);
+  background: var(--navbar-bg);
+  color: var(--navbar-text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 0 2rem 0 0; /* Sin padding izquierdo */
+  padding-left: 2rem; /* Se ajusta dinámicamente */
+  z-index: 50; /* Debajo del sidebar (9999) */
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: padding-left 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Línea decorativa superior - Congruente con slide-bar */
+.navbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    var(--accent) 0%, 
+    rgba(37, 99, 235, 0.8) 50%, 
+    var(--accent) 100%
+  );
+  opacity: 0.8;
+}
+
+/* Línea decorativa inferior */
+.navbar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 2rem; /* Empieza desde el inicio cuando sidebar está cerrado */
+  right: 2rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent) 30%, var(--accent) 70%, transparent);
+  opacity: 0.3;
+  transition: left 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Cuando el sidebar está abierto, la línea empieza después del sidebar */
+.navbar:not(.sidebar-collapsed)::after {
+  left: var(--sidebar-width);
+}
+
+/* ============================================
+   BOTÓN HAMBURGUESA - Integrado en navbar
+   ============================================ */
+.hamburger-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px; /* Border radius en los 4 lados */
+  color: var(--accent); /* Rayitas del icono en azul */
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  margin-left: 0; /* aligned next to page-info */
+  backdrop-filter: blur(10px);
+}
+
+.hamburger-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px; /* Border radius en los 4 lados */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.hamburger-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateX(4px);
+  box-shadow: 4px 0 16px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.hamburger-btn:hover::before {
+  opacity: 1;
+}
+
+.hamburger-btn:active {
+  transform: translateX(2px) scale(0.98);
+}
+
+.hamburger-btn i {
+  font-size: 1.5rem;
+  transition: transform 220ms ease;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15)); /* Sombra sutil para las rayitas */
+}
+
+.hamburger-btn:hover i {
+  transform: scale(1.1); /* Animación de escala en lugar de rotación */
+  filter: drop-shadow(0 2px 4px rgba(37, 99, 235, 0.4)); /* Sombra azul en hover */
+}
+
+/* ============================================
+   SECCIÓN IZQUIERDA - Botón hamburguesa + nombre
+   ============================================ */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 1;
+}
+
+.page-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  background: transparent; /* remove visible background */
+  border: none; /* remove border per request */
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+.page-info[role="link"] {
+  cursor: pointer;
+}
+
+.page-info:hover {
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.page-title {
+  color: var(--navbar-text);
+  white-space: nowrap;
+}
+
+/* ============================================
+   SECCIÓN CENTRAL - Barra de búsqueda
+   ============================================ */
+.navbar-center {
+  flex: 1;
+  max-width: 600px;
+  z-index: 1;
+}
+
+.search-container {
+  position: relative;
+  width: 100%;
+}
+
+.search-container i {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  color: var(--accent);
+  pointer-events: none;
+  transition: all 200ms ease;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 3rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: var(--navbar-text);
+  font-size: 0.95rem;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.search-input:focus {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.search-input:focus + i,
+.search-container:focus-within i {
+  color: var(--accent);
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* ============================================
+   SECCIÓN DERECHA - Acciones y perfil
+   ============================================ */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 1;
+}
+
+/* Botones de acción (notificaciones, etc) */
+.nav-action-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: var(--navbar-text);
+  cursor: pointer;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3); /* Misma sombra que hamburguesa */
+  backdrop-filter: blur(10px);
+}
+
+.nav-action-btn:hover {
+  background: var(--hover-bg);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.4); /* Sombra más pronunciada en hover */
+}
+
+.nav-action-btn:active {
+  transform: translateY(0);
+}
+
+.nav-action-btn i {
+  font-size: 1.25rem;
+  color: var(--accent);
+}
+
+/* Badge de notificaciones */
+.notification-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.3rem;
+  border: 2px solid var(--navbar-bg);
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+
+@keyframes pulse-badge {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(239, 68, 68, 0.6);
+  }
+}
+
+/* Sección de usuario */
+.user-section-wrapper {
+  position: relative;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.user-section:hover,
+.user-section.active {
+  background: var(--hover-bg);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.dropdown-icon {
+  font-size: 0.85rem;
+  color: var(--accent);
+  transition: transform 220ms ease;
+  margin-left: 0.25rem;
+}
+
+.dropdown-icon.rotate {
+  transform: rotate(180deg);
+}
+
+/* Profile Dropdown */
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: 280px;
+  background: var(--navbar-bg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(20px);
+  z-index: 1000;
+  animation: dropdownSlide 200ms ease-out;
+  overflow: hidden;
+}
+
+@keyframes dropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(37, 99, 235, 0.05) 100%);
+}
+
+.dropdown-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.dropdown-user-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--navbar-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-user-email {
+  font-size: 0.8rem;
+  color: var(--accent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  margin: 0;
+}
+
+.dropdown-body {
+  padding: 0.5rem 0;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: var(--navbar-text);
+  text-decoration: none;
+  transition: all 180ms ease;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-left-color: var(--accent);
+  padding-left: 1.25rem;
+}
+
+.dropdown-item i {
+  font-size: 1.1rem;
+  color: var(--accent);
+  width: 20px;
+  text-align: center;
+}
+
+.dropdown-item span {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.dropdown-footer {
+  padding: 0.5rem;
+}
+
+.dropdown-logout {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  color: #ef4444;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.dropdown-logout:hover {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%);
+  border-color: rgba(239, 68, 68, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.dropdown-logout i {
+  font-size: 1.1rem;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.user-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--navbar-text);
+  line-height: 1.2;
+}
+
+.user-role {
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* ============================================
+   RESPONSIVE - Desktop (sidebar activo)
+   ============================================ */
+@media (min-width: 768px) {
+  /* Cuando el sidebar está abierto */
+  .navbar:not(.sidebar-collapsed) {
+    padding-left: calc(240px); /* 240px del sidebar */
+  }
+  
+  .navbar:not(.sidebar-collapsed) .hamburger-btn {
+    margin-left: calc(-240px + 0.5rem); /* Mueve el botón pero mantiene separación de 0.5rem */
+  }
+  
+  /* Cuando el sidebar está cerrado */
+  .navbar.sidebar-collapsed {
+    padding-left: 0; /* Sin espacio */
+  }
+  
+  .navbar.sidebar-collapsed .hamburger-btn {
+    margin-left: 0.5rem; /* Separado de la margen izquierda */
+  }
+}
+
+/* ============================================
+   RESPONSIVE - Tablets
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .navbar {
+    padding-right: 1.5rem;
+    gap: 1rem;
+  }
+  
+  .navbar-center {
+    max-width: 400px;
+  }
+  
+  .search-input {
+    font-size: 0.9rem;
+  }
+  
+  .user-info {
+    display: none; /* Ocultar info de usuario en tablets */
+  }
+}
+
+/* ============================================
+   RESPONSIVE - Móviles
+   ============================================ */
+@media (max-width: 767px) {
+  .navbar {
+    padding: 0 1rem 0 0; /* Sin padding izquierdo */
+    height: 64px;
+    gap: 0.75rem;
+  }
+  
+  .hamburger-btn {
+    width: 52px;
+    height: 52px;
+    margin-left: 0.5rem; /* Separado de la margen izquierda */
+  }
+  
+  .hamburger-btn i {
+    font-size: 1.4rem;
+  }
+  
+  /* Ocultar información de página en móvil */
+  .navbar-left {
+    display: none;
+  }
+  
+  /* Búsqueda responsive */
+  .navbar-center {
+    flex: 1;
+    max-width: none;
+  }
+  
+  .search-input {
+    padding: 0.6rem 0.8rem 0.6rem 2.5rem;
+    font-size: 0.85rem;
+  }
+  
+  .search-container i {
+    left: 0.75rem;
+    font-size: 1rem;
+  }
+  
+  /* Acciones en móvil */
+  .navbar-right {
+    gap: 0.5rem;
+  }
+  
+  .nav-action-btn {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .nav-action-btn i {
+    font-size: 1.1rem;
+  }
+  
+  /* Ocultar texto de usuario, solo mostrar avatar */
+  .user-info {
+    display: none;
+  }
+  
+  .user-section {
+    padding: 0.25rem;
+    min-width: auto;
+  }
+  
+  /* Ajustar líneas decorativas */
+  .navbar::after {
+    left: 4.5rem;
+    right: 1rem;
+  }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 480px) {
+  .search-input::placeholder {
+    font-size: 0.8rem;
+  }
+}
+
+/* ============================================
+   TEMA CLARO
+   ============================================ */
+:host-context(html.light) .navbar {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.06);
+  border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+
+:host-context(html.light) .navbar::before {
+  opacity: 0.6;
+}
+
+:host-context(html.light) .search-input {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+:host-context(html.light) .search-input::placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+:host-context(html.light) .page-info,
+:host-context(html.light) .user-section,
+:host-context(html.light) .nav-action-btn {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================
+   ACCESIBILIDAD
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .navbar,
+  .search-input,
+  .nav-action-btn,
+  .user-section,
+  .page-info,
+  .notification-badge {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* Focus visible para teclado */
+.search-input:focus-visible,
+.nav-action-btn:focus-visible,
+.user-section:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

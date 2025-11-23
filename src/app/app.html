@@ -1,5 +1,15 @@
-<app-header></app-header>
-<app-slide-bar (sidebarStateChange)="onSidebarStateChange($event)"></app-slide-bar>
+<app-header 
+  [class.sidebar-collapsed]="!sidebarOpen || sidebarMobile"
+  [isMobile]="sidebarMobile"
+  [sidebarOpen]="sidebarOpen"
+  (toggleSidebar)="toggleSidebar()"
+  (goToHome)="goToHome()">
+</app-header>
+
+<app-slide-bar 
+  #sidebar
+  (sidebarStateChange)="onSidebarStateChange($event)">
+</app-slide-bar>
 
 <main class="main-content" 
       [class.sidebar-open]="sidebarOpen && !sidebarMobile"
@@ -11,3 +21,5 @@
   </div>
 </main>
 
+<!-- Chat flotante - Accesible desde cualquier página -->
+<app-floating-chat></app-floating-chat>

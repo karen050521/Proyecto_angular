@@ -10,7 +10,7 @@ import { ThemeService } from '../../../core/services/theme.service';
   styleUrl: './slide-bar.css',
 })
 export class SlideBar implements OnInit {
-  isOpen = true;
+  isOpen = false; // Cerrado por defecto
   isMobile = false;
   private wasMobile = false;
   activeSection = 'inicio'; // Sección activa por defecto
@@ -36,12 +36,8 @@ export class SlideBar implements OnInit {
     if (currentIsMobile !== this.wasMobile) {
       this.isMobile = currentIsMobile;
       
-      // Ajustar estado inicial según el nuevo modo
-      if (this.isMobile) {
-        this.isOpen = false; // Cerrado en móvil
-      } else {
-        this.isOpen = true; // Abierto en desktop
-      }
+      // Cerrado por defecto en ambos modos
+      this.isOpen = false;
       
       this.wasMobile = this.isMobile;
       this.emitState();
@@ -59,8 +55,9 @@ export class SlideBar implements OnInit {
   }
 
   close(): void {
-    console.log('Close clicked:', { isOpen: this.isOpen, isMobile: this.isMobile });
-    if (this.isMobile) {
+    // Always close the sidebar when this is called (overlay click, menu selection)
+    console.log('Close clicked (force):', { isOpen: this.isOpen, isMobile: this.isMobile });
+    if (this.isOpen) {
       this.isOpen = false;
       this.emitState();
     }

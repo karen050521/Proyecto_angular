@@ -1,12 +1,3 @@
-<!-- Botón hamburguesa flotante para móviles -->
-<button class="mobile-toggle-btn" 
-        *ngIf="isMobile" 
-        (click)="toggle()" 
-        [attr.aria-label]="isOpen ? 'Cerrar menú' : 'Abrir menú'" 
-        type="button">
-  <i class="bi" [class.bi-list]="!isOpen" [class.bi-x-lg]="isOpen" aria-hidden="true"></i>
-</button>
-
 <!-- Sidebar responsive con iconos Bootstrap -->
 <nav class="sidebar" 
      [class.open]="isOpen" 
@@ -15,17 +6,17 @@
      role="navigation" 
      aria-label="Menú principal">
   <div class="sidebar-header">
-    <button class="toggle-btn" 
-            *ngIf="!isMobile"
-            (click)="toggle()" 
-            aria-label="Colapsar/expandir menú" 
-            type="button">
-      <i class="bi bi-list" aria-hidden="true"></i>
-    </button>
-    <div class="brand">
-      <i class="bi bi-bicycle"></i>
-      <span>Domicilios</span>
+    <div class="brand" role="link" tabindex="0" (click)="setActiveSection('inicio')" (keydown.enter)="setActiveSection('inicio')" title="Ir al inicio">
+      <img src="assets/motorcycle-sidebar.svg" alt="Moto" class="brand-icon" />
     </div>
+    <!-- Botón de retracción -->
+    <button class="retract-btn" 
+            (click)="toggle()" 
+            [attr.aria-label]="isOpen ? 'Cerrar menú' : 'Abrir menú'"
+            title="Cerrar menú"
+            type="button">
+      <i class="bi bi-x-lg"></i>
+    </button>
   </div>
 
   <ul class="menu">
@@ -113,5 +104,5 @@
   </div>
 </nav>
 
-<!-- Overlay para móviles -->
-<div class="overlay" *ngIf="isOpen && isMobile" (click)="close()" aria-hidden="true"></div>
+<!-- Overlay para cerrar al hacer clic fuera (visible siempre cuando sidebar está abierto) -->
+<div class="overlay" *ngIf="isOpen" (click)="close()" aria-hidden="true"></div>

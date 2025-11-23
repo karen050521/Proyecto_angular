@@ -1,14 +1,18 @@
 /* Contenido principal con margen adaptable al sidebar */
 .main-content {
   padding: 2rem;
-  transition: margin-left 220ms ease;
+  padding-left: 2rem;
+  padding-top: calc(70px + 1.5rem); /* Altura del header (70px) + margen (1.5rem) */
+  transition: margin-left 220ms cubic-bezier(0.4, 0, 0.2, 1);
   min-height: 100vh;
   background: var(--bg-secondary);
+  margin-left: 0; /* Sin margen por defecto */
 }
 
 /* Pantallas pequeñas (móviles < 768px): sin margen porque sidebar es overlay */
 .main-content.sidebar-mobile {
   margin-left: 0;
+  padding-top: calc(64px + 1.5rem); /* Header móvil (64px) + margen */
 }
 
 /* Cuando el sidebar está abierto en móvil, ocultar el contenido para evitar sobreposición de títulos */
@@ -20,14 +24,16 @@
 
 /* Pantallas medianas y grandes (>= 768px): margen según estado del sidebar */
 @media (min-width: 768px) {
-  /* Sidebar abierto: margen completo */
+  /* Sidebar abierto: margen completo - exactamente el ancho del sidebar */
   .main-content.sidebar-open {
     margin-left: 240px;
+    padding-left: 3rem;
   }
 
-  /* Sidebar colapsado: margen reducido */
+  /* Sidebar cerrado: sin margen */
   .main-content.sidebar-closed {
-    margin-left: 72px;
+    margin-left: 0;
+    padding-left: 3rem;
   }
 }
 
@@ -55,6 +61,12 @@ h1 {
 @media (min-width: 768px) and (max-width: 1024px) {
   .main-content {
     padding: 1.5rem;
+    padding-top: calc(70px + 1.5rem); /* Header + margen */
+  }
+  
+  .main-content.sidebar-open,
+  .main-content.sidebar-closed {
+    padding-left: 3rem !important;
   }
   
   h1 {
@@ -66,6 +78,9 @@ h1 {
 @media (max-width: 767px) {
   .main-content {
     padding: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: calc(64px + 1rem); /* Header fijo + margen */
   }
   
   h1 {

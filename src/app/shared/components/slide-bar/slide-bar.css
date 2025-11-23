@@ -8,47 +8,9 @@
   --hover-bg: var(--sidebar-hover);
 }
 
-/* Botón hamburguesa flotante para móviles - adaptado a tema */
+/* Botón hamburguesa flotante para móviles - DESHABILITADO (ahora está en navbar) */
 .mobile-toggle-btn {
-  position: fixed;
-  top: 1rem;
-  left: 1rem;
-  z-index: 10000;
-  background: var(--accent);
-  border: none;
-  color: white;
-  font-size: 1.75rem;
-  width: 48px;
-  height: 48px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  transition: transform 150ms ease, box-shadow 150ms ease;
-}
-
-.mobile-toggle-btn:active {
-  transform: scale(0.95);
-}
-
-.mobile-toggle-btn:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-}
-
-.mobile-toggle-btn i {
-  font-size: 1.5rem;
-  color: white;
-}
-
-/* Modo claro - botón más visible */
-:host-context(html.light) .mobile-toggle-btn {
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-}
-
-:host-context(html.light) .mobile-toggle-btn:hover {
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+  display: none; /* El botón ahora está en el navbar */
 }
 
 /* Sidebar principal */
@@ -62,42 +24,64 @@
   color: var(--sidebar-text);
   display: flex;
   flex-direction: column;
-  transition: width 220ms ease, transform 220ms ease;
-  z-index: 9999;
-  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
+  transition: transform 220ms ease, box-shadow 220ms ease;
+  z-index: 9999; /* Por encima del header (50) y debajo del botón (10000) */
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.05);
   overflow: hidden;
+  backdrop-filter: blur(10px);
 }
 
+/* En desktop, cuando está cerrado se oculta completamente */
 .sidebar:not(.mobile):not(.open) {
-  width: var(--sidebar-collapsed);
+  transform: translateX(-100%); /* Se oculta completamente hacia la izquierda */
 }
 
 .sidebar-header {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  min-height: 64px;
+  padding: 1.25rem 1rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+  min-height: 70px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+  position: relative;
+  justify-content: space-between;
+}
+
+.sidebar-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 1rem;
+  right: 1rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.3;
 }
 
 .toggle-btn {
-  background: transparent;
-  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--sidebar-text);
   font-size: 1.5rem;
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 0.6rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
-  transition: background 150ms ease;
+  border-radius: 8px;
+  transition: all 200ms ease;
   flex-shrink: 0;
 }
 
 .toggle-btn:hover {
   background: var(--hover-bg);
+  border-color: var(--accent);
+  transform: scale(1.05);
+}
+
+.toggle-btn:active {
+  transform: scale(0.95);
 }
 
 .toggle-btn:focus {
@@ -108,16 +92,112 @@
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   white-space: nowrap;
   transition: opacity 180ms ease;
+  letter-spacing: 0.5px;
+}
+
+.brand[role="link"] {
+  cursor: pointer;
 }
 
 .brand i {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   color: var(--accent);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.brand span {
+  background: linear-gradient(135deg, var(--sidebar-text) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Brand image (replaces the bicycle icon) */
+.brand img.brand-icon {
+  width: 36px;
+  height: 36px;
+  display: inline-block;
+  object-fit: contain;
+  color: var(--accent);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.18));
+  vertical-align: middle;
+}
+
+/* When the sidebar is collapsed hide the brand image (keeps layout tidy) */
+.sidebar:not(.mobile):not(.open) .brand img.brand-icon {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* Botón de retracción del sidebar - X siempre roja */
+.retract-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.retract-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(239, 68, 68, 0.15);
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.retract-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ff4d4d;
+  transform: rotate(90deg);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.retract-btn:hover::before {
+  opacity: 1;
+}
+
+.retract-btn:active {
+  transform: rotate(90deg) scale(0.95);
+}
+
+.retract-btn i {
+  font-size: 1.1rem;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+  transition: transform 220ms ease;
+  color: #ef4444; /* X siempre roja */
+}
+
+.retract-btn:hover i {
+  transform: scale(1.1);
+  color: #ff4d4d; /* Más brillante en hover */
+}
+
+.retract-btn:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .sidebar:not(.mobile):not(.open) .brand span {
@@ -128,33 +208,58 @@
 
 .menu {
   list-style: none;
-  margin: 1rem 0;
-  padding: 0;
+  margin: 0.5rem 0;
+  padding: 0.5rem 0;
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .menu li {
-  margin: 0.25rem 0.5rem;
+  margin: 0.15rem 0.75rem;
 }
 
 .menu a {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1.25rem;
   color: var(--sidebar-text);
   text-decoration: none;
-  border-radius: 8px;
-  transition: background 150ms ease, transform 100ms ease, border-left 150ms ease;
+  border-radius: 10px;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
   position: relative;
   border-left: 3px solid transparent;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.menu a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--accent);
+  opacity: 0;
+  border-radius: 10px;
+  transition: opacity 200ms ease;
+}
+
+.menu a:hover::before {
+  opacity: 0.1;
+}
+
+.menu a > * {
+  position: relative;
+  z-index: 1;
 }
 
 .menu a:hover {
   background: var(--hover-bg);
-  transform: translateX(2px);
+  transform: translateX(3px);
 }
 
 .menu a:focus {
@@ -163,25 +268,44 @@
 }
 
 .menu a.active {
-  background: var(--hover-bg);
+  background: linear-gradient(90deg, var(--hover-bg) 0%, rgba(37, 99, 235, 0.15) 100%);
   border-left-color: var(--accent);
   font-weight: 600;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
 }
 
 .menu a.active i {
-  filter: brightness(1.2);
+  filter: brightness(1.3);
+  transform: scale(1.1);
 }
 
 .menu a.active .label {
   color: var(--accent);
+  font-weight: 600;
 }
 
 .menu a i {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   width: 24px;
   text-align: center;
   color: var(--accent);
   flex-shrink: 0;
+  transition: all 200ms ease;
+}
+
+/* Image used as icon (sidebar) */
+.menu a img.menu-icon {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  object-fit: contain;
+  flex-shrink: 0;
+  transition: transform 200ms ease, filter 200ms ease, opacity 180ms ease;
+}
+
+.menu a.active img.menu-icon {
+  transform: scale(1.1);
+  filter: brightness(1.15);
 }
 
 .menu a .label {
@@ -195,61 +319,143 @@
 }
 
 .sidebar-footer {
-  padding: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.25rem 1rem;
+  border-top: 2px solid rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, transparent 100%);
+  position: relative;
+}
+
+.sidebar-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 1rem;
+  right: 1rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.3;
 }
 
 .theme-toggle {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 0.75rem 1rem;
-  background: transparent;
-  border: none;
+  padding: 0.85rem 1.25rem;
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.2);
   color: var(--sidebar-text);
   text-decoration: none;
-  border-radius: 8px;
-  transition: background 150ms ease;
+  border-radius: 10px;
+  transition: all 200ms ease;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
   text-align: left;
   width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.15), transparent);
+  transition: left 300ms ease;
+}
+
+.theme-toggle:hover::before {
+  left: 100%;
 }
 
 .theme-toggle:hover {
-  background: var(--hover-bg);
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.2);
 }
 
 .theme-toggle i {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: #fbbf24;
   width: 24px;
   flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(251, 191, 36, 0.4));
+  transition: transform 200ms ease;
+  position: relative;
+  z-index: 1;
+}
+
+.theme-toggle:hover i {
+  transform: rotate(180deg) scale(1.1);
+}
+
+.theme-toggle .label {
+  position: relative;
+  z-index: 1;
 }
 
 .sidebar-footer a {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1.25rem;
   color: var(--sidebar-text);
   text-decoration: none;
-  border-radius: 8px;
-  transition: background 150ms ease;
+  border-radius: 10px;
+  transition: all 200ms ease;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-footer a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(239, 68, 68, 0.1);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.sidebar-footer a:hover::before {
+  opacity: 1;
 }
 
 .sidebar-footer a:hover {
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  transform: translateX(4px);
 }
 
 .sidebar-footer a i {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: #ef4444;
   width: 24px;
   flex-shrink: 0;
+  transition: transform 200ms ease;
+  position: relative;
+  z-index: 1;
+}
+
+.sidebar-footer a:hover i {
+  transform: translateX(4px);
+}
+
+.sidebar-footer a span {
+  position: relative;
+  z-index: 1;
 }
 
 .sidebar:not(.mobile):not(.open) .theme-toggle .label,
@@ -260,7 +466,16 @@
 }
 
 .overlay {
-  display: none;
+  /* overlay visible when inserted by *ngIf */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.22);
+  z-index: 9998; /* just below the sidebar (9999) */
+  transition: opacity 220ms ease;
+  opacity: 1;
 }
 
 @keyframes fadeIn {
@@ -277,11 +492,19 @@
     transform: translateX(-100%);
     width: var(--sidebar-width);
     visibility: hidden;
+    /* En móvil el sidebar ocupa toda la altura, no empieza debajo del header */
+    top: 0;
+    height: 100vh;
   }
 
   .sidebar.mobile.open {
     transform: translateX(0);
     visibility: visible;
+  }
+
+  /* En móvil, padding normal */
+  .sidebar.mobile .sidebar-header {
+    padding-left: 1rem;
   }
 }
 

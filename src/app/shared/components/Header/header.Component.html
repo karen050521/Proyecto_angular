@@ -1,18 +1,88 @@
-<header>
-  <div class="flex items-center">
-    <!-- Botón menú solo visible si showMenuButton -->
-    <button *ngIf="showMenuButton" (click)="onDrawerToggle()" class="mr-2 md:hidden">
-      <!-- icono Menu (puedes implementar como SVG aquí) -->
-      <span class="material-icons">menu</span>
+<nav class="navbar" role="navigation" aria-label="Navegación principal">
+  <!-- Sección izquierda: Botón hamburguesa + nombre de la empresa -->
+  <div class="navbar-left">
+    <button 
+      class="hamburger-btn" 
+      (click)="onToggleSidebar()"
+      [attr.aria-label]="sidebarOpen ? 'Cerrar menú lateral' : 'Abrir menú lateral'"
+      [attr.aria-expanded]="sidebarOpen"
+      type="button">
+      <i class="bi" [class.bi-list]="!sidebarOpen" [class.bi-x-lg]="sidebarOpen && isMobile"></i>
     </button>
-    <a routerLink="/dashboard" class="cursor-pointer no-underline text-gray-900 font-bold text-lg md:text-xl">
-      BienvenidX, entregas sin límites
-    </a>
+
+    <div class="page-info" title="QuickDeliver" role="button" tabindex="0" (click)="goHome()" (keydown.enter)="goHome()" aria-label="Ir al inicio">
+      <span class="page-title">QuickDeliver</span>
+    </div>
   </div>
-  <div class="flex items-center gap-4">
-    <app-user-avatar [src]="photoURL" [size]="42"></app-user-avatar>
-    <app-chat-toggle-button [toggleChat]="toggleChat"></app-chat-toggle-button>
-    <app-logout-button></app-logout-button>
+
+  <!-- Sección central: Barra de búsqueda -->
+  <div class="navbar-center">
+    <div class="search-container">
+      <i class="bi bi-search"></i>
+      <input 
+        type="search" 
+        class="search-input" 
+        placeholder="Buscar pedidos, restaurantes, conductores..."
+        aria-label="Buscar en la plataforma"
+      />
+    </div>
   </div>
-  <app-chat-modal *ngIf="showChat" [toggleChat]="toggleChat"></app-chat-modal>
-</header>
+
+  <!-- Sección derecha: Acciones y perfil -->
+  <div class="navbar-right">
+    <!-- Perfil de usuario con dropdown -->
+    <div class="user-section-wrapper">
+      <div class="user-section" (click)="toggleProfileMenu()" [class.active]="showProfileMenu">
+        <app-user-avatar [src]="photoURL" [size]="42"></app-user-avatar>
+        <div class="user-info">
+          <span class="user-name">Admin</span>
+          <span class="user-role">Administrador</span>
+        </div>
+        <i class="bi bi-chevron-down dropdown-icon" [class.rotate]="showProfileMenu"></i>
+      </div>
+
+      <!-- Dropdown menu -->
+      <div class="profile-dropdown" *ngIf="showProfileMenu">
+        <div class="dropdown-header">
+          <app-user-avatar [src]="photoURL" [size]="48"></app-user-avatar>
+          <div class="dropdown-user-info">
+            <span class="dropdown-user-name">Admin</span>
+            <span class="dropdown-user-email">admin@quickdeliver.com</span>
+          </div>
+        </div>
+        
+        <div class="dropdown-divider"></div>
+        
+        <div class="dropdown-body">
+          <a href="#" class="dropdown-item" (click)="$event.preventDefault()">
+            <i class="bi bi-person"></i>
+            <span>Mi Perfil</span>
+          </a>
+          <a href="#" class="dropdown-item" (click)="$event.preventDefault()">
+            <i class="bi bi-gear"></i>
+            <span>Configuración</span>
+          </a>
+          <a href="#" class="dropdown-item" (click)="$event.preventDefault()">
+            <i class="bi bi-question-circle"></i>
+            <span>Ayuda</span>
+          </a>
+        </div>
+        
+        <div class="dropdown-divider"></div>
+        
+        <div class="dropdown-footer">
+          <button class="dropdown-logout" (click)="logout()">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Cerrar Sesión</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notificaciones (moved to the far right) -->
+    <button class="nav-action-btn notifications-final" aria-label="Notificaciones" title="Notificaciones">
+      <i class="bi bi-bell"></i>
+      <span class="notification-badge">3</span>
+    </button>
+  </div>
+</nav>

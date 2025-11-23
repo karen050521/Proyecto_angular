@@ -10,9 +10,13 @@ import { Component, Input } from '@angular/core';
       [style.height.px]="size"
       [style.minWidth.px]="size"
       [style.minHeight.px]="size"
-      class="rounded-full border-2 border-white object-cover"
+      [style.border]="'2px solid rgba(255,255,255,0.9)'"
+      [style.borderRadius.%]="50"
+      [style.objectFit]="'cover'"
+      [style.display]="'block'"
       [style.background]="'#eee'"
       referrerpolicy="no-referrer"
+      aria-hidden="false"
     />
   `
 })

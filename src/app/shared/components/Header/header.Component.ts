@@ -1,9 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChatModalComponent } from '../../components/Chat/chat.Modal';
-import { LogoutButtonComponent } from './logout.Button';
+import { Router, RouterModule } from '@angular/router';
 import { UserAvatarComponent } from './user.Avatar.Component';
-import { ChatToggleButtonComponent } from '../../components/Chat/chat.Toggle.Button';
 
 @Component({
   standalone: true,
@@ -12,19 +10,39 @@ import { ChatToggleButtonComponent } from '../../components/Chat/chat.Toggle.But
   styleUrls: ['./header.Component.css'],
   imports: [
     CommonModule,
-    ChatModalComponent,
-    LogoutButtonComponent,
     UserAvatarComponent,
-    ChatToggleButtonComponent
+    RouterModule
   ]
 })
 
 export class HeaderComponent {
-  @Input() onDrawerToggle!: () => void;
-  @Input() showMenuButton: boolean = false;
+  @Input() isMobile: boolean = false;
+  @Input() sidebarOpen: boolean = true;
+  @Output() toggleSidebar = new EventEmitter<void>();
+  @Output() goToHome = new EventEmitter<void>();
 
-  showChat = false;
   photoURL = localStorage.getItem('photoURL') || '';
+  showProfileMenu = false;
 
-  toggleChat = () => this.showChat = !this.showChat;
+  constructor(private router: Router) {}
+
+  onToggleSidebar() {
+    this.toggleSidebar.emit();
+  }
+
+  goHome() {
+    // Emit event to parent to activate "inicio" section
+    this.goToHome.emit();
+  }
+
+  toggleProfileMenu() {
+    this.showProfileMenu = !this.showProfileMenu;
+  }
+
+  logout() {
+    // Implement logout logic here
+    console.log('Logout clicked');
+    this.showProfileMenu = false;
+    // TODO: Add actual logout logic (clear tokens, redirect, etc.)
+  }
 }
