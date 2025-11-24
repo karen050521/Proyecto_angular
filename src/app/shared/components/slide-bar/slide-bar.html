@@ -55,10 +55,15 @@
     <li>
       <a href="#" 
          [class.active]="activeSection === 'clientes'"
-         (click)="setActiveSection('clientes'); $event.preventDefault()">
+         (click)="$event.preventDefault(); setActiveSection('clientes');">
         <i class="bi bi-people"></i>
         <span class="label">Clientes</span>
       </a>
+      <ul *ngIf="activeSection === 'clientes'" class="client-sub-links">
+        <li *ngFor="let link of clientLinks">
+          <a [routerLink]="link.to" routerLinkActive="font-bold text-blue-600">{{ link.label }}</a>
+        </li>
+      </ul>
     </li>
     <li>
       <a href="#" 

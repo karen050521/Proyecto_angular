@@ -1,15 +1,22 @@
 import { Component, HostListener, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ThemeService } from '../../../core/services/theme.service';
+import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-slide-bar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './slide-bar.html',
   styleUrl: './slide-bar.css',
 })
 export class SlideBar implements OnInit {
+    clientLinks = [
+      { to: '/dashboard/client/orders', label: 'Pedidos' },
+      { to: '/dashboard/client/cart', label: 'Carrito' },
+      { to: '/dashboard/client/profile', label: 'Perfil' },
+    ];
   isOpen = false; // Cerrado por defecto
   isMobile = false;
   private wasMobile = false;
@@ -17,7 +24,7 @@ export class SlideBar implements OnInit {
 
   @Output() sidebarStateChange = new EventEmitter<{ isOpen: boolean; isMobile: boolean }>();
 
-  constructor(public themeService: ThemeService) {}
+  constructor(public themeService: ThemeService, private router: Router) {}
 
   ngOnInit(): void {
     this.checkScreenSize();
@@ -64,8 +71,11 @@ export class SlideBar implements OnInit {
   }
 
   setActiveSection(section: string): void {
-    this.activeSection = section;
-    this.close();
+      this.activeSection = section;
+      // Evitar navegación al hacer click en 'Clientes', solo togglear sub-links
+      if (section !== 'clientes') {
+        this.close();
+      }
   }
 
   private emitState(): void {

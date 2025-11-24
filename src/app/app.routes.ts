@@ -11,8 +11,7 @@ export const routes: Routes = [
 		children: [
 			{ path: 'orders', component: OrdersComponent },
 			{ path: 'cart', component: CartComponent },
-			{ path: 'profile', component: ProfileComponent },
-			{ path: '', redirectTo: 'orders', pathMatch: 'full' }
+			{ path: 'profile', component: ProfileComponent }
 		]
 	}
 ];

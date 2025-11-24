@@ -97,4 +97,25 @@ comandos:
 npm install leaflet
 npm install --save-dev @types/leaflet
 
+enviorinment va sin /api
 
+se crearon los services y models necesarios para todo lo relacionado con Cliente:
+/core
+ /services
+  address.service
+  order.service
+  product.service
+  customer.service
+ /models
+  address.model
+  order.model
+  product.model
+  customer.model
+
+## se crearon los componentes para cliente (carruto, orden y perfil)  
+/shared
+ /components
+  /clients
+   ![alt text](image.png)
+
+la cual se consume en el layout: client-layout.component
