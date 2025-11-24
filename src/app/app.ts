@@ -5,11 +5,12 @@ import { SlideBar } from './shared/components/slide-bar/slide-bar';
 import { HeaderComponent } from './shared/components/Header/header.Component';
 import { FloatingChatComponent } from './shared/components/floating-chat/floating-chat';
 import { MapConsumerComponent } from './shared/components/map-consumer/map-consumer.component';
+import { ClientLayoutComponent } from './core/layouts/client-layout.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SlideBar, HeaderComponent, FloatingChatComponent, MapConsumerComponent, HttpClientModule],
+  imports: [RouterOutlet, SlideBar, HeaderComponent, FloatingChatComponent, MapConsumerComponent, HttpClientModule, ClientLayoutComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

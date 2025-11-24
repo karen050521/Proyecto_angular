@@ -1,0 +1,73 @@
+<div class="max-w-2xl mx-auto p-4">
+  <h2 class="text-2xl font-bold mb-4">Carrito</h2>
+  <table class="min-w-full bg-white border border-gray-200 rounded-lg mb-4">
+    <thead>
+      <tr>
+        <th class="px-4 py-2 border-b">Producto</th>
+        <th class="px-4 py-2 border-b">Cantidad</th>
+        <th class="px-4 py-2 border-b">Precio</th>
+        <th class="px-4 py-2 border-b">Total</th>
+        <th class="px-4 py-2 border-b">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="cartItems.length === 0; else cartContent">
+        <tr>
+          <td colspan="5" class="text-center py-4">El carrito está vacío</td>
+        </tr>
+      </ng-container>
+      <ng-template #cartContent>
+        <tr *ngFor="let item of cartItems">
+          <td class="px-4 py-2 border-b">{{ item.name }}</td>
+          <td class="px-4 py-2 border-b">
+            <input
+              type="number"
+              min="1"
+              [value]="item.quantity"
+              (input)="handleQuantityChange(item.id, $event.target.value)"
+              class="w-16 border rounded p-1 text-center"
+            />
+          </td>
+          <td class="px-4 py-2 border-b">{{ item.price }}</td>
+          <td class="px-4 py-2 border-b">{{ item.price * item.quantity }}</td>
+          <td class="px-4 py-2 border-b flex gap-2 justify-center">
+            <button
+              class="bg-red-500 text-white px-2 py-1 rounded"
+              (click)="handleRemove(item.id)"
+            >
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+    </tbody>
+  </table>
+
+  <form (submit)="handleSubmit($event)" class="space-y-4 mt-8">
+    <select name="address" [value]="form.address" (change)="handleApartmentSelect($event)" required class="w-full border px-2 py-1 rounded">
+      <option value="">Selecciona Apartamento</option>
+      <option *ngFor="let a of addresses" [value]="a | json">{{ a.street }} {{ a.city ? '- ' + a.city : '' }}</option>
+    </select>
+    <input type="hidden" name="menu_id" [value]="form.menu_id" />
+    <select name="motorcycle_id" [value]="form.motorcycle_id" (change)="handleFormChange($event)" required class="w-full border px-2 py-1 rounded">
+      <option value="">Selecciona Moto (solo disponibles)</option>
+      <option *ngFor="let m of motorcycles" [value]="m.id">{{ m.license_plate }}</option>
+    </select>
+    <div class="w-full">
+      <label class="block text-sm font-semibold mb-1">Precio Total</label>
+      <input
+        name="total_price"
+        [value]="total"
+        readonly
+        type="number"
+        class="w-full border px-2 py-1 rounded bg-gray-100 text-gray-700"
+      />
+    </div>
+    <input type="hidden" name="status" value="pending" />
+    <input type="hidden" name="created_at" [value]="form.created_at" />
+    <input type="hidden" name="customer_id" [value]="form.customer_id" />
+    <div class="flex gap-2">
+      <button type="submit" class="bg-blue-600 text-white rounded px-3 py-1">Guardar</button>
+    </div>
+  </form>
+</div>
