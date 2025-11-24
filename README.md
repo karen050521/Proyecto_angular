@@ -88,3 +88,13 @@ chat.component.css
 
 2. Decidir si quiere el botón de cerrar sesión en el Header o sidebar
 
+
+# 24/11/2025
+
+Mapa ANDREs requiere correr los siguientes 
+comandos:
+
+npm install leaflet
+npm install --save-dev @types/leaflet
+
+
