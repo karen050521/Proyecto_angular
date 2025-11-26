@@ -2,11 +2,6 @@
   <ul class="flex gap-4 my-4">
     <li *ngFor="let link of links">
       <a [routerLink]="link.to" routerLinkActive="font-bold text-blue-600">{{ link.label }}</a>
-      <ul *ngIf="activeSection === link.label && link.children" class="client-sub-links">
-        <li *ngFor="let child of link.children">
-          <a [routerLink]="child.to" routerLinkActive="font-bold text-blue-600">{{ child.label }}</a>
-        </li>
-      </ul>
     </li>
   </ul>
   <router-outlet></router-outlet>

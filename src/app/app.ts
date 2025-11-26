@@ -10,7 +10,7 @@ import { ClientLayoutComponent } from './core/layouts/client-layout.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SlideBar, HeaderComponent, FloatingChatComponent, MapConsumerComponent, HttpClientModule, ClientLayoutComponent],
+  imports: [RouterOutlet, SlideBar, HeaderComponent, FloatingChatComponent, MapConsumerComponent, HttpClientModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

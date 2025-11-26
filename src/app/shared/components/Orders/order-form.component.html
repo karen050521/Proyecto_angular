@@ -1,0 +1,50 @@
+<form (submit)="onSubmit($event)" class="space-y-4">
+  <select name="customer_id" [value]="form.customer_id" (change)="onInputChange($event)" required>
+    <option value="">Selecciona Cliente</option>
+    <option *ngFor="let c of customers" [value]="c.id">{{ c.name }}</option>
+  </select>
+  <select name="motorcycle_id" [value]="form.motorcycle_id" (change)="onInputChange($event)" required>
+    <option value="">Selecciona Moto</option>
+    <option *ngFor="let m of motorcycles" [value]="m.id">{{ m.license_plate }}</option>
+  </select>
+  <select name="menu_id" [value]="form.menu_id" (change)="onInputChange($event)" required>
+    <option value="">Selecciona Menú</option>
+    <option *ngFor="let menu of menus" [value]="menu.id">{{ getMenuProductName(menu) }}</option>
+  </select>
+  <input
+    name="quantity"
+    [value]="form.quantity"
+    (input)="onInputChange($event)"
+    placeholder="Cantidad"
+    type="number"
+    min="1"
+    required
+    class="w-full border px-2 py-1 rounded"
+  />
+  <select
+    name="status"
+    [value]="form.status"
+    (change)="onInputChange($event)"
+    required
+    class="w-full border px-2 py-1 rounded"
+  >
+    <option value="">Selecciona Estado</option>
+    <option value="pending">Pendiente</option>
+    <option value="in_progress">En progreso</option>
+    <option value="delivered">Entregado</option>
+    <option value="cancelled">Cancelado</option>
+  </select>
+  <input
+    name="total_price"
+    [value]="form.total_price"
+    (input)="onInputChange($event)"
+    placeholder="Precio Total"
+    type="number"
+    required
+    class="w-full border px-2 py-1 rounded"
+  />
+  <div class="flex gap-2">
+    <button type="submit" class="bg-blue-600 text-white rounded px-3 py-1">Guardar</button>
+    <button type="button" class="bg-gray-300 rounded px-3 py-1" (click)="onCancel()">Cancelar</button>
+  </div>
+</form>

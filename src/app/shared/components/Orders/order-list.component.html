@@ -1,0 +1,44 @@
+<div class="overflow-x-auto">
+  <table class="min-w-full bg-white rounded shadow">
+    <thead>
+      <tr>
+        <th class="px-2 py-2">ID</th>
+        <th class="px-2 py-2">Cliente</th>
+        <th class="px-2 py-2">Moto</th>
+        <th class="px-2 py-2">Menú</th>
+        <th class="px-2 py-2">Cantidad</th>
+        <th class="px-2 py-2">Estado</th>
+        <th class="px-2 py-2">Total</th>
+        <th class="px-2 py-2">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="orders.length === 0">
+        <td colspan="8" class="text-center py-4">No hay pedidos.</td>
+      </tr>
+      <tr *ngFor="let order of orders; let index = index" class="border-b hover:bg-gray-50">
+        <td class="px-2 py-2">{{ order.id }}</td>
+        <td class="px-2 py-2">{{ getCustomerName(order.customer_id) }}</td>
+        <td class="px-2 py-2">{{ getMotorcyclePlate(order.motorcycle_id) }}</td>
+        <td class="px-2 py-2">{{ getMenuName(order.menu_id) }}</td>
+        <td class="px-2 py-2">{{ order.quantity }}</td>
+        <td class="px-2 py-2">{{ order.status }}</td>
+        <td class="px-2 py-2">{{ order.total_price }}</td>
+        <td class="px-2 py-2">
+          <button
+            class="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+            (click)="onEdit(order.id)"
+          >
+            Editar
+          </button>
+          <button
+            class="bg-red-500 text-white px-2 py-1 rounded"
+            (click)="onDelete(order.id)"
+          >
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

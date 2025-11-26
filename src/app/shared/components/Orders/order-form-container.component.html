@@ -1,0 +1,11 @@
+<app-order-form
+  [form]="form"
+  [customers]="customers"
+  [motorcycles]="motorcycles"
+  [menus]="menus"
+  [products]="products"
+  (formChange)="handleFormChange($event)"
+  (submitForm)="handleSubmit($event)"
+  (cancelForm)="handleCancel()"
+>
+</app-order-form>

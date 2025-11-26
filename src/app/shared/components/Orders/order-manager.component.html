@@ -1,0 +1,52 @@
+<div class="p-4">
+  <h2 class="text-2xl font-bold mb-4">Pedidos (Admin)</h2>
+
+  <button
+    class="mb-4 bg-green-600 text-white px-4 py-2 rounded"
+    (click)="handleCreate()"
+  >
+    Nuevo Pedido
+  </button>
+
+  <app-order-list
+    [orders]="orders"
+    [getCustomerName]="getCustomerName"
+    [getMotorcyclePlate]="getMotorcyclePlate"
+    [getMenuName]="getMenuName"
+    (editOrder)="handleEdit($event)"
+    (deleteOrder)="handleDelete($event)">
+  </app-order-list>
+
+  <div
+    *ngIf="loading"
+    class="mb-4 text-gray-500">
+    Cargando pedidos...
+  </div>
+  <div
+    *ngIf="error"
+    style="color: red;">
+    {{ error }}
+  </div>
+
+  <div *ngIf="showForm" class="fixed z-20 left-0 top-0 w-full h-full flex items-center justify-center bg-black bg-opacity-30">
+    <div class="bg-white rounded shadow-lg p-8 relative w-full max-w-lg">
+      <h3 class="text-xl font-bold mb-4">
+        {{ editingOrder ? 'Editar Pedido' : 'Nuevo Pedido' }}
+      </h3>
+      <app-order-form-container
+        [order]="editingOrder"
+        [customers]="customers"
+        [motorcycles]="motorcycles"
+        [menus]="menus"
+        [products]="products"
+        (submit)="handleSubmit($event)"
+        (cancel)="handleCancel()"
+      >
+      </app-order-form-container>
+      <button
+        class="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+        (click)="handleCancel()"
+      >✕</button>
+    </div>
+  </div>
+</div>
