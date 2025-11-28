@@ -5,6 +5,7 @@
      [style.display]="!isMobile || isOpen ? 'flex' : 'none'"
      role="navigation" 
      aria-label="Menú principal">
+  
   <div class="sidebar-header">
     <div class="brand" role="link" tabindex="0" (click)="setActiveSection('inicio')" (keydown.enter)="setActiveSection('inicio')" title="Ir al inicio">
       <img src="assets/motorcycle-sidebar.svg" alt="Moto" class="brand-icon" />
@@ -108,6 +109,3 @@
     </a>
   </div>
 </nav>
-
-<!-- Overlay para cerrar al hacer clic fuera (visible siempre cuando sidebar está abierto) -->
-<div class="overlay" *ngIf="isOpen" (click)="close()" aria-hidden="true"></div>

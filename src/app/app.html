@@ -7,6 +7,11 @@
 >
 </app-header>
 
+<!-- Overlay con frosted glass SOLO sobre el navbar -->
+@if (sidebarOpen) {
+  <div class="navbar-frosted-overlay"></div>
+}
+
 <app-slide-bar #sidebar (sidebarStateChange)="onSidebarStateChange($event)"> </app-slide-bar>
 
 <main
@@ -17,10 +22,10 @@
   [class.sidebar-mobile-open]="sidebarMobile && sidebarOpen"
 >
   <div class="container">
-    <router-outlet />
-    <!-- Mapa de Manizales BORRAR, ESTÁ AQUÍ PARA PRUEBAS, DEFINIR UBICACION FINAL -->
-    <app-map-consumer></app-map-consumer>
+    <app-restaurants-view></app-restaurants-view>
   </div>
+  <router-outlet></router-outlet>
+
 </main>
 
 <!-- Chat flotante - Accesible desde cualquier página -->

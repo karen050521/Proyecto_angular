@@ -1,0 +1,45 @@
+<div class="restaurants-container">
+  <h1>Restaurantes</h1>
+
+  <!-- Mostrar mientras carga -->
+  <div *ngIf="loading" class="loading">
+    <p>Cargando restaurantes...</p>
+  </div>
+
+  <!-- Mostrar si hay error -->
+  <div *ngIf="error && !loading" class="error">
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Mostrar la lista de restaurantes -->
+  <div *ngIf="!loading && !error" class="restaurants-grid">
+    <div *ngFor="let restaurant of restaurants" class="restaurant-card">
+      <!-- Imagen del restaurante -->
+      <div class="restaurant-image">
+        <img 
+          [src]="restaurant.imageUrl || 'assets/default-restaurant.jpg'" 
+          [alt]="restaurant.name"
+        />
+      </div>
+
+      <!-- Información del restaurante -->
+      <div class="restaurant-info">
+        <h3>{{ restaurant.name }}</h3>
+        <p class="address">
+          <i class="bi bi-geo-alt"></i> 
+          {{ restaurant.address || 'Sin dirección' }}
+        </p>
+        <p class="phone">
+          <i class="bi bi-telephone"></i> 
+          {{ restaurant.phone || 'Sin teléfono' }}
+        </p>
+        <p class="email">
+          <i class="bi bi-envelope"></i> 
+          {{ restaurant.email || 'Sin email' }}
+        </p>
+        
+        <button class="btn-view">Ver Menú</button>
+      </div>
+    </div>
+  </div>
+</div>

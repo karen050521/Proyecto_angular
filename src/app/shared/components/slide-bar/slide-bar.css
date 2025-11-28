@@ -16,19 +16,18 @@
 /* Sidebar principal */
 .sidebar {
   position: fixed;
-  top: 0;
+  top: 0; /* Empieza desde el top absoluto, cubre el navbar */
   left: 0;
-  height: 100vh;
+  height: 100vh; /* Altura completa de la pantalla */
   width: var(--sidebar-width);
   background: var(--sidebar-bg);
   color: var(--sidebar-text);
   display: flex;
   flex-direction: column;
   transition: transform 220ms ease, box-shadow 220ms ease;
-  z-index: 9999; /* Por encima del header (50) y debajo del botón (10000) */
-  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  z-index: 10000; /* Por encima de todo, incluyendo navbar (50) */
+  box-shadow: 4px 0 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05);
   overflow: hidden;
-  backdrop-filter: blur(10px);
 }
 
 /* En desktop, cuando está cerrado se oculta completamente */
@@ -325,7 +324,6 @@
   flex-direction: column;
   gap: 0.5rem;
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, transparent 100%);
-  position: relative;
 }
 
 .sidebar-footer::before {
@@ -463,28 +461,6 @@
   opacity: 0;
   width: 0;
   overflow: hidden;
-}
-
-.overlay {
-  /* overlay visible when inserted by *ngIf */
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.22);
-  z-index: 9998; /* just below the sidebar (9999) */
-  transition: opacity 220ms ease;
-  opacity: 1;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }
 
 @media (max-width: 767px) {

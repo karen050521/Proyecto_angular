@@ -13,11 +13,11 @@
   --border-color: #e5e7eb;
   --shadow: rgba(0, 0, 0, 0.1);
 
-  /* Sidebar específico */
-  --sidebar-bg: #1f2937;
-  --sidebar-text: #f9fafb;
+  /* Sidebar específico - BLANCO en modo claro */
+  --sidebar-bg: #ffffff;
+  --sidebar-text: #111827;
   --sidebar-accent: #3b82f6;
-  --sidebar-hover: rgba(59, 130, 246, 0.1);
+  --sidebar-hover: rgba(59, 130, 246, 0.08);
 }
 
 /* Modo oscuro */
@@ -47,11 +47,11 @@ html.light {
   --border-color: #e5e7eb;
   --shadow: rgba(0, 0, 0, 0.1);
 
-  /* Sidebar en modo claro */
-  --sidebar-bg: #1f2937;
-  --sidebar-text: #f9fafb;
+  /* Sidebar en modo claro - BLANCO */
+  --sidebar-bg: #ffffff;
+  --sidebar-text: #111827;
   --sidebar-accent: #3b82f6;
-  --sidebar-hover: rgba(59, 130, 246, 0.1);
+  --sidebar-hover: rgba(59, 130, 246, 0.08);
 }
 
 /* Reset básico */

@@ -12,6 +12,7 @@ export interface Restaurant {
   phone?: string | null;
   email?: string | null;
   created_at?: string | null; // ISO date string
+  imageUrl?: string | null; // URL de la imagen del restaurante
 }
 
 export interface RestaurantCreatePayload {

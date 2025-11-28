@@ -1,16 +1,15 @@
 import { Component, signal, ViewChild } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
 import { RouterOutlet } from '@angular/router';
 import { SlideBar } from './shared/components/slide-bar/slide-bar';
 import { HeaderComponent } from './shared/components/Header/header.Component';
 import { FloatingChatComponent } from './shared/components/floating-chat/floating-chat';
-import { MapConsumerComponent } from './shared/components/map-consumer/map-consumer.component';
+import { RestaurantsView } from './features/restaurants-view/restaurants-view';
 import { ClientLayoutComponent } from './core/layouts/client-layout.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SlideBar, HeaderComponent, FloatingChatComponent, MapConsumerComponent, HttpClientModule],
+  imports: [RouterOutlet, SlideBar, HeaderComponent, FloatingChatComponent, RestaurantsView],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

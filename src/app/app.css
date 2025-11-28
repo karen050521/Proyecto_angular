@@ -9,6 +9,34 @@
   margin-left: 0; /* Sin margen por defecto */
 }
 
+/* Overlay elegante sobre el navbar - Degradado sutil sin blur */
+.navbar-frosted-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px; /* Mismo ancho que el sidebar */
+  height: 70px; /* Altura del navbar */
+  z-index: 9999; /* Entre el navbar (50) y el sidebar (10000) */
+  background: linear-gradient(
+    90deg,
+    var(--sidebar-bg) 0%,
+    var(--sidebar-bg) 85%,
+    transparent 100%
+  );
+  pointer-events: none; /* No bloquea clicks */
+  animation: navbarOverlayFadeIn 280ms ease;
+  opacity: 0.95;
+}
+
+@keyframes navbarOverlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.95;
+  }
+}
+
 /* Pantallas pequeñas (móviles < 768px): sin margen porque sidebar es overlay */
 .main-content.sidebar-mobile {
   margin-left: 0;
