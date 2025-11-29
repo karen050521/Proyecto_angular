@@ -4,12 +4,14 @@ import { SlideBar } from './shared/components/slide-bar/slide-bar';
 import { HeaderComponent } from './shared/components/Header/header.Component';
 import { FloatingChatComponent } from './shared/components/floating-chat/floating-chat';
 import { RestaurantsView } from './features/restaurants-view/restaurants-view';
+import {ProductsView } from './features/products-view/products-view';
+import {MenuView } from './features/menu-view/menu-view';
 import { ClientLayoutComponent } from './core/layouts/client-layout.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SlideBar, HeaderComponent, FloatingChatComponent, RestaurantsView],
+  imports: [RouterOutlet, SlideBar, HeaderComponent, FloatingChatComponent, RestaurantsView, ProductsView, MenuView],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

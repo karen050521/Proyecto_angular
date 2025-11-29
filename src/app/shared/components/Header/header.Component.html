@@ -29,7 +29,7 @@
   </div>
 
   <!-- Sección derecha: Acciones y perfil -->
-  <div class="navbar-right">
+  <div class="navbar-right" style="display: flex; align-items: center; gap: 1.2rem;">
     <!-- Perfil de usuario con dropdown -->
     <div class="user-section-wrapper">
       <div class="user-section" (click)="toggleProfileMenu()" [class.active]="showProfileMenu">
@@ -79,10 +79,15 @@
       </div>
     </div>
 
-    <!-- Notificaciones (moved to the far right) -->
+    <!-- Notificaciones -->
     <button class="nav-action-btn notifications-final" aria-label="Notificaciones" title="Notificaciones">
       <i class="bi bi-bell"></i>
       <span class="notification-badge">3</span>
+    </button>
+
+    <!-- Carrito de compras -->
+    <button class="nav-action-btn cart-btn" aria-label="Carrito de compras" title="Carrito de compras" style="margin-left: 1.2rem;">
+      <i class="bi bi-cart3" style="font-size: 1.7rem;"></i>
     </button>
   </div>
 </nav>
