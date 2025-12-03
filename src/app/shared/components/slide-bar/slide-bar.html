@@ -38,9 +38,7 @@
       </a>
     </li>
     <li>
-      <a href="#" 
-         [class.active]="activeSection === 'restaurantes'"
-         (click)="setActiveSection('restaurantes'); $event.preventDefault()">
+      <a [routerLink]="'/restaurantes'" routerLinkActive="active" [class.active]="activeSection === 'restaurantes'" (click)="setActiveSection('restaurantes')">
         <i class="bi bi-shop"></i>
         <span class="label">Restaurantes</span>
       </a>

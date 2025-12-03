@@ -1,1 +1,35 @@
-<p>menu-view works!</p>
+<div class="menu-container">
+	<h2>Menú del Restaurante</h2>
+
+	<div *ngIf="loading" class="loading">Cargando productos...</div>
+	<div *ngIf="error && !loading" class="error">{{ error }}</div>
+
+	<div *ngIf="!loading && !error && menus.length === 0" class="empty">No hay productos en el menú.</div>
+
+	<div *ngIf="!loading && !error && menus.length > 0" class="menu-grid">
+		<div *ngFor="let menu of menus" class="menu-card">
+			<!-- Imagen del producto -->
+			<div class="menu-image" *ngIf="menu.product?.imageUrl">
+				<img [src]="menu.product?.imageUrl" [alt]="menu.product?.name" />
+			</div>
+			<div class="menu-image menu-image-placeholder" *ngIf="!menu.product?.imageUrl">
+				<span>🍽️</span>
+			</div>
+
+			<!-- Información del producto -->
+			<div class="menu-info">
+				<h3>{{ menu.product?.name || 'Producto' }}</h3>
+				<p>{{ menu.product?.description || 'Sin descripción' }}</p>
+				<p class="price">${{ menu.price }}</p>
+				
+				<!-- Botón agregar al carrito -->
+				<button 
+					class="btn-add-cart" 
+					[disabled]="!menu.availability"
+					(click)="addToCart(menu)">
+					{{ menu.availability ? '🛒 Agregar al carrito' : 'No disponible' }}
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

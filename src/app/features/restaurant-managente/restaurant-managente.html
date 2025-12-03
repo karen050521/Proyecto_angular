@@ -1,1 +1,364 @@
-<p>restaurant-managente works!</p>
+<div class="management-container">
+	<h1>Gestión de Restaurantes y Productos</h1>
+
+	<!-- Navigation Tabs -->
+	<div class="tabs">
+		<button 
+			class="tab-button" 
+			[class.active]="activeTab === 'restaurants'" 
+			(click)="setActiveTab('restaurants')">
+			Crear Restaurante
+		</button>
+		<button 
+			class="tab-button" 
+			[class.active]="activeTab === 'products'" 
+			(click)="setActiveTab('products')">
+			Crear Producto
+		</button>
+		<button 
+			class="tab-button" 
+			[class.active]="activeTab === 'menus'" 
+			(click)="setActiveTab('menus')">
+			Gestión de Menús
+		</button>
+		<button 
+			class="tab-button" 
+			[class.active]="activeTab === 'list-restaurants'" 
+			(click)="setActiveTab('list-restaurants')">
+			Ver Restaurantes
+		</button>
+		<button 
+			class="tab-button" 
+			[class.active]="activeTab === 'list-products'" 
+			(click)="setActiveTab('list-products')">
+			Ver Productos
+		</button>
+	</div>
+
+	<!-- Create Restaurant Tab -->
+	<div class="tab-content" *ngIf="activeTab === 'restaurants'">
+		<h2>Crear Restaurante</h2>
+		<form (ngSubmit)="createRestaurant()" autocomplete="off" #restaurantForm="ngForm">
+			<div class="form-group">
+				<label for="restaurantName">Nombre * (solo letras)</label>
+				<input 
+					id="restaurantName" 
+					name="restaurantName" 
+					type="text" 
+					[(ngModel)]="restaurantName" 
+					required 
+					pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"
+					class="form-control"
+					placeholder="Ej: La Trattoria"
+				/>
+				<small class="form-hint">Solo letras y espacios</small>
+			</div>
+			<div class="form-group">
+				<label for="restaurantAddress">Dirección *</label>
+				<input 
+					id="restaurantAddress" 
+					name="restaurantAddress" 
+					type="text" 
+					[(ngModel)]="restaurantAddress" 
+					required 
+					class="form-control"
+					placeholder="Ej: Calle 123 #45-67"
+				/>
+			</div>
+			<div class="form-group">
+				<label for="restaurantPhone">Teléfono * (solo números)</label>
+				<input 
+					id="restaurantPhone" 
+					name="restaurantPhone" 
+					type="tel" 
+					[(ngModel)]="restaurantPhone" 
+					required 
+					pattern="^[\d\s\-()]+$"
+					class="form-control"
+					placeholder="Ej: 3001234567"
+				/>
+				<small class="form-hint">Solo números, espacios y guiones</small>
+			</div>
+			<div class="form-group">
+				<label for="restaurantEmail">Email</label>
+				<input 
+					id="restaurantEmail" 
+					name="restaurantEmail" 
+					type="email" 
+					[(ngModel)]="restaurantEmail" 
+					pattern="^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+					class="form-control"
+					placeholder="Ej: restaurante@gmail.com"
+				/>
+				<small class="form-hint">Formato: nombre@dominio.com</small>
+			</div>
+			<button type="submit" [disabled]="loading || restaurantForm.invalid" class="btn btn-primary">
+				{{ loading ? 'Creando...' : 'Crear Restaurante' }}
+			</button>
+		</form>
+	</div>
+
+	<!-- Create Product Tab -->
+	<div class="tab-content" *ngIf="activeTab === 'products'">
+		<h2>Crear Producto</h2>
+		<form (ngSubmit)="createProduct()" autocomplete="off" #productForm="ngForm">
+			<div class="form-group">
+				<label for="productName">Nombre * (mínimo 2 caracteres)</label>
+				<input 
+					id="productName" 
+					name="productName" 
+					type="text" 
+					[(ngModel)]="productName" 
+					required 
+					minlength="2"
+					class="form-control"
+					placeholder="Ej: Pizza Margarita"
+				/>
+				<small class="form-hint">Mínimo 2 caracteres</small>
+			</div>
+			<div class="form-group">
+				<label for="productDescription">Descripción</label>
+				<textarea 
+					id="productDescription" 
+					name="productDescription" 
+					[(ngModel)]="productDescription" 
+					class="form-control"
+					placeholder="Ej: Deliciosa pizza con tomate, mozzarella y albahaca fresca"
+				></textarea>
+			</div>
+			<div class="form-group">
+				<label for="productPrice">Precio * (mayor a 0)</label>
+				<input 
+					id="productPrice" 
+					name="productPrice" 
+					type="number" 
+					[(ngModel)]="productPrice" 
+					required 
+					min="0.01" 
+					step="0.01" 
+					class="form-control"
+					placeholder="Ej: 15000"
+				/>
+				<small class="form-hint">Debe ser mayor a 0, máximo 2 decimales</small>
+			</div>
+			<div class="form-group">
+				<label for="productCategory">Categoría (solo letras)</label>
+				<input 
+					id="productCategory" 
+					name="productCategory" 
+					type="text" 
+					[(ngModel)]="productCategory" 
+					pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"
+					class="form-control"
+					placeholder="Ej: Comida Italiana"
+				/>
+				<small class="form-hint">Solo letras y espacios</small>
+			</div>
+			<div class="form-group">
+				<label for="productImageUrl">URL de la Imagen</label>
+				<input 
+					id="productImageUrl" 
+					name="productImageUrl" 
+					type="url" 
+					[(ngModel)]="productImageUrl" 
+					class="form-control"
+					placeholder="Ej: https://ejemplo.com/imagen.jpg"
+				/>
+				<small class="form-hint">URL completa de la imagen del producto</small>
+			</div>
+			<button type="submit" [disabled]="loading || productForm.invalid" class="btn btn-primary">
+				{{ loading ? 'Creando...' : 'Crear Producto' }}
+			</button>
+		</form>
+	</div>
+
+	<!-- List Restaurants Tab -->
+	<div class="tab-content" *ngIf="activeTab === 'list-restaurants'">
+		<h2>Lista de Restaurantes</h2>
+		<div class="list-grid" *ngIf="restaurants.length > 0; else noRestaurants">
+			<div class="card" *ngFor="let restaurant of restaurants">
+				<h3>{{ restaurant.name }}</h3>
+				<p><strong>Dirección:</strong> {{ restaurant.address }}</p>
+				<p><strong>Teléfono:</strong> {{ restaurant.phone }}</p>
+				<p *ngIf="restaurant.email"><strong>Email:</strong> {{ restaurant.email }}</p>
+				<button 
+					class="btn btn-secondary" 
+					(click)="manageRestaurantMenu(restaurant.id!)">
+					🍽️ Modificar Menú
+				</button>
+			</div>
+		</div>
+		<ng-template #noRestaurants>
+			<p class="empty-message">No hay restaurantes registrados.</p>
+		</ng-template>
+	</div>
+
+	<!-- List Products Tab -->
+	<div class="tab-content" *ngIf="activeTab === 'list-products'">
+		<h2>Lista de Productos</h2>
+		<div class="list-grid" *ngIf="products.length > 0; else noProducts">
+			<div class="card" *ngFor="let product of products">
+				<h3>{{ product.name }}</h3>
+				<p *ngIf="product.description">{{ product.description }}</p>
+				<p><strong>Precio:</strong> ${{ product.price }}</p>
+				<p *ngIf="product.category"><strong>Categoría:</strong> {{ product.category }}</p>
+			</div>
+		</div>
+		<ng-template #noProducts>
+			<p class="empty-message">No hay productos registrados.</p>
+		</ng-template>
+	</div>
+
+	<!-- Menu Management Tab -->
+	<div class="tab-content" *ngIf="activeTab === 'menus'">
+		<!-- Header with restaurant info -->
+		<div class="menu-header">
+			<h2 *ngIf="!managingRestaurantId">Gestión de Menús</h2>
+			<div *ngIf="managingRestaurantId" class="restaurant-header">
+				<h2>Menú de: {{ getRestaurantById(managingRestaurantId)?.name }}</h2>
+				<button class="btn btn-secondary" (click)="managingRestaurantId = null; setActiveTab('menus')">
+					← Volver a crear menú
+				</button>
+			</div>
+		</div>
+
+		<!-- Create Menu Form (only if not managing specific restaurant) -->
+		<div *ngIf="!managingRestaurantId" class="menu-create-section">
+			<h3>Crear Nuevo Menú</h3>
+			<form (ngSubmit)="createMenu()" autocomplete="off" #menuForm="ngForm">
+				<div class="form-row">
+					<div class="form-group">
+						<label for="menuRestaurant">Restaurante *</label>
+						<select 
+							id="menuRestaurant" 
+							name="menuRestaurant" 
+							[(ngModel)]="selectedRestaurantId" 
+							required 
+							class="form-control">
+							<option [value]="null">Selecciona un restaurante</option>
+							<option *ngFor="let restaurant of restaurants" [value]="restaurant.id">
+								{{ restaurant.name }}
+							</option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="menuProduct">Producto *</label>
+						<select 
+							id="menuProduct" 
+							name="menuProduct" 
+							[(ngModel)]="selectedProductId" 
+							required 
+							class="form-control">
+							<option [value]="null">Selecciona un producto</option>
+							<option *ngFor="let product of products" [value]="product.id">
+								{{ product.name }} - ${{ product.price }}
+							</option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="menuPrice">Precio en Menú *</label>
+						<input 
+							id="menuPrice" 
+							name="menuPrice" 
+							type="number" 
+							[(ngModel)]="menuPrice" 
+							required 
+							min="0.01" 
+							step="0.01" 
+							class="form-control"
+							placeholder="Ej: 18000"
+						/>
+						<small class="form-hint">Precio específico para este restaurante</small>
+					</div>
+
+					<div class="form-group">
+						<label class="checkbox-label">
+							<input 
+								type="checkbox" 
+								name="menuAvailability" 
+								[(ngModel)]="menuAvailability"
+							/>
+							Disponible
+						</label>
+					</div>
+				</div>
+
+				<button type="submit" [disabled]="loading || menuForm.invalid" class="btn btn-primary">
+					{{ loading ? 'Creando...' : 'Agregar al Menú' }}
+				</button>
+			</form>
+		</div>
+
+		<!-- Restaurant Menu List (when managing specific restaurant) -->
+		<div *ngIf="managingRestaurantId" class="menu-list-section">
+			<h3>Productos en el Menú</h3>
+			<div *ngIf="restaurantMenus.length === 0" class="empty-message">
+				Este restaurante no tiene productos en su menú.
+			</div>
+
+			<div class="menu-items" *ngIf="restaurantMenus.length > 0">
+				<div class="menu-item" *ngFor="let menu of restaurantMenus">
+					<!-- View Mode -->
+					<div *ngIf="editingMenuId !== menu.id" class="menu-item-view">
+						<div class="menu-item-info">
+							<h4>{{ getProductById(menu.product_id)?.name || 'Producto' }}</h4>
+							<p>{{ getProductById(menu.product_id)?.description }}</p>
+							<p class="menu-price">Precio: ${{ menu.price }}</p>
+							<span class="menu-availability" [class.available]="menu.availability">
+								{{ menu.availability ? '✓ Disponible' : '✗ No disponible' }}
+							</span>
+						</div>
+						<div class="menu-item-actions">
+							<button class="btn btn-sm btn-edit" (click)="editMenu(menu)">
+								✏️ Editar
+							</button>
+							<button class="btn btn-sm btn-danger" (click)="deleteMenu(menu.id!)">
+								🗑️ Eliminar
+							</button>
+						</div>
+					</div>
+
+					<!-- Edit Mode -->
+					<div *ngIf="editingMenuId === menu.id" class="menu-item-edit">
+						<h4>{{ getProductById(menu.product_id)?.name || 'Producto' }}</h4>
+						<div class="edit-form">
+							<div class="form-group">
+								<label>Precio</label>
+								<input 
+									type="number" 
+									[(ngModel)]="menuPrice" 
+									min="0.01" 
+									step="0.01" 
+									class="form-control"
+								/>
+							</div>
+							<div class="form-group">
+								<label class="checkbox-label">
+									<input 
+										type="checkbox" 
+										[(ngModel)]="menuAvailability"
+									/>
+									Disponible
+								</label>
+							</div>
+							<div class="edit-actions">
+								<button class="btn btn-sm btn-success" (click)="updateMenu(menu.id!)">
+									💾 Guardar
+								</button>
+								<button class="btn btn-sm btn-secondary" (click)="cancelEdit()">
+									✖️ Cancelar
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Messages -->
+	<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+	<div *ngIf="success" class="alert alert-success">{{ success }}</div>
+</div>

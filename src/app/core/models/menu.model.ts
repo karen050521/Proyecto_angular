@@ -1,10 +1,9 @@
 import type { Restaurant } from './restaurant.model';
+import type { Product } from './product.model';
 
 /**
  * Menu model attributes as provided by backend:
  * id, restaurant_id, product_id, price, availability, created_at, product?, restaurant?
- * Note: products are not modeled globally in this project (per decision). We keep product
- * as an optional unknown object to mirror backend payloads when present.
  */
 export interface Menu {
   id: number;
@@ -14,7 +13,7 @@ export interface Menu {
   availability: boolean;
   created_at?: string | null; // ISO date string
   // optional embedded relations returned by backend
-  product?: unknown | null;
+  product?: Product | null;
   restaurant?: Restaurant | null;
 }
 

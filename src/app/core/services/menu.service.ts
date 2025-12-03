@@ -7,7 +7,7 @@ import { Menu, MenuCreatePayload } from '../models/menu.model';
 @Injectable({ providedIn: 'root' })
 export class MenuService {
   private http = inject(HttpClient);
-  private base = `${environment.apiBase}/menus`;
+  private base = `${environment.apiBase}/api/menus`;
 
   getAll(): Observable<Menu[]> {
     return this.http.get<Menu[]>(this.base);
