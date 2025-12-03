@@ -3,12 +3,13 @@ import { RouterOutlet } from '@angular/router';
 import { SlideBar } from './shared/components/slide-bar/slide-bar';
 import { HeaderComponent } from './shared/components/Header/header.Component';
 import { FloatingChatComponent } from './shared/components/floating-chat/floating-chat';
+import { CartSidebar } from './shared/components/cart-sidebar/cart-sidebar';
 import { ClientLayoutComponent } from './core/layouts/client-layout.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SlideBar, HeaderComponent, FloatingChatComponent],
+  imports: [RouterOutlet, SlideBar, HeaderComponent, FloatingChatComponent, CartSidebar],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

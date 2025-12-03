@@ -22,12 +22,29 @@
 				<p>{{ menu.product?.description || 'Sin descripción' }}</p>
 				<p class="price">${{ menu.price }}</p>
 				
+				<!-- Indicador de carrito -->
+				@if (isInCart(menu.id)) {
+					<div class="in-cart-indicator">
+						<i class="bi bi-check-circle-fill"></i>
+						{{ getCartQuantity(menu.id) }} en el carrito
+					</div>
+				}
+				
 				<!-- Botón agregar al carrito -->
 				<button 
 					class="btn-add-cart" 
 					[disabled]="!menu.availability"
+					[class.in-cart]="isInCart(menu.id)"
 					(click)="addToCart(menu)">
-					{{ menu.availability ? '🛒 Agregar al carrito' : 'No disponible' }}
+					@if (menu.availability) {
+						@if (isInCart(menu.id)) {
+							<i class="bi bi-plus-circle"></i> Agregar más
+						} @else {
+							<i class="bi bi-cart-plus"></i> Agregar al carrito
+						}
+					} @else {
+						<i class="bi bi-x-circle"></i> No disponible
+					}
 				</button>
 			</div>
 		</div>

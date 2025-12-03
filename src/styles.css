@@ -66,6 +66,10 @@ body {
   background: var(--bg-secondary);
   color: var(--text-primary);
   transition: background 200ms ease, color 200ms ease;
+  /* Mejor scroll en móviles */
+  -webkit-overflow-scrolling: touch;
+  /* Prevenir zoom en inputs en iOS */
+  -webkit-text-size-adjust: 100%;
 }
 
 /* Transición suave al cambiar tema */
@@ -73,5 +77,130 @@ body {
   transition-property: background-color, border-color, color, fill, stroke;
   transition-duration: 200ms;
   transition-timing-function: ease-in-out;
+}
+
+/* Mejoras táctiles para móviles */
+@media (hover: none) and (pointer: coarse) {
+  /* Aumentar área táctil de botones y enlaces */
+  button,
+  a,
+  input[type="button"],
+  input[type="submit"],
+  .clickable {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Eliminar efectos hover en dispositivos táctiles */
+  *:hover {
+    transition: none;
+  }
+}
+
+/* Prevenir selección de texto en elementos interactivos */
+button,
+.btn,
+.tab-button,
+.nav-action-btn {
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Mejoras de scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Responsive typography */
+@media (max-width: 768px) {
+  html {
+    font-size: 15px; /* Ligeramente más pequeño en móvil */
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* ===== TOAST NOTIFICATIONS ===== */
+.toast-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #10b981;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10000;
+  animation: slideIn 0.3s ease-out;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  max-width: 400px;
+}
+
+.toast-notification.removing {
+  animation: slideOut 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+}
+
+/* Responsive toast para móviles */
+@media (max-width: 768px) {
+  .toast-notification {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+    padding: 0.875rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateY(-100px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideOut {
+    from {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(-100px);
+      opacity: 0;
+    }
+  }
 }
 

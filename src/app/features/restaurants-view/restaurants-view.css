@@ -25,6 +25,86 @@ h1 {
   gap: 2rem;
 }
 
+/* Responsive improvements */
+@media (max-width: 1200px) {
+  .restaurants-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .restaurants-container {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .restaurants-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .restaurant-card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .restaurant-image {
+    height: 180px;
+  }
+
+  .restaurant-info {
+    padding: 1.25rem;
+  }
+
+  .restaurant-info h3 {
+    font-size: 1.15rem;
+  }
+
+  .restaurant-info p {
+    font-size: 0.9rem;
+  }
+
+  .btn-view {
+    padding: 0.65rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .restaurants-container {
+    padding: 0.75rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .restaurants-grid {
+    gap: 1rem;
+  }
+
+  .restaurant-image {
+    height: 160px;
+  }
+
+  .restaurant-info {
+    padding: 1rem;
+  }
+
+  .restaurant-info h3 {
+    font-size: 1.05rem;
+  }
+
+  .restaurant-info p {
+    font-size: 0.85rem;
+  }
+}
+
 .restaurant-card {
   background: var(--bg-primary);
   border-radius: 12px;

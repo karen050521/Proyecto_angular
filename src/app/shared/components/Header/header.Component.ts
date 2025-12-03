@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { UserAvatarComponent } from './user.Avatar.Component';
+import { CartIconComponent } from '../cart-icon/cart-icon';
 
 @Component({
   standalone: true,
@@ -11,7 +12,8 @@ import { UserAvatarComponent } from './user.Avatar.Component';
   imports: [
     CommonModule,
     UserAvatarComponent,
-    RouterModule
+    RouterModule,
+    CartIconComponent
   ]
 })
 

@@ -16,7 +16,7 @@ import { Menu } from '../../core/models/menu.model';
   styleUrl: './restaurant-managente.css',
 })
 export class RestaurantManagente implements OnInit {
-  activeTab: 'restaurants' | 'products' | 'list-restaurants' | 'list-products' | 'menus' = 'restaurants';
+  activeTab: 'restaurants' | 'products' | 'list-restaurants' | 'list-products' | 'menus' | 'list-menus' = 'restaurants';
   
   // Restaurant form
   restaurantName = '';
@@ -59,17 +59,30 @@ export class RestaurantManagente implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadRestaurants();
+    // Cargar productos y restaurantes primero, luego menús
     this.loadProducts();
-    this.loadMenus();
+    this.loadRestaurants();
+    // Esperar un poco para que se carguen productos y restaurantes antes de cargar menús
+    setTimeout(() => {
+      this.loadMenus();
+    }, 500);
   }
 
   // Tab management
-  setActiveTab(tab: 'restaurants' | 'products' | 'list-restaurants' | 'list-products' | 'menus'): void {
+  setActiveTab(tab: 'restaurants' | 'products' | 'list-restaurants' | 'list-products' | 'menus' | 'list-menus'): void {
     this.activeTab = tab;
     this.clearMessages();
     this.editingMenuId = null;
     this.managingRestaurantId = null;
+    
+    // Recargar datos cuando se muestra la vista de menús
+    if (tab === 'list-menus') {
+      this.loadProducts();
+      this.loadRestaurants();
+      setTimeout(() => {
+        this.loadMenus();
+      }, 300);
+    }
   }
 
   // Restaurant methods
@@ -233,6 +246,9 @@ export class RestaurantManagente implements OnInit {
     this.menuService.getAll().subscribe({
       next: (data) => {
         this.menus = data;
+        console.log('Menús cargados:', data);
+        console.log('Productos disponibles:', this.products.length);
+        console.log('Restaurantes disponibles:', this.restaurants.length);
       },
       error: (err) => {
         console.error('Error al cargar menús:', err);
@@ -284,11 +300,50 @@ export class RestaurantManagente implements OnInit {
   manageRestaurantMenu(restaurantId: number): void {
     this.managingRestaurantId = restaurantId;
     this.activeTab = 'menus';
-    this.loadRestaurantMenus(restaurantId);
+    this.clearMessages();
+    this.loadMenus(); // Recargar todos los menús primero
+    setTimeout(() => {
+      this.loadRestaurantMenus(restaurantId);
+    }, 100);
   }
 
   loadRestaurantMenus(restaurantId: number): void {
-    this.restaurantMenus = this.menus.filter(m => m.restaurant_id === restaurantId);
+    console.log('loadRestaurantMenus - Restaurante ID:', restaurantId);
+    console.log('loadRestaurantMenus - Menús totales:', this.menus.length);
+    
+    // Filtrar los menús del restaurante seleccionado
+    // Convertir ambos IDs a números para comparación correcta
+    this.restaurantMenus = this.menus.filter(m => {
+      const menuRestaurantId = typeof m.restaurant_id === 'string' 
+        ? parseInt(m.restaurant_id, 10) 
+        : m.restaurant_id;
+      
+      const matches = menuRestaurantId === restaurantId;
+      console.log(`Comparando menú: restaurant_id=${menuRestaurantId} con ${restaurantId} → ${matches}`);
+      return matches;
+    });
+    
+    console.log('loadRestaurantMenus - Menús filtrados:', this.restaurantMenus.length);
+    
+    // Enriquecer cada menú con los datos del producto
+    this.restaurantMenus = this.restaurantMenus.map(menu => {
+      const productId = typeof menu.product_id === 'string'
+        ? parseInt(menu.product_id, 10)
+        : menu.product_id;
+      
+      const product = this.getProductById(productId);
+      
+      if (!product) {
+        console.warn(`Producto no encontrado para menu.product_id=${menu.product_id}`);
+      }
+      
+      return {
+        ...menu,
+        product: product || undefined
+      };
+    });
+    
+    console.log('loadRestaurantMenus - Menús enriquecidos:', this.restaurantMenus);
   }
 
   editMenu(menu: Menu): void {
@@ -359,12 +414,31 @@ export class RestaurantManagente implements OnInit {
   }
 
   getProductById(id: number | null | undefined): Product | undefined {
-    if (!id) return undefined;
-    return this.products.find(p => p.id === id);
+    if (!id) {
+      console.warn('getProductById: ID es null o undefined');
+      return undefined;
+    }
+    const product = this.products.find(p => p.id === id);
+    if (!product) {
+      console.warn(`Producto con ID ${id} no encontrado. Productos disponibles:`, this.products.map(p => ({ id: p.id, name: p.name })));
+    }
+    return product;
   }
 
-  getRestaurantById(id: number | undefined): Restaurant | undefined {
-    return this.restaurants.find(r => r.id === id);
+  getRestaurantById(id: number | string | undefined): Restaurant | undefined {
+    if (!id) {
+      console.warn('getRestaurantById: ID es undefined');
+      return undefined;
+    }
+    
+    // Convertir a número si es string para comparación correcta
+    const numericId = typeof id === 'string' ? parseInt(id, 10) : id;
+    
+    const restaurant = this.restaurants.find(r => r.id === numericId);
+    if (!restaurant) {
+      console.warn(`Restaurante con ID ${id} no encontrado. Restaurantes disponibles:`, this.restaurants.map(r => ({ id: r.id, name: r.name })));
+    }
+    return restaurant;
   }
 
   // Utility

@@ -531,3 +531,251 @@ textarea.form-control {
 		font-size: 1.1rem;
 	}
 }
+
+/* View Menus Specific Styles */
+.menu-card {
+	position: relative;
+	background: linear-gradient(to bottom, #f9fafb 0%, #ffffff 100%);
+	border-left: 4px solid #2563eb;
+}
+
+.menu-card-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+	padding-bottom: 0.75rem;
+	border-bottom: 1px solid #e5e7eb;
+}
+
+.menu-id-badge {
+	background: #2563eb;
+	color: white;
+	padding: 0.25rem 0.75rem;
+	border-radius: 12px;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.5px;
+}
+
+.badge {
+	padding: 0.25rem 0.75rem;
+	border-radius: 12px;
+	font-size: 0.75rem;
+	font-weight: 600;
+}
+
+.badge-success {
+	background: #d1fae5;
+	color: #065f46;
+}
+
+.badge-danger {
+	background: #fee2e2;
+	color: #b91c1c;
+}
+
+.menu-restaurant {
+	color: #4b5563;
+	font-size: 0.95rem;
+	margin-bottom: 0.75rem;
+}
+
+.menu-product-description {
+	color: #6b7280;
+	font-size: 0.9rem;
+	font-style: italic;
+	margin-bottom: 1rem;
+}
+
+.menu-price-section {
+	background: #f3f4f6;
+	padding: 1rem;
+	border-radius: 8px;
+	margin: 1rem 0;
+}
+
+.price-comparison {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1rem;
+}
+
+.price-item {
+	text-align: center;
+}
+
+.price-item.highlight {
+	background: #eff6ff;
+	padding: 0.5rem;
+	border-radius: 6px;
+	border: 2px solid #2563eb;
+}
+
+.price-label {
+	display: block;
+	font-size: 0.75rem;
+	color: #6b7280;
+	margin-bottom: 0.25rem;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.price-value {
+	display: block;
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: #1f2937;
+}
+
+.price-value.menu-price {
+	color: #2563eb;
+	font-size: 1.5rem;
+}
+
+.menu-category {
+	color: #4b5563;
+	font-size: 0.9rem;
+	margin-top: 0.75rem;
+}
+
+.menu-created {
+	color: #9ca3af;
+	font-size: 0.85rem;
+	margin-top: 0.5rem;
+	border-top: 1px solid #e5e7eb;
+	padding-top: 0.75rem;
+}
+
+.card-actions {
+	margin-top: 1rem;
+}
+
+.empty-state {
+	text-align: center;
+	padding: 4rem 2rem;
+	color: #9ca3af;
+}
+
+.empty-icon {
+	font-size: 4rem;
+	margin-bottom: 1rem;
+}
+
+.empty-message {
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: #6b7280;
+	margin-bottom: 0.5rem;
+}
+
+.empty-hint {
+	font-size: 1rem;
+	color: #9ca3af;
+}
+
+/* Responsive for menu cards */
+@media (max-width: 1200px) {
+	.list-grid {
+		grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+		gap: 1.25rem;
+	}
+
+	.menu-card {
+		box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+	}
+}
+
+@media (max-width: 768px) {
+	.price-comparison {
+		grid-template-columns: 1fr;
+		gap: 0.75rem;
+	}
+	
+	.menu-card-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.5rem;
+	}
+
+	.menu-card {
+		border-left-width: 3px;
+	}
+
+	.menu-price-section {
+		padding: 0.75rem;
+		margin: 0.75rem 0;
+	}
+
+	.price-value {
+		font-size: 1.15rem;
+	}
+
+	.price-value.menu-price {
+		font-size: 1.35rem;
+	}
+
+	.card h3 {
+		font-size: 1.15rem;
+	}
+
+	.card p {
+		font-size: 0.9rem;
+	}
+
+	.menu-restaurant {
+		font-size: 0.9rem;
+	}
+
+	.menu-product-description {
+		font-size: 0.85rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.menu-card {
+		border-left-width: 2px;
+	}
+
+	.menu-price-section {
+		padding: 0.6rem;
+	}
+
+	.price-value {
+		font-size: 1.05rem;
+	}
+
+	.price-value.menu-price {
+		font-size: 1.25rem;
+	}
+
+	.price-label {
+		font-size: 0.7rem;
+	}
+
+	.empty-icon {
+		font-size: 3rem;
+	}
+
+	.empty-message {
+		font-size: 1.1rem;
+	}
+
+	.empty-hint {
+		font-size: 0.9rem;
+	}
+
+	.empty-state {
+		padding: 3rem 1rem;
+	}
+
+	.badge {
+		font-size: 0.7rem;
+		padding: 0.2rem 0.6rem;
+	}
+
+	.menu-id-badge {
+		font-size: 0.7rem;
+		padding: 0.2rem 0.6rem;
+	}
+}

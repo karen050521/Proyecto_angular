@@ -1,0 +1,149 @@
+<div class="cart-container">
+  <div class="cart-header">
+    <h1>🛒 Mi Carrito</h1>
+    
+    @if (!cartStore.isEmpty()) {
+      <button class="btn-clear" (click)="clearCart()">
+        <i class="bi bi-trash"></i>
+        Vaciar carrito
+      </button>
+    }
+  </div>
+  
+  <!-- Carrito vacío -->
+  @if (cartStore.isEmpty()) {
+    <div class="empty-cart">
+      <div class="empty-icon">🛒</div>
+      <h2>Tu carrito está vacío</h2>
+      <p>Agrega productos desde el menú de tu restaurante favorito</p>
+      <button class="btn btn-primary" routerLink="/restaurants">
+        <i class="bi bi-shop"></i>
+        Ver Restaurantes
+      </button>
+    </div>
+  }
+  
+  <!-- Carrito con items -->
+  @if (!cartStore.isEmpty()) {
+    <div class="cart-content">
+      <!-- Lista de items -->
+      <div class="cart-items">
+        <div class="items-header">
+          <h2>Productos ({{ cartStore.itemCount() }})</h2>
+        </div>
+        
+        @for (item of cartStore.items(); track item.id) {
+          <div class="cart-item">
+            <!-- Imagen del producto -->
+            <div class="item-image">
+              <img 
+                [src]="getImageUrl(item)" 
+                [alt]="item.product_name"
+                (error)="hasImageError($event)">
+            </div>
+            
+            <!-- Información del producto -->
+            <div class="item-info">
+              <h3>{{ item.product_name }}</h3>
+              
+              @if (item.product_description) {
+                <p class="item-description">{{ item.product_description }}</p>
+              }
+              
+              <p class="item-restaurant">
+                <i class="bi bi-shop"></i>
+                {{ item.restaurant_name }}
+              </p>
+              
+              <p class="item-price">
+                <span class="price-label">Precio unitario:</span>
+                <span class="price-value">${{ item.price }}</span>
+              </p>
+            </div>
+            
+            <!-- Controles de cantidad -->
+            <div class="item-controls">
+              <div class="quantity-controls">
+                <button 
+                  class="btn-quantity" 
+                  (click)="decrementQuantity(item.id)"
+                  [disabled]="item.quantity <= 1">
+                  <i class="bi bi-dash"></i>
+                </button>
+                
+                <span class="quantity">{{ item.quantity }}</span>
+                
+                <button 
+                  class="btn-quantity" 
+                  (click)="incrementQuantity(item.id)">
+                  <i class="bi bi-plus"></i>
+                </button>
+              </div>
+              
+              <div class="item-subtotal">
+                <span class="subtotal-label">Subtotal:</span>
+                <span class="subtotal-value">${{ item.subtotal }}</span>
+              </div>
+              
+              <button 
+                class="btn-remove" 
+                (click)="removeItem(item.id)"
+                title="Eliminar producto">
+                <i class="bi bi-trash"></i>
+                Eliminar
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+      
+      <!-- Resumen del pedido -->
+      <div class="cart-summary">
+        <div class="summary-card">
+          <h2>Resumen del Pedido</h2>
+          
+          <div class="summary-details">
+            <div class="summary-row">
+              <span>Productos ({{ cartStore.itemCount() }})</span>
+              <span>${{ cartStore.total() }}</span>
+            </div>
+            
+            <div class="summary-row">
+              <span>Envío</span>
+              <span class="text-success">Gratis</span>
+            </div>
+            
+            <div class="summary-divider"></div>
+            
+            <div class="summary-row summary-total">
+              <span>Total</span>
+              <span class="total-amount">${{ cartStore.total() }}</span>
+            </div>
+          </div>
+          
+          <button class="btn btn-checkout" (click)="checkout()">
+            <i class="bi bi-credit-card"></i>
+            Proceder al Pago
+          </button>
+          
+          <button class="btn btn-secondary" routerLink="/restaurants">
+            <i class="bi bi-arrow-left"></i>
+            Seguir Comprando
+          </button>
+        </div>
+        
+        <!-- Advertencia de múltiples restaurantes -->
+        @if (cartStore.hasMultipleRestaurants()) {
+          <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle"></i>
+            <div>
+              <strong>¡Atención!</strong>
+              <p>Tienes productos de {{ cartStore.restaurantIds().length }} restaurantes diferentes. 
+              Se realizarán pedidos separados.</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

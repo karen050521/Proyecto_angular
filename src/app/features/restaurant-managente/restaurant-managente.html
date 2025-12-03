@@ -33,6 +33,12 @@
 			(click)="setActiveTab('list-products')">
 			Ver Productos
 		</button>
+		<button 
+			class="tab-button" 
+			[class.active]="activeTab === 'list-menus'" 
+			(click)="setActiveTab('list-menus')">
+			Ver Menús
+		</button>
 	</div>
 
 	<!-- Create Restaurant Tab -->
@@ -356,6 +362,58 @@
 				</div>
 			</div>
 		</div>
+	</div>
+
+	<!-- List All Menus Tab -->
+	<div class="tab-content" *ngIf="activeTab === 'list-menus'">
+		<h2>Lista de Menús</h2>
+		<div class="list-grid" *ngIf="menus.length > 0; else noMenus">
+			<div class="card menu-card" *ngFor="let menu of menus">
+				<div class="menu-card-header">
+					<span class="menu-id-badge">ID: {{ menu.id }}</span>
+					<span class="badge" [class.badge-success]="menu.availability" [class.badge-danger]="!menu.availability">
+						{{ menu.availability ? '✓ Disponible' : '✗ No disponible' }}
+					</span>
+				</div>
+				<h3>{{ getProductById(menu.product_id)?.name || 'Producto desconocido' }}</h3>
+				<p class="menu-restaurant">
+					🏪 <strong>Restaurante:</strong> {{ getRestaurantById(menu.restaurant_id)?.name || 'Desconocido' }}
+				</p>
+				<p class="menu-product-description" *ngIf="getProductById(menu.product_id)?.description">
+					{{ getProductById(menu.product_id)?.description }}
+				</p>
+				<div class="menu-price-section">
+					<div class="price-comparison">
+						<div class="price-item">
+							<span class="price-label">Precio Base:</span>
+							<span class="price-value">${{ getProductById(menu.product_id)?.price || 0 }}</span>
+						</div>
+						<div class="price-item highlight">
+							<span class="price-label">Precio en Menú:</span>
+							<span class="price-value menu-price">${{ menu.price }}</span>
+						</div>
+					</div>
+				</div>
+				<p class="menu-category" *ngIf="getProductById(menu.product_id)?.category">
+					<strong>Categoría:</strong> {{ getProductById(menu.product_id)?.category }}
+				</p>
+				<p class="menu-created" *ngIf="menu.created_at">
+					<small>📅 Creado: {{ menu.created_at | date: 'dd/MM/yyyy HH:mm' }}</small>
+				</p>
+				<div class="card-actions">
+					<button class="btn btn-sm btn-secondary" (click)="manageRestaurantMenu(menu.restaurant_id)">
+						🍽️ Ver Menú del Restaurante
+					</button>
+				</div>
+			</div>
+		</div>
+		<ng-template #noMenus>
+			<div class="empty-state">
+				<div class="empty-icon">📭</div>
+				<p class="empty-message">No hay menús registrados.</p>
+				<p class="empty-hint">Ve a "Gestión de Menús" para crear tu primer menú.</p>
+			</div>
+		</ng-template>
 	</div>
 
 	<!-- Messages -->

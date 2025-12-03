@@ -1,0 +1,12 @@
+<button 
+  class="cart-icon-btn" 
+  (click)="goToCart()"
+  [class.has-items]="!cartStore.isEmpty()"
+  title="Ver carrito">
+  <i class="bi bi-cart3"></i>
+  
+  <!-- Badge con cantidad de items -->
+  @if (!cartStore.isEmpty()) {
+    <span class="cart-badge">{{ cartStore.itemCount() }}</span>
+  }
+</button>

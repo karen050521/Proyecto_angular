@@ -7,6 +7,7 @@ import { ProfileComponent } from './shared/components/Client/profile.component';
 import { RestaurantManagente } from './features/restaurant-managente/restaurant-managente';
 import { RestaurantsView } from './features/restaurants-view/restaurants-view';
 import { MenuView } from './features/menu-view/menu-view';
+import { CartViewComponent } from './features/cart-view/cart-view';
 
 export const routes: Routes = [
 	{
@@ -34,5 +35,9 @@ export const routes: Routes = [
 	{
 		path: 'restaurantes/:id/menu',
 		component: MenuView
+	},
+	{
+		path: 'cart',
+		component: CartViewComponent
 	}
 ];

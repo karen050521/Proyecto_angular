@@ -1,6 +1,66 @@
-# AngularProyecto
+# 🍽️ Sistema de Delivery con Gestión de Menús
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10.
+Sistema completo de delivery de comida con Angular 19, incluyendo gestión de restaurantes, productos y menús con relación intermedia.
+
+**Generado con**: [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10
+
+---
+
+## ⚡ Inicio Rápido
+
+```bash
+# Instalar dependencias
+npm install
+
+# Iniciar servidor de desarrollo
+ng serve
+
+# Abrir navegador en
+http://localhost:4200
+```
+
+---
+
+## 🎯 Características Principales
+
+### ✅ Gestión de Menús (NUEVO - Diciembre 2025)
+
+**Problema resuelto**: Sistema completo de menús sin necesidad de modificar el backend.
+
+- **CRUD completo de menús** usando localStorage
+- **Relación Restaurante ↔ Producto** mediante entidad intermedia Menu
+- **Precios específicos** por restaurante para el mismo producto
+- **Control de disponibilidad** por menú
+- **Vista de administración** con edición inline
+- **Vista de cliente** con productos del menú del restaurante
+
+**Documentación completa**:
+- 📖 `INICIO_RAPIDO.md` - Guía de inicio paso a paso
+- 📖 `SISTEMA_MENUS_LOCALSTORAGE.md` - Documentación técnica completa
+- 📖 `SOLUCION_COMPLETA.md` - Resumen de la implementación
+- 🛠️ `public/inspector-menus.html` - Herramienta de inspección visual
+
+### 🏪 Gestión de Restaurantes
+
+- Crear, listar restaurantes
+- Validaciones de datos (nombre solo letras, teléfono solo números, email válido)
+- Interfaz de administración completa
+
+### 🍕 Gestión de Productos
+
+- Crear, listar productos
+- Soporte para imágenes de productos
+- Categorización
+- Precios con validación de decimales
+
+### 🗺️ Mapas y Ubicación
+
+- Integración con Leaflet
+- Visualización de ubicaciones de restaurantes
+
+---
+
+## AngularProyecto
 
 ## Development server
 

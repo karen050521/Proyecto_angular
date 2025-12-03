@@ -1,0 +1,112 @@
+<!-- Overlay oscuro -->
+<div 
+  class="cart-overlay" 
+  [class.active]="cartStore.isSidebarOpen()"
+  (click)="onOverlayClick($event)"
+  (keydown)="onKeyDown($event)"
+  tabindex="0"
+>
+  <!-- Sidebar deslizable -->
+  <div class="cart-sidebar" [class.open]="cartStore.isSidebarOpen()">
+    <!-- Header del sidebar -->
+    <div class="cart-header">
+      <h2>
+        <i class="bi bi-cart3"></i>
+        Mi Carrito
+        <span class="item-count" *ngIf="!cartStore.isEmpty()">
+          ({{ cartStore.itemCount() }})
+        </span>
+      </h2>
+      <button class="close-btn" (click)="closeSidebar()" aria-label="Cerrar carrito">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Contenido del carrito -->
+    <div class="cart-content">
+      <!-- Carrito vacío -->
+      <div class="empty-cart" *ngIf="cartStore.isEmpty()">
+        <i class="bi bi-cart-x empty-icon"></i>
+        <p class="empty-message">Tu carrito está vacío</p>
+        <p class="empty-hint">¡Agrega productos para empezar!</p>
+        <button class="btn-continue" (click)="closeSidebar()">
+          <i class="bi bi-shop"></i>
+          Continuar comprando
+        </button>
+      </div>
+
+      <!-- Items del carrito -->
+      <div class="cart-items" *ngIf="!cartStore.isEmpty()">
+        <div class="cart-item" *ngFor="let item of cartStore.items()">
+          <!-- Imagen del producto (placeholder) -->
+          <div class="item-image">
+            <i class="bi bi-image-fill"></i>
+          </div>
+
+          <!-- Info del item -->
+          <div class="item-info">
+            <h3 class="item-name">{{ item.product_name }}</h3>
+            <p class="item-restaurant">
+              <i class="bi bi-shop"></i>
+              {{ item.restaurant_name }}
+            </p>
+            <p class="item-price">${{ item.price }}</p>
+          </div>
+
+          <!-- Controles de cantidad -->
+          <div class="item-controls">
+            <div class="quantity-controls">
+              <button 
+                class="qty-btn" 
+                (click)="decreaseQuantity(item.id)"
+                [disabled]="item.quantity <= 1"
+              >
+                <i class="bi bi-dash"></i>
+              </button>
+              <span class="quantity">{{ item.quantity }}</span>
+              <button 
+                class="qty-btn" 
+                (click)="increaseQuantity(item.id)"
+              >
+                <i class="bi bi-plus"></i>
+              </button>
+            </div>
+
+            <!-- Subtotal -->
+            <p class="item-subtotal">${{ item.subtotal }}</p>
+
+            <!-- Botón eliminar -->
+            <button 
+              class="remove-btn" 
+              (click)="removeItem(item.id)"
+              aria-label="Eliminar item"
+            >
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer con total y botones -->
+    <div class="cart-footer" *ngIf="!cartStore.isEmpty()">
+      <!-- Total -->
+      <div class="cart-total">
+        <span class="total-label">Total:</span>
+        <span class="total-amount">${{ cartStore.total() }}</span>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="cart-actions">
+        <button class="btn-clear" (click)="clearCart()">
+          <i class="bi bi-trash"></i>
+          Vaciar carrito
+        </button>
+        <button class="btn-checkout" (click)="checkout()">
+          <i class="bi bi-credit-card"></i>
+          Proceder al pago
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

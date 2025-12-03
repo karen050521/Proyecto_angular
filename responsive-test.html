@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Responsive - Angular Proyecto</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f3f4f6;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2563eb;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .device-info {
+            background: #eff6ff;
+            border: 2px solid #2563eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .device-info h2 {
+            color: #1d4ed8;
+            margin-bottom: 1rem;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .info-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 6px;
+        }
+        
+        .info-label {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+        
+        .info-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        
+        .breakpoint-indicator {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .test-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: transform 0.2s;
+        }
+        
+        .test-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .test-card h3 {
+            color: #2563eb;
+            margin-bottom: 0.75rem;
+        }
+        
+        .test-card p {
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        
+        .btn:hover {
+            background: #1d4ed8;
+        }
+        
+        .instructions {
+            background: #fef3c7;
+            border-left: 4px solid #fbbf24;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+        
+        .instructions h3 {
+            color: #92400e;
+            margin-bottom: 0.75rem;
+        }
+        
+        .instructions ol {
+            margin-left: 1.5rem;
+            color: #78350f;
+        }
+        
+        .instructions li {
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .test-grid {
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .test-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .breakpoint-indicator {
+                font-size: 1.25rem;
+                padding: 0.75rem 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 0.5rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 1.3rem;
+            }
+            
+            .breakpoint-indicator {
+                font-size: 1.1rem;
+            }
+            
+            .info-value {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 Test de Diseño Responsive</h1>
+        
+        <div class="breakpoint-indicator" id="breakpoint">
+            Cargando...
+        </div>
+        
+        <div class="device-info">
+            <h2>📊 Información del Dispositivo</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Ancho de Pantalla</div>
+                    <div class="info-value" id="width">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Alto de Pantalla</div>
+                    <div class="info-value" id="height">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Tipo de Dispositivo</div>
+                    <div class="info-value" id="device">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Orientación</div>
+                    <div class="info-value" id="orientation">-</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-grid">
+            <div class="test-card">
+                <h3>🏠 Restaurante 1</h3>
+                <p>📍 Dirección: Calle Principal 123</p>
+                <p>🕐 Horario: 10:00 - 22:00</p>
+                <p>📞 Tel: +123 456 7890</p>
+                <button class="btn">Ver Menú</button>
+            </div>
+            
+            <div class="test-card">
+                <h3>🍕 Restaurante 2</h3>
+                <p>📍 Dirección: Avenida Central 456</p>
+                <p>🕐 Horario: 09:00 - 23:00</p>
+                <p>📞 Tel: +123 456 7891</p>
+                <button class="btn">Ver Menú</button>
+            </div>
+            
+            <div class="test-card">
+                <h3>🍔 Restaurante 3</h3>
+                <p>📍 Dirección: Plaza Mayor 789</p>
+                <p>🕐 Horario: 11:00 - 21:00</p>
+                <p>📞 Tel: +123 456 7892</p>
+                <button class="btn">Ver Menú</button>
+            </div>
+            
+            <div class="test-card">
+                <h3>🌮 Restaurante 4</h3>
+                <p>📍 Dirección: Boulevard Norte 321</p>
+                <p>🕐 Horario: 08:00 - 20:00</p>
+                <p>📞 Tel: +123 456 7893</p>
+                <button class="btn">Ver Menú</button>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>🧪 Cómo Probar el Responsive</h3>
+            <ol>
+                <li><strong>Redimensiona la ventana</strong> del navegador y observa cómo cambia el diseño</li>
+                <li><strong>Presiona F12</strong> para abrir DevTools</li>
+                <li><strong>Presiona Ctrl+Shift+M</strong> para activar el modo de dispositivo</li>
+                <li><strong>Selecciona diferentes dispositivos</strong>:
+                    <ul style="margin-top: 0.5rem;">
+                        <li>📱 iPhone SE (375x667)</li>
+                        <li>📱 iPhone 12 Pro (390x844)</li>
+                        <li>📱 iPad (768x1024)</li>
+                        <li>💻 Desktop (1920x1080)</li>
+                    </ul>
+                </li>
+                <li><strong>Observa</strong> cómo las tarjetas se reorganizan automáticamente</li>
+            </ol>
+        </div>
+    </div>
+    
+    <script>
+        function updateDeviceInfo() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const orientation = width > height ? 'Horizontal' : 'Vertical';
+            
+            let device = '';
+            let breakpoint = '';
+            
+            if (width < 480) {
+                device = '📱 Móvil Pequeño';
+                breakpoint = '< 480px - MÓVIL PEQUEÑO';
+            } else if (width < 768) {
+                device = '📱 Móvil';
+                breakpoint = '< 768px - MÓVIL';
+            } else if (width < 1024) {
+                device = '📱 Tablet';
+                breakpoint = '768px - 1024px - TABLET';
+            } else if (width < 1200) {
+                device = '💻 Desktop';
+                breakpoint = '1024px - 1200px - DESKTOP';
+            } else {
+                device = '💻 Desktop Grande';
+                breakpoint = '> 1200px - DESKTOP GRANDE';
+            }
+            
+            document.getElementById('width').textContent = width + 'px';
+            document.getElementById('height').textContent = height + 'px';
+            document.getElementById('device').textContent = device;
+            document.getElementById('orientation').textContent = orientation;
+            document.getElementById('breakpoint').textContent = breakpoint;
+        }
+        
+        // Actualizar al cargar
+        updateDeviceInfo();
+        
+        // Actualizar al redimensionar
+        window.addEventListener('resize', updateDeviceInfo);
+    </script>
+</body>
+</html>

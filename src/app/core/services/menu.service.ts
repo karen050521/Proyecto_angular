@@ -7,7 +7,7 @@ import { Menu, MenuCreatePayload } from '../models/menu.model';
 @Injectable({ providedIn: 'root' })
 export class MenuService {
   private http = inject(HttpClient);
-  private base = `${environment.apiBase}/api/menus`;
+  private base = `${environment.apiBase}/menus`;
 
   getAll(): Observable<Menu[]> {
     return this.http.get<Menu[]>(this.base);
@@ -27,5 +27,10 @@ export class MenuService {
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.base}/${id}`);
+  }
+
+  // Método helper para obtener menús por restaurante
+  getByRestaurantId(restaurantId: number): Observable<Menu[]> {
+    return this.http.get<Menu[]>(`${this.base}/restaurant/${restaurantId}`);
   }
 }
