@@ -1,0 +1,267 @@
+<p>dashboard works!</p>
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <div class="header-content">
+      <div class="header-title">
+        <i class="bi bi-graph-up-arrow header-icon"></i>
+        <div>
+          <h1>Dashboard de Análisis</h1>
+          <p>Panel de control con métricas y estadísticas en tiempo real</p>
+        </div>
+      </div>
+      <button (click)="loadAllData()" class="refresh-btn" [disabled]="loading">
+        <i class="bi bi-arrow-clockwise" [class.spinning]="loading"></i>
+        <span>Actualizar</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Cargando datos del dashboard...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-container">
+    <i class="bi bi-exclamation-triangle-fill error-icon"></i>
+    <h3>Error al cargar los datos</h3>
+    <p>No se pudo conectar con el servidor. Asegúrate de que el Mock Server esté corriendo en http://localhost:3001</p>
+    <button (click)="loadAllData()" class="retry-btn">
+      <i class="bi bi-arrow-clockwise"></i>
+      Reintentar
+    </button>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div *ngIf="!loading && !error" class="dashboard-content">
+    
+    <!-- Estadísticas Generales -->
+    <div class="stats-section">
+      <div class="section-header">
+        <i class="bi bi-bar-chart-line"></i>
+        <h2>Estadísticas Generales</h2>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card stat-primary">
+          <div class="stat-icon-wrapper">
+            <i class="bi bi-box-seam stat-icon"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Total Pedidos</span>
+            <p class="stat-value">{{ formatNumber(estadisticas.totalPedidos) }}</p>
+            <span class="stat-change positive">
+              <i class="bi bi-arrow-up"></i>
+              Hoy: {{ estadisticas.pedidosHoy }}
+            </span>
+          </div>
+        </div>
+
+        <div class="stat-card stat-success">
+          <div class="stat-icon-wrapper">
+            <i class="bi bi-currency-dollar stat-icon"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Ingresos</span>
+            <p class="stat-value">{{ formatCurrency(estadisticas.ingresosTotal) }}</p>
+            <span class="stat-change positive">
+              <i class="bi bi-arrow-up"></i>
+              Hoy: {{ formatCurrency(estadisticas.ingresosHoy) }}
+            </span>
+          </div>
+        </div>
+
+        <div class="stat-card stat-info">
+          <div class="stat-icon-wrapper">
+            <i class="bi bi-people-fill stat-icon"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Clientes Activos</span>
+            <p class="stat-value">{{ formatNumber(estadisticas.clientesActivos) }}</p>
+            <span class="stat-change">
+              <i class="bi bi-shop"></i>
+              {{ estadisticas.restaurantesActivos }} Restaurantes
+            </span>
+          </div>
+        </div>
+
+        <div class="stat-card stat-warning">
+          <div class="stat-icon-wrapper">
+            <i class="bi bi-clock-history stat-icon"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Tiempo Promedio</span>
+            <p class="stat-value">{{ estadisticas.promedioEntrega }}</p>
+            <span class="stat-change">
+              <i class="bi bi-star-fill"></i>
+              {{ estadisticas.tasaSatisfaccion }}/5.0
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráficos Circulares -->
+    <div class="charts-section">
+      <div class="section-header">
+        <i class="bi bi-pie-chart-fill"></i>
+        <h2>Distribución y Proporciones</h2>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <i class="bi bi-clipboard-check"></i>
+            <h3>Estado de Pedidos</h3>
+          </div>
+          <div class="chart-container">
+            <canvas baseChart
+              *ngIf="piePedidosEstadoData"
+              [data]="piePedidosEstadoData"
+              [options]="pieChartOptions"
+              type="pie">
+            </canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <i class="bi bi-bag-check-fill"></i>
+            <h3>Productos Más Vendidos</h3>
+          </div>
+          <div class="chart-container">
+            <canvas baseChart
+              *ngIf="pieProductosVendidosData"
+              [data]="pieProductosVendidosData"
+              [options]="pieChartOptions"
+              type="pie">
+            </canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <i class="bi bi-scooter"></i>
+            <h3>Estado de Motos</h3>
+          </div>
+          <div class="chart-container">
+            <canvas baseChart
+              *ngIf="pieMotosEstadoData"
+              [data]="pieMotosEstadoData"
+              [options]="pieChartOptions"
+              type="pie">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráficos de Barras -->
+    <div class="charts-section">
+      <div class="section-header">
+        <i class="bi bi-bar-chart-fill"></i>
+        <h2>Comparativas y Rankings</h2>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <i class="bi bi-shop-window"></i>
+            <h3>Pedidos por Restaurante</h3>
+          </div>
+          <div class="chart-container">
+            <canvas baseChart
+              *ngIf="barPedidosRestauranteData"
+              [data]="barPedidosRestauranteData"
+              [options]="barChartOptions"
+              type="bar">
+            </canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <i class="bi bi-person-badge"></i>
+            <h3>Conductores Activos</h3>
+          </div>
+          <div class="chart-container">
+            <canvas baseChart
+              *ngIf="barConductoresActivosData"
+              [data]="barConductoresActivosData"
+              [options]="barChartOptions"
+              type="bar">
+            </canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <i class="bi bi-exclamation-triangle"></i>
+            <h3>Incidentes del Mes</h3>
+          </div>
+          <div class="chart-container">
+            <canvas baseChart
+              *ngIf="barIncidentesMesData"
+              [data]="barIncidentesMesData"
+              [options]="barChartOptions"
+              type="bar">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráficos de Línea -->
+    <div class="charts-section">
+      <div class="section-header">
+        <i class="bi bi-graph-up"></i>
+        <h2>Tendencias y Evolución</h2>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <i class="bi bi-calendar3"></i>
+            <h3>Pedidos Diarios</h3>
+          </div>
+          <div class="chart-container">
+            <canvas baseChart
+              *ngIf="linePedidosDiariosData"
+              [data]="linePedidosDiariosData"
+              [options]="lineChartOptions"
+              type="line">
+            </canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <i class="bi bi-cash-stack"></i>
+            <h3>Ingresos Mensuales</h3>
+          </div>
+          <div class="chart-container">
+            <canvas baseChart
+              *ngIf="lineIngresosMensualesData"
+              [data]="lineIngresosMensualesData"
+              [options]="lineChartOptions"
+              type="line">
+            </canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <i class="bi bi-stopwatch"></i>
+            <h3>Tiempo de Entrega</h3>
+          </div>
+          <div class="chart-container">
+            <canvas baseChart
+              *ngIf="lineTiempoEntregaData"
+              [data]="lineTiempoEntregaData"
+              [options]="lineChartOptions"
+              type="line">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

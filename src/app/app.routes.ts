@@ -7,13 +7,18 @@ import { ProfileComponent } from './shared/components/Client/profile.component';
 import { RestaurantManagente } from './features/restaurant-managente/restaurant-managente';
 import { RestaurantsView } from './features/restaurants-view/restaurants-view';
 import { MenuView } from './features/menu-view/menu-view';
-import { OrdersView } from './features/orders-view/orders-view';
+import { CartViewComponent } from './features/cart-view/cart-view';
+import { DashboardComponent } from './features/dashboard/dashboard';
 
 export const routes: Routes = [
 	{
 		path: '',
 		redirectTo: 'restaurantes',
 		pathMatch: 'full'
+	},
+	{
+		path: 'dashboard',
+		component: DashboardComponent
 	},
 	{
 		path: 'dashboard/client',
@@ -37,7 +42,7 @@ export const routes: Routes = [
 		component: MenuView
 	},
 	{
-		path: 'ordenes',
-		component: OrdersView
+		path: 'cart',
+		component: CartViewComponent
 	}
 ];
