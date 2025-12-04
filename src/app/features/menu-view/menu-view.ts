@@ -6,10 +6,20 @@ import { MenuService } from '../../core/services/menu.service';
 import { ProductService } from '../../core/services/product.service';
 import { RestaurantService } from '../../core/services/restaurant.service';
 import { CartStore } from '../../core/services/cart.store';
+import { NotificationService } from '../../core/services/notification.service';
 import { Menu } from '../../core/models/menu.model';
 import { Product } from '../../core/models/product.model';
 import { Restaurant } from '../../core/models/restaurant.model';
 
+/**
+ * MenuView Component - Responsabilidad única: UI de visualización de menús
+ * 
+ * SRP: Single Responsibility Principle
+ * - Solo maneja la visualización de menús de un restaurante
+ * - Delega notificaciones al NotificationService
+ * - Delega manejo del carrito al CartStore
+ * - No maneja lógica de negocio compleja
+ */
 @Component({
   selector: 'app-menu-view',
   imports: [CommonModule],
@@ -21,6 +31,9 @@ export class MenuView implements OnInit {
   private productService = inject(ProductService);
   private restaurantService = inject(RestaurantService);
   private route = inject(ActivatedRoute);
+  private notificationService = inject(NotificationService);
+  
+  // Servicios públicos para el template
   cartStore = inject(CartStore);
 
   menus: Menu[] = [];
@@ -28,14 +41,13 @@ export class MenuView implements OnInit {
   restaurant: Restaurant | null = null;
   loading = true;
   error = '';
-  restaurantId: number|null = null;
+  restaurantId: number | null = null;
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.restaurantId = id ? +id : null;
-      console.log('🏪 MenuView - Restaurant ID de la URL:', this.restaurantId);
-      console.log('🏪 MenuView - Tipo:', typeof this.restaurantId);
+      
       if (this.restaurantId) {
         this.loadMenusAndProducts(this.restaurantId);
       } else {
@@ -54,7 +66,7 @@ export class MenuView implements OnInit {
         this.restaurant = restaurantData;
       },
       error: (err) => {
-        console.error('Error al cargar restaurante:', err);
+        console.error('❌ Error al cargar restaurante:', err);
       }
     });
     
@@ -66,21 +78,14 @@ export class MenuView implements OnInit {
         // Luego cargar los menús de este restaurante específico
         this.menuService.getAll().subscribe({
           next: (menusData) => {
-            console.log('Todos los menús del backend:', menusData);
-            console.log('Buscando menús para restaurante ID:', restaurantId);
-            
             // Filtrar solo los menús de este restaurante
-            // Convertir ambos IDs a números para comparación correcta
             const restaurantMenus = menusData.filter(m => {
               const menuRestaurantId = typeof m.restaurant_id === 'string' 
                 ? parseInt(m.restaurant_id, 10) 
                 : m.restaurant_id;
               
-              console.log(`Comparando: menú restaurant_id=${menuRestaurantId} con restaurantId=${restaurantId}`);
               return menuRestaurantId === restaurantId;
             });
-            
-            console.log('Menús filtrados para este restaurante:', restaurantMenus);
             
             // Enriquecer cada menú con los datos del producto
             this.menus = restaurantMenus.map(menu => {
@@ -91,7 +96,7 @@ export class MenuView implements OnInit {
               const product = this.products.find(p => p.id === productId);
               
               if (!product) {
-                console.warn(`Producto no encontrado para menu.product_id=${menu.product_id}`);
+                console.warn(`⚠️ Producto no encontrado para menu.product_id=${menu.product_id}`);
               }
               
               return {
@@ -100,12 +105,10 @@ export class MenuView implements OnInit {
               };
             });
             
-            console.log('Menús enriquecidos con productos:', this.menus);
             this.loading = false;
           },
           error: (err) => {
-            console.error('Error al cargar menús:', err);
-            // Si hay error, mostrar array vacío
+            console.error('❌ Error al cargar menús:', err);
             this.menus = [];
             this.loading = false;
           }
@@ -114,14 +117,14 @@ export class MenuView implements OnInit {
       error: (err) => {
         this.error = 'Error al cargar productos';
         this.loading = false;
-        console.error(err);
+        console.error('❌ Error al cargar productos:', err);
       }
     });
   }
 
   addToCart(menu: Menu): void {
     if (!menu.product) {
-      console.error('Producto no encontrado para el menú');
+      this.notificationService.showError('Producto no encontrado');
       return;
     }
     
@@ -146,8 +149,29 @@ export class MenuView implements OnInit {
       quantity: 1
     });
     
-    // Mostrar notificación visual (opcional)
-    this.showToast(`✅ ${menu.product.name} agregado al carrito`);
+    this.notificationService.showSuccess(`✅ ${menu.product.name} agregado al carrito`);
+  }
+  
+  increaseQuantity(menuId: number): void {
+    const item = this.cartStore.items().find(item => item.menu_id === menuId);
+    if (item) {
+      this.cartStore.updateQuantity(item.id, item.quantity + 1);
+    }
+  }
+  
+  decreaseQuantity(menuId: number): void {
+    const item = this.cartStore.items().find(item => item.menu_id === menuId);
+    if (item) {
+      if (item.quantity > 1) {
+        this.cartStore.updateQuantity(item.id, item.quantity - 1);
+      } else {
+        this.cartStore.removeItem(item.id);
+      }
+    }
+  }
+  
+  openCart(): void {
+    this.cartStore.openSidebar();
   }
   
   isInCart(menuId: number): boolean {
@@ -156,30 +180,5 @@ export class MenuView implements OnInit {
   
   getCartQuantity(menuId: number): number {
     return this.cartStore.getMenuQuantity(menuId);
-  }
-  
-  private showToast(message: string): void {
-    // Implementación simple de toast
-    const toast = document.createElement('div');
-    toast.textContent = message;
-    toast.style.cssText = `
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      background: #10b981;
-      color: white;
-      padding: 1rem 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      z-index: 10000;
-      animation: slideIn 0.3s ease;
-    `;
-    
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-      toast.style.animation = 'slideOut 0.3s ease';
-      setTimeout(() => toast.remove(), 300);
-    }, 2000);
   }
 }

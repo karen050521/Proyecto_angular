@@ -22,31 +22,38 @@
 				<p>{{ menu.product?.description || 'Sin descripción' }}</p>
 				<p class="price">${{ menu.price }}</p>
 				
-				<!-- Indicador de carrito -->
-				@if (isInCart(menu.id)) {
-					<div class="in-cart-indicator">
-						<i class="bi bi-check-circle-fill"></i>
-						{{ getCartQuantity(menu.id) }} en el carrito
-					</div>
-				}
-				
-				<!-- Botón agregar al carrito -->
-				<button 
-					class="btn-add-cart" 
-					[disabled]="!menu.availability"
-					[class.in-cart]="isInCart(menu.id)"
-					(click)="addToCart(menu)">
-					@if (menu.availability) {
-						@if (isInCart(menu.id)) {
-							<i class="bi bi-plus-circle"></i> Agregar más
-						} @else {
-							<i class="bi bi-cart-plus"></i> Agregar al carrito
-						}
-					} @else {
+				<!-- Controles de cantidad si está en carrito, botón si no está -->
+				@if (!menu.availability) {
+					<button class="btn-add-cart" disabled>
 						<i class="bi bi-x-circle"></i> No disponible
-					}
-				</button>
+					</button>
+				} @else if (isInCart(menu.id)) {
+					<!-- Controles de cantidad cuando ya está en el carrito -->
+					<div class="cart-actions-row">
+						<div class="quantity-controls-card">
+							<button class="qty-btn-card" (click)="decreaseQuantity(menu.id)">
+								<i class="bi bi-dash"></i>
+							</button>
+							<span class="quantity-display">{{ getCartQuantity(menu.id) }}</span>
+							<button class="qty-btn-card" (click)="increaseQuantity(menu.id)">
+								<i class="bi bi-plus"></i>
+							</button>
+						</div>
+						<!-- Icono de carrito al lado -->
+						<button class="btn-cart-icon" (click)="openCart()" title="Ver carrito">
+							<i class="bi bi-cart3"></i>
+							<span class="cart-mini-badge">{{ cartStore.itemCount() }}</span>
+						</button>
+					</div>
+				} @else {
+					<!-- Botón agregar al carrito cuando no está -->
+					<button class="btn-add-cart" (click)="addToCart(menu)">
+						<i class="bi bi-cart-plus"></i> Agregar al carrito
+					</button>
+				}
 			</div>
 		</div>
 	</div>
+	
+	<!-- ❌ Botón flotante eliminado - ahora el icono está en cada card -->
 </div>

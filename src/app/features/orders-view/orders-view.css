@@ -1,0 +1,398 @@
+/* Container principal */
+.orders-container {
+	min-height: 100vh;
+	padding: 2rem;
+	background: #f3f4f6;
+}
+
+/* Header con título y stats */
+.orders-header {
+	max-width: 1400px;
+	margin: 0 auto 2rem;
+}
+
+.orders-header h1 {
+	color: #1f2937;
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-bottom: 2rem;
+	text-align: center;
+}
+
+/* Stats cards */
+.stats-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 1.5rem;
+	margin-bottom: 2rem;
+}
+
+.stat-card {
+	background: white;
+	padding: 1.5rem;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.stat-card i {
+	font-size: 2.5rem;
+	color: #2563eb;
+}
+
+.stat-card.success i {
+	color: #10b981;
+}
+
+.stat-info {
+	display: flex;
+	flex-direction: column;
+}
+
+.stat-value {
+	font-size: 2rem;
+	font-weight: 700;
+	color: #1f2937;
+}
+
+.stat-label {
+	font-size: 0.875rem;
+	color: #6b7280;
+}
+
+/* Filtros */
+.filters {
+	max-width: 1400px;
+	margin: 0 auto 2rem;
+	display: flex;
+	gap: 1rem;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.filter-btn {
+	padding: 0.75rem 1.5rem;
+	background: white;
+	color: #6b7280;
+	border: 2px solid #e5e7eb;
+	border-radius: 8px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.filter-btn:hover {
+	border-color: #2563eb;
+	color: #2563eb;
+}
+
+.filter-btn.active {
+	background: #2563eb;
+	color: white;
+	border-color: #2563eb;
+}
+
+/* Loading, error, empty */
+.loading,
+.error,
+.empty {
+	max-width: 600px;
+	margin: 4rem auto;
+	text-align: center;
+	padding: 3rem;
+	background: white;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.loading i,
+.error i,
+.empty i {
+	font-size: 4rem;
+	margin-bottom: 1rem;
+}
+
+.loading i {
+	color: #2563eb;
+	animation: spin 2s linear infinite;
+}
+
+.error {
+	color: #ef4444;
+}
+
+.error i {
+	color: #ef4444;
+}
+
+.empty i {
+	color: #d1d5db;
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* Grid de órdenes */
+.orders-grid {
+	max-width: 1400px;
+	margin: 0 auto;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+	gap: 1.5rem;
+}
+
+/* Card de orden */
+.order-card {
+	background: white;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	overflow: hidden;
+	transition: transform 0.2s, box-shadow 0.2s;
+	display: flex;
+	flex-direction: column;
+}
+
+.order-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Header de la orden */
+.order-header {
+	padding: 1.25rem 1.5rem;
+	background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 2px solid #e5e7eb;
+}
+
+.order-number {
+	font-weight: 700;
+	color: #1f2937;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 1.1rem;
+}
+
+.order-number i {
+	color: #2563eb;
+	font-size: 1.25rem;
+}
+
+/* Status badges */
+.order-status {
+	padding: 0.5rem 1rem;
+	border-radius: 20px;
+	font-size: 0.875rem;
+	font-weight: 600;
+	text-transform: capitalize;
+}
+
+.status-pending {
+	background: #fef3c7;
+	color: #92400e;
+}
+
+.status-progress {
+	background: #dbeafe;
+	color: #1e40af;
+}
+
+.status-delivered {
+	background: #d1fae5;
+	color: #065f46;
+}
+
+.status-cancelled {
+	background: #fee2e2;
+	color: #991b1b;
+}
+
+/* Body de la orden */
+.order-body {
+	padding: 1.5rem;
+	flex: 1;
+}
+
+.order-info {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.product-name {
+	margin: 0;
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: #1f2937;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.product-name i {
+	color: #2563eb;
+}
+
+.restaurant-name {
+	margin: 0;
+	color: #6b7280;
+	font-size: 0.95rem;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.restaurant-name i {
+	color: #9ca3af;
+}
+
+.order-details {
+	display: flex;
+	gap: 1.5rem;
+	margin-top: 0.5rem;
+}
+
+.quantity,
+.price {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.95rem;
+	color: #374151;
+	font-weight: 600;
+}
+
+.quantity i,
+.price i {
+	color: #9ca3af;
+}
+
+.price {
+	color: #2563eb;
+}
+
+.order-date {
+	margin: 0;
+	font-size: 0.875rem;
+	color: #9ca3af;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-top: 0.5rem;
+	padding-top: 0.75rem;
+	border-top: 1px solid #f3f4f6;
+}
+
+.order-date i {
+	color: #d1d5db;
+}
+
+/* Acciones */
+.order-actions {
+	padding: 1rem 1.5rem;
+	border-top: 2px solid #f3f4f6;
+	display: flex;
+	gap: 0.75rem;
+}
+
+.btn-cancel {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.75rem 1.25rem;
+	background: rgba(239, 68, 68, 0.1);
+	color: #ef4444;
+	border: 1px solid rgba(239, 68, 68, 0.2);
+	border-radius: 8px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+	background: rgba(239, 68, 68, 0.2);
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.orders-container {
+		padding: 1rem;
+	}
+
+	.orders-header h1 {
+		font-size: 2rem;
+	}
+
+	.stats-cards {
+		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+		gap: 1rem;
+	}
+
+	.stat-card {
+		padding: 1rem;
+	}
+
+	.stat-card i {
+		font-size: 2rem;
+	}
+
+	.stat-value {
+		font-size: 1.5rem;
+	}
+
+	.orders-grid {
+		grid-template-columns: 1fr;
+		gap: 1rem;
+	}
+
+	.filters {
+		gap: 0.5rem;
+	}
+
+	.filter-btn {
+		padding: 0.65rem 1.25rem;
+		font-size: 0.9rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.orders-header h1 {
+		font-size: 1.75rem;
+	}
+
+	.stats-cards {
+		grid-template-columns: 1fr;
+	}
+
+	.order-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.75rem;
+	}
+
+	.order-details {
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+}
