@@ -1,0 +1,245 @@
+<div class="tracking-container" *ngIf="!loading">
+      <div class="tracking-header">
+        <button class="btn-back" (click)="goBack()">
+          <i class="bi bi-arrow-left"></i> Volver
+        </button>
+        <h1><i class="bi bi-pin-map"></i> Seguimiento de Orden #{{ orderId }}</h1>
+      </div>
+
+      <!-- Información de la Orden -->
+      <div class="order-info-card" *ngIf="order">
+        <div class="info-header">
+          <h2>Detalles de la Orden</h2>
+          <div class="header-actions">
+            <span class="status-badge" [class]="'status-' + order.status">
+              {{ getStatusLabel(order.status) }}
+            </span>
+            <button 
+              *ngIf="order.status !== 'delivered' && order.status !== 'cancelled'"
+              class="btn-complete"
+              (click)="completeOrder()"
+              [disabled]="loading"
+            >
+              <i class="bi bi-check-circle"></i>
+              Marcar como Completada
+            </button>
+          </div>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <i class="bi bi-receipt"></i>
+            <div>
+              <span class="label">Orden</span>
+              <span class="value">#{{ order.id }}</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <i class="bi bi-basket"></i>
+            <div>
+              <span class="label">Cantidad</span>
+              <span class="value">{{ order.quantity }} producto(s)</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <i class="bi bi-cash"></i>
+            <div>
+              <span class="label">Total</span>
+              <span class="value">\${{ order.total_price || 0 }}</span>
+            </div>
+          </div>
+
+          <div class="info-item" *ngIf="order.motorcycle_id && motorcycle">
+            <i class="bi bi-motorcycle"></i>
+            <div>
+              <span class="label">Repartidor</span>
+              <span class="value">{{ motorcycle.license_plate }} - {{ motorcycle.brand }}</span>
+            </div>
+          </div>
+
+          <div class="info-item" *ngIf="!order.motorcycle_id">
+            <i class="bi bi-hourglass-split"></i>
+            <div>
+              <span class="label">Repartidor</span>
+              <span class="value">Asignando...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Información del producto -->
+        <div class="product-section" *ngIf="order.menu">
+          <h3><i class="bi bi-bag"></i> Producto</h3>
+          <div class="product-card">
+            <div class="product-info">
+              <h4>{{ order.menu.product?.name || 'Producto' }}</h4>
+              <p class="restaurant">{{ order.menu.restaurant?.name || 'Restaurante' }}</p>
+              <p class="description" *ngIf="order.menu.product?.description">
+                {{ order.menu.product?.description }}
+              </p>
+            </div>
+            <div class="product-quantity">
+              <span class="qty">x{{ order.quantity }}</span>
+              <span class="price">\${{ order.menu.price }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Información del Repartidor (Card separada) -->
+      <div class="driver-card" *ngIf="motorcycle">
+        <h3><i class="bi bi-person-badge"></i> Información del Repartidor</h3>
+        <div class="driver-details">
+          <div class="driver-item">
+            <i class="bi bi-card-text"></i>
+            <div>
+              <span class="label">Placa</span>
+              <span class="value">{{ motorcycle.license_plate }}</span>
+            </div>
+          </div>
+          <div class="driver-item">
+            <i class="bi bi-gear"></i>
+            <div>
+              <span class="label">Marca</span>
+              <span class="value">{{ motorcycle.brand }}</span>
+            </div>
+          </div>
+          <div class="driver-item">
+            <i class="bi bi-calendar3"></i>
+            <div>
+              <span class="label">Año</span>
+              <span class="value">{{ motorcycle.year }}</span>
+            </div>
+          </div>
+          <div class="driver-item">
+            <i class="bi bi-signal"></i>
+            <div>
+              <span class="label">Estado</span>
+              <span class="value status-{{ motorcycle.status }}">
+                {{ getStatusLabel(motorcycle.status) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mapa con ubicación del restaurante -->
+      <div class="map-section">
+        <h3><i class="bi bi-geo-alt"></i> Ubicación del Restaurante</h3>
+        <app-restaurant-map
+          *ngIf="order?.menu?.restaurant"
+          [restaurantName]="order?.menu?.restaurant?.name || 'Restaurante'"
+          [address]="order?.menu?.restaurant?.address || 'Sin dirección'"
+          [latitude]="4.5339"
+          [longitude]="-75.6811"
+          [height]="400"
+        ></app-restaurant-map>
+        <div class="map-placeholder" *ngIf="!order?.menu?.restaurant">
+          <i class="bi bi-map"></i>
+          <p>Información del restaurante no disponible</p>
+        </div>
+      </div>
+
+      <!-- Dirección de Entrega -->
+      <div class="address-section">
+        <h3><i class="bi bi-house-door"></i> Dirección de Entrega</h3>
+
+        <!-- Mostrar dirección existente -->
+        <div class="address-card" *ngIf="address">
+          <div class="address-content">
+            <p class="address-street">{{ address.street }}</p>
+            <p class="address-details">{{ address.city }}, {{ address.state }} - {{ address.postal_code }}</p>
+            <p class="address-info" *ngIf="address.additional_info">
+              <i class="bi bi-info-circle"></i> {{ address.additional_info }}
+            </p>
+          </div>
+          <button class="btn-edit" (click)="editAddress()">
+            <i class="bi bi-pencil"></i> Editar
+          </button>
+        </div>
+
+        <!-- Formulario para crear/editar dirección -->
+        <div class="address-form" *ngIf="!address || isEditingAddress">
+          <form (submit)="saveAddress($event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Calle <span class="required">*</span></label>
+                <input 
+                  type="text" 
+                  [(ngModel)]="addressForm.street" 
+                  name="street"
+                  placeholder="Calle 123 # 45-67"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label>Ciudad <span class="required">*</span></label>
+                <input 
+                  type="text" 
+                  [(ngModel)]="addressForm.city" 
+                  name="city"
+                  placeholder="Armenia"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Departamento <span class="required">*</span></label>
+                <input 
+                  type="text" 
+                  [(ngModel)]="addressForm.state" 
+                  name="state"
+                  placeholder="Quindío"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label>Código Postal <span class="required">*</span></label>
+                <input 
+                  type="text" 
+                  [(ngModel)]="addressForm.postal_code" 
+                  name="postal_code"
+                  placeholder="630001"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Información Adicional</label>
+              <textarea 
+                [(ngModel)]="addressForm.additional_info" 
+                name="additional_info"
+                placeholder="Casa blanca, portón verde, segundo piso..."
+                rows="3"
+              ></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-secondary" (click)="cancelEditAddress()" *ngIf="address">
+                Cancelar
+              </button>
+              <button type="submit" class="btn-primary">
+                <i class="bi bi-save"></i> {{ address ? 'Actualizar' : 'Guardar' }} Dirección
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="loading-container" *ngIf="loading">
+      <i class="bi bi-arrow-repeat spin"></i>
+      <p>Cargando información...</p>
+    </div>
+
+    <div class="error-container" *ngIf="error">
+      <i class="bi bi-exclamation-triangle"></i>
+      <p>{{ error }}</p>
+      <button class="btn-primary" (click)="goBack()">Volver</button>
+    </div>

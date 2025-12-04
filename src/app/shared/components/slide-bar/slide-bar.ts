@@ -21,6 +21,7 @@ export class SlideBar implements OnInit {
   isMobile = false;
   private wasMobile = false;
   activeSection = 'inicio'; // Sección activa por defecto
+  adminExpanded = false; // Estado del menú Admin
 
   @Output() sidebarStateChange = new EventEmitter<{ isOpen: boolean; isMobile: boolean }>();
 
@@ -76,6 +77,10 @@ export class SlideBar implements OnInit {
       if (section !== 'clientes') {
         this.close();
       }
+  }
+
+  toggleAdmin(): void {
+    this.adminExpanded = !this.adminExpanded;
   }
 
   private emitState(): void {

@@ -1,0 +1,130 @@
+<div class="drivers-container">
+      <div class="header">
+        <h2><i class="bi bi-motorcycle"></i> Gestión de Repartidores</h2>
+        <button class="btn-primary" (click)="showCreateForm = true">
+          <i class="bi bi-plus-circle"></i> Agregar Repartidor
+        </button>
+      </div>
+
+      <!-- Formulario de Crear/Editar -->
+      <div class="form-card" *ngIf="showCreateForm || editingMotorcycle">
+        <h3>{{ editingMotorcycle ? 'Editar' : 'Nuevo' }} Repartidor</h3>
+        <form (submit)="saveMotorcycle($event)">
+          <div class="form-group">
+            <label>Placa <span class="required">*</span></label>
+            <input 
+              type="text" 
+              [(ngModel)]="formData.license_plate" 
+              name="license_plate"
+              placeholder="ABC-123"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Marca <span class="required">*</span></label>
+            <input 
+              type="text" 
+              [(ngModel)]="formData.brand" 
+              name="brand"
+              placeholder="Honda, Yamaha, etc."
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Año <span class="required">*</span></label>
+            <input 
+              type="number" 
+              [(ngModel)]="formData.year" 
+              name="year"
+              placeholder="2023"
+              min="1900"
+              max="2030"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Estado</label>
+            <select [(ngModel)]="formData.status" name="status">
+              <option value="available">Disponible</option>
+              <option value="in_use">En uso</option>
+              <option value="maintenance">Mantenimiento</option>
+            </select>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" (click)="cancelEdit()">
+              Cancelar
+            </button>
+            <button type="submit" class="btn-primary">
+              <i class="bi bi-save"></i> {{ editingMotorcycle ? 'Actualizar' : 'Guardar' }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Lista de Repartidores -->
+      <div class="drivers-list" *ngIf="!loading; else loadingTemplate">
+        <div class="card" *ngFor="let motorcycle of motorcycles">
+          <div class="card-header">
+            <div class="plate">
+              <i class="bi bi-card-text"></i>
+              {{ motorcycle.license_plate }}
+            </div>
+            <span class="badge badge-{{ motorcycle.status }}">
+              {{ getStatusLabel(motorcycle.status) }}
+            </span>
+          </div>
+
+          <div class="card-body">
+            <div class="info-row">
+              <i class="bi bi-gear"></i>
+              <span>{{ motorcycle.brand }}</span>
+            </div>
+            <div class="info-row">
+              <i class="bi bi-calendar"></i>
+              <span>Año {{ motorcycle.year }}</span>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button 
+              class="btn-icon btn-edit" 
+              (click)="editMotorcycle(motorcycle)"
+              title="Editar"
+            >
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button 
+              class="btn-icon btn-delete" 
+              (click)="deleteMotorcycle(motorcycle.id)"
+              title="Eliminar"
+            >
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="empty-state" *ngIf="motorcycles.length === 0">
+          <i class="bi bi-motorcycle"></i>
+          <p>No hay repartidores registrados</p>
+          <button class="btn-primary" (click)="showCreateForm = true">
+            Agregar el primero
+          </button>
+        </div>
+      </div>
+
+      <ng-template #loadingTemplate>
+        <div class="loading">
+          <i class="bi bi-arrow-repeat spin"></i>
+          <p>Cargando repartidores...</p>
+        </div>
+      </ng-template>
+
+      <div class="error-message" *ngIf="error">
+        <i class="bi bi-exclamation-triangle"></i>
+        {{ error }}
+      </div>
+    </div>

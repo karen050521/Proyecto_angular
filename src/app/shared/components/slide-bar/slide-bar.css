@@ -531,3 +531,8 @@
 .menu::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
 }
+
+/* Estilos para el icono de chevron rotado */
+.bi-chevron-down.rotate {
+  transform: rotate(180deg);
+}

@@ -1,0 +1,18 @@
+<div class="map-container">
+      <div class="map-header" *ngIf="restaurantName">
+        <h3><i class="bi bi-geo-alt-fill"></i> {{ restaurantName }}</h3>
+        <p *ngIf="address">{{ address }}</p>
+      </div>
+      <div 
+        #mapElement 
+        id="restaurant-map" 
+        class="map"
+        [style.height.px]="height"
+      ></div>
+      <div class="map-legend">
+        <div class="legend-item">
+          <i class="bi bi-motorcycle"></i>
+          <span>Ubicación del restaurante</span>
+        </div>
+      </div>
+    </div>

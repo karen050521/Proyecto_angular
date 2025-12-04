@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { UserAvatarComponent } from './user.Avatar.Component';
 import { CartIconComponent } from '../cart-icon/cart-icon';
+import { NotificationIconComponent } from '../../notification-icon/notification-icon';
 
 @Component({
   standalone: true,
@@ -13,7 +14,8 @@ import { CartIconComponent } from '../cart-icon/cart-icon';
     CommonModule,
     UserAvatarComponent,
     RouterModule,
-    CartIconComponent
+    CartIconComponent,
+    NotificationIconComponent
   ]
 })
 

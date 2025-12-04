@@ -3,6 +3,7 @@ import { Injectable, signal } from '@angular/core';
 export interface OrderConfirmation {
   orderCount: number;
   totalAmount: number;
+  orderId?: number | null;
 }
 
 @Injectable({
@@ -12,8 +13,8 @@ export class OrderConfirmationService {
   // ✅ Inicializado en null - No se muestra al cargar la app
   private confirmationData = signal<OrderConfirmation | null>(null);
   
-  showConfirmation(orderCount: number, totalAmount: number) {
-    this.confirmationData.set({ orderCount, totalAmount });
+  showConfirmation(orderCount: number, totalAmount: number, orderId?: number | null) {
+    this.confirmationData.set({ orderCount, totalAmount, orderId });
   }
   
   getConfirmation() {

@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { OrderService } from '../../core/services/order.service';
 import { Order } from '../../core/models/order.model';
 
@@ -12,6 +13,7 @@ import { Order } from '../../core/models/order.model';
 })
 export class OrdersView implements OnInit {
   private orderService = inject(OrderService);
+  private router = inject(Router);
 
   orders: Order[] = [];
   loading = true;
@@ -117,5 +119,9 @@ export class OrdersView implements OnInit {
     return this.orders
       .filter(o => o.status !== 'cancelled')
       .reduce((sum, o) => sum + o.total_price, 0);
+  }
+
+  viewOrderDetail(orderId: number): void {
+    this.router.navigate(['/tracking', orderId]);
   }
 }

@@ -30,9 +30,10 @@
       </a>
     </li>
     <li>
-      <a href="#" 
+      <a [routerLink]="'/dashboard'" 
+         routerLinkActive="active"
          [class.active]="activeSection === 'dashboard'"
-         (click)="setActiveSection('dashboard'); $event.preventDefault()">
+         (click)="setActiveSection('dashboard')">
         <i class="bi bi-graph-up"></i>
         <span class="label">Dashboard</span>
       </a>
@@ -44,9 +45,10 @@
       </a>
     </li>
     <li>
-      <a href="#" 
+      <a [routerLink]="'/orders'" 
+         routerLinkActive="active"
          [class.active]="activeSection === 'pedidos'"
-         (click)="setActiveSection('pedidos'); $event.preventDefault()">
+         (click)="setActiveSection('pedidos')">
         <i class="bi bi-cart"></i>
         <span class="label">Pedidos</span>
       </a>
@@ -66,19 +68,23 @@
     </li>
     <li>
       <a href="#" 
-         [class.active]="activeSection === 'conductores'"
-         (click)="setActiveSection('conductores'); $event.preventDefault()">
-        <i class="bi bi-person-badge"></i>
-        <span class="label">Conductores</span>
+         [class.active]="adminExpanded"
+         (click)="$event.preventDefault(); toggleAdmin();">
+        <i class="bi bi-shield-lock"></i>
+        <span class="label">Admin</span>
+        <i class="bi bi-chevron-down" [class.rotate]="adminExpanded" style="margin-left: auto; font-size: 0.8em; transition: transform 0.2s;"></i>
       </a>
-    </li>
-    <li>
-      <a href="#" 
-         [class.active]="activeSection === 'motos'"
-         (click)="setActiveSection('motos'); $event.preventDefault()">
-        <i class="bi bi-scooter"></i>
-        <span class="label">Motos</span>
-      </a>
+      <ul *ngIf="adminExpanded" class="client-sub-links">
+        <li>
+          <a [routerLink]="'/admin/drivers'" routerLinkActive="font-bold text-blue-600" (click)="close()">Conductores</a>
+        </li>
+        <li>
+          <a [routerLink]="'/admin/addresses'" routerLinkActive="font-bold text-blue-600" (click)="close()">Direcciones</a>
+        </li>
+        <li>
+          <a [routerLink]="'/admin/manage'" routerLinkActive="font-bold text-blue-600" (click)="close()">Administrar</a>
+        </li>
+      </ul>
     </li>
     <li>
       <a href="#" 

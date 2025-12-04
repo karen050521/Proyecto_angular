@@ -1,7 +1,9 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, forkJoin, switchMap, tap } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { OrderService } from './order.service';
+import { MotorcycleService } from './motorcycle.service';
+import { NotificationService } from './notification.service';
 import { Order, OrderCreatePayload } from '../models/order.model';
 import { CartItem } from '../models/cart-item.model';
 
@@ -17,12 +19,15 @@ import { CartItem } from '../models/cart-item.model';
 })
 export class CheckoutService {
   private orderService = inject(OrderService);
+  private motorcycleService = inject(MotorcycleService);
+  private notificationService = inject(NotificationService);
   
   // Customer ID hardcoded (TODO: integrar con sistema de autenticación)
   private readonly DEFAULT_CUSTOMER_ID = 1;
   
   /**
    * Procesa el checkout creando múltiples órdenes (una por cada item del carrito)
+   * y asigna un repartidor disponible
    * 
    * @param items Items del carrito a procesar
    * @param customerId ID del cliente (opcional, usa default si no se provee)
@@ -35,21 +40,72 @@ export class CheckoutService {
     
     const effectiveCustomerId = customerId || this.DEFAULT_CUSTOMER_ID;
     
-    // Crear payloads para cada item
-    const orderPayloads: OrderCreatePayload[] = items.map(item => ({
-      customer_id: effectiveCustomerId,
-      menu_id: item.menu_id,
-      quantity: item.quantity,
-      total_price: item.subtotal,
-      status: 'pending' as const
-    }));
-    
-    // Crear todas las órdenes en paralelo
-    const orderRequests = orderPayloads.map(payload => 
-      this.orderService.create(payload)
+    // Primero asignar un repartidor disponible
+    return this.motorcycleService.assignRandomDriver().pipe(
+      tap(assignedDriver => {
+        console.log('🚚 Repartidor asignado:', assignedDriver);
+      }),
+      switchMap(assignedDriver => {
+        // Crear payloads para cada item
+        const orderPayloads: OrderCreatePayload[] = items.map(item => ({
+          customer_id: effectiveCustomerId,
+          menu_id: item.menu_id,
+          motorcycle_id: assignedDriver?.id, // Asignar el repartidor
+          quantity: item.quantity,
+          total_price: item.subtotal,
+          status: 'pending' as const
+        }));
+        
+        console.log('📦 Creando órdenes:', orderPayloads);
+        
+        // Crear todas las órdenes en paralelo
+        const orderRequests = orderPayloads.map(payload => 
+          this.orderService.create(payload)
+        );
+        
+        return forkJoin(orderRequests).pipe(
+          tap(orders => {
+            console.log('✅ Órdenes creadas:', orders);
+            console.log('📊 Estructura de órdenes:', {
+              length: orders.length,
+              firstOrder: orders[0],
+              firstOrderId: orders[0]?.id,
+              isArray: Array.isArray(orders[0])
+            });
+            
+            // Aplanar el array si es necesario
+            const flatOrders = Array.isArray(orders[0]) ? orders[0] : orders;
+            const firstValidOrder = flatOrders[0];
+            
+            // Crear notificación cuando se asigna el pedido
+            if (assignedDriver && flatOrders.length > 0 && firstValidOrder?.id) {
+              const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+              const totalPrice = items.reduce((sum, item) => sum + item.subtotal, 0);
+              const driverName = assignedDriver.driver_name || `Conductor #${assignedDriver.id}`;
+              
+              console.log('🔔 Creando notificación:', {
+                orderId: firstValidOrder.id,
+                driverName,
+                details: `${totalItems} productos - $${totalPrice.toFixed(2)}`
+              });
+              
+              this.notificationService.addOrderNotification(
+                firstValidOrder.id,
+                driverName,
+                `${totalItems} productos - $${totalPrice.toFixed(2)}`
+              );
+            } else {
+              console.warn('⚠️ No se creó notificación:', { 
+                hasDriver: !!assignedDriver, 
+                hasOrders: flatOrders.length > 0,
+                hasOrderId: !!firstValidOrder?.id,
+                firstValidOrder
+              });
+            }
+          })
+        );
+      })
     );
-    
-    return forkJoin(orderRequests);
   }
   
   /**

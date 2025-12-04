@@ -1,0 +1,51 @@
+.map-container {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      background: white;
+    }
+
+    .map-header {
+      padding: 1rem 1.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .map-header h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .map-header p {
+      margin: 0;
+      opacity: 0.9;
+      font-size: 0.95rem;
+    }
+
+    .map {
+      width: 100%;
+      background: #e5e7eb;
+    }
+
+    .map-legend {
+      padding: 0.75rem 1.5rem;
+      background: #f8f9fa;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .legend-item i {
+      color: #667eea;
+      font-size: 1.2rem;
+    }

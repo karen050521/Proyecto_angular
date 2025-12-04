@@ -164,6 +164,8 @@
 	transition: transform 0.2s, box-shadow 0.2s;
 	display: flex;
 	flex-direction: column;
+	cursor: pointer;
+	position: relative;
 }
 
 .order-card:hover {
@@ -395,4 +397,51 @@
 		flex-direction: column;
 		gap: 0.5rem;
 	}
+}
+
+/* Información del repartidor y dirección */
+.driver-info,
+.address-info {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.75rem;
+	background: #f9fafb;
+	border-radius: 8px;
+	margin-top: 0.5rem;
+	font-size: 0.9rem;
+	color: #4b5563;
+}
+
+.driver-info i {
+	color: #2563eb;
+	font-size: 1.2rem;
+}
+
+.address-info i {
+	color: #10b981;
+	font-size: 1.2rem;
+}
+
+/* Click indicator */
+.click-indicator {
+	padding: 1rem 1.5rem;
+	background: #f9fafb;
+	border-top: 1px solid #e5e7eb;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	color: #2563eb;
+	font-weight: 600;
+	font-size: 0.9rem;
+	margin-top: auto;
+}
+
+.order-card:hover .click-indicator {
+	background: #eff6ff;
+}
+
+.click-indicator i {
+	font-size: 1.25rem;
 }

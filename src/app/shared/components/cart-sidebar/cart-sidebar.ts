@@ -80,19 +80,20 @@ export class CartSidebar {
     // Procesar checkout usando el servicio
     this.checkoutService.processCheckout(items).subscribe({
       next: (orders) => {
-        console.log('✅ Órdenes creadas exitosamente:', orders);
-        
-        const total = this.checkoutService.calculateTotal(orders);
+        // Calcular el total y la cantidad de productos desde los items del carrito
+        const total = items.reduce((sum, item) => sum + item.subtotal, 0);
+        const totalProducts = items.reduce((sum, item) => sum + item.quantity, 0);
         
         // Limpiar carrito y cerrar sidebar
         this.cartStore.clearCart();
         this.closeSidebar();
         
-        // Mostrar modal de confirmación
-        this.confirmationService.showConfirmation(orders.length, total);
+        // Mostrar modal de confirmación con datos correctos
+        // Guardamos el ID de la primera orden para el tracking
+        const firstOrderId = orders[0]?.id || null;
+        this.confirmationService.showConfirmation(totalProducts, total, firstOrderId);
       },
       error: (err) => {
-        console.error('❌ Error al crear órdenes:', err);
         this.notificationService.showError('Error al generar la orden. Por favor intenta de nuevo.');
       }
     });

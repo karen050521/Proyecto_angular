@@ -43,7 +43,8 @@
       </div>
 
       <!-- Dropdown menu -->
-      <div class="profile-dropdown" *ngIf="showProfileMenu">
+      @if (showProfileMenu) {
+      <div class="profile-dropdown">
         <div class="dropdown-header">
           <app-user-avatar [src]="photoURL" [size]="48"></app-user-avatar>
           <div class="dropdown-user-info">
@@ -78,13 +79,11 @@
           </button>
         </div>
       </div>
+      }
     </div>
 
     <!-- Notificaciones -->
-    <button class="nav-action-btn notifications-final" aria-label="Notificaciones" title="Notificaciones">
-      <i class="bi bi-bell"></i>
-      <span class="notification-badge">3</span>
-    </button>
+    <app-notification-icon></app-notification-icon>
 
     <!-- Carrito de compras -->
     <app-cart-icon></app-cart-icon>

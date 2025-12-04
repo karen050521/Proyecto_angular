@@ -10,6 +10,7 @@ export interface Motorcycle {
   brand: string;
   year: number;
   status: MotorcycleStatus;
+  driver_name?: string; // Nombre del conductor
   created_at?: string | null; // ISO date string
 }
 

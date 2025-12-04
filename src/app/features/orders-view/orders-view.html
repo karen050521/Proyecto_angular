@@ -87,7 +87,7 @@
 
 	<!-- Orders list -->
 	<div *ngIf="!loading && !error && filteredOrders.length > 0" class="orders-grid">
-		<div *ngFor="let order of filteredOrders" class="order-card">
+		<div *ngFor="let order of filteredOrders" class="order-card" (click)="viewOrderDetail(order.id!)">
 			<!-- Header de la orden -->
 			<div class="order-header">
 				<div class="order-number">
@@ -120,6 +120,19 @@
 							Total: ${{ order.total_price }}
 						</span>
 					</div>
+
+					<!-- Información del repartidor -->
+					<div class="driver-info" *ngIf="order.motorcycle_id">
+						<i class="bi bi-motorcycle"></i>
+						<span>Repartidor asignado: Moto #{{ order.motorcycle_id }}</span>
+					</div>
+
+					<!-- Información de la dirección -->
+					<div class="address-info" *ngIf="order.address">
+						<i class="bi bi-geo-alt"></i>
+						<span>{{ order.address.street }}, {{ order.address.city }}</span>
+					</div>
+
 					<p class="order-date">
 						<i class="bi bi-calendar"></i>
 						{{ order.created_at | date: 'dd/MM/yyyy HH:mm' }}
@@ -127,12 +140,10 @@
 				</div>
 			</div>
 
-			<!-- Acciones -->
-			<div class="order-actions" *ngIf="order.status === 'pending'">
-				<button class="btn-cancel" (click)="cancelOrder(order.id!)">
-					<i class="bi bi-x-circle"></i>
-					Cancelar
-				</button>
+			<!-- Indicador de clic -->
+			<div class="click-indicator">
+				<i class="bi bi-arrow-right-circle"></i>
+				Ver detalles
 			</div>
 		</div>
 	</div>

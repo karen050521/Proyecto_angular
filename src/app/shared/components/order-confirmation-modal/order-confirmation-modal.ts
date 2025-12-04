@@ -21,6 +21,7 @@ export class OrderConfirmationModal {
   visible = computed(() => this.confirmationData() !== null);
   orderCount = computed(() => this.confirmationData()?.orderCount || 0);
   totalAmount = computed(() => this.confirmationData()?.totalAmount || 0);
+  orderId = computed(() => this.confirmationData()?.orderId || null);
 
   /**
    * Cerrar modal con tecla ESC
@@ -38,7 +39,14 @@ export class OrderConfirmationModal {
 
   goToOrders(): void {
     this.close();
-    this.router.navigate(['/ordenes']);
+    const id = this.orderId();
+    if (id) {
+      // Redirigir al tracking de la orden específica
+      this.router.navigate(['/tracking', id]);
+    } else {
+      // Si no hay ID, ir a la lista general
+      this.router.navigate(['/orders']);
+    }
   }
 
   continueShopping(): void {

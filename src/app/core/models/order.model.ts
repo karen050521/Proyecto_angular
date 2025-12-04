@@ -1,6 +1,7 @@
 import { Address } from './address.model';
 import { Customer } from './customer.model';
 import { Menu } from './menu.model';
+import { Motorcycle } from './motorcycle.model';
 
 export interface Order {
   id?: number;
@@ -14,6 +15,7 @@ export interface Order {
   address?: Address;
   customer?: Customer;
   menu?: Menu;
+  motorcycle?: Motorcycle;
 }
 
 export interface OrderCreatePayload {
