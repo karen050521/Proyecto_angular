@@ -16,11 +16,17 @@ export class CartViewComponent {
   cartStore = inject(CartStore);
   
   incrementQuantity(itemId: string): void {
-    this.cartStore.incrementQuantity(itemId);
+    const item = this.cartStore.items().find(i => i.id === itemId);
+    if (item) {
+      this.cartStore.updateQuantity(itemId, item.quantity + 1);
+    }
   }
   
   decrementQuantity(itemId: string): void {
-    this.cartStore.decrementQuantity(itemId);
+    const item = this.cartStore.items().find(i => i.id === itemId);
+    if (item) {
+      this.cartStore.updateQuantity(itemId, item.quantity - 1);
+    }
   }
   
   removeItem(itemId: string): void {

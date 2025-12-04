@@ -98,13 +98,17 @@
 
       <!-- Botones de acción -->
       <div class="cart-actions">
+        <button class="btn-back" (click)="backToMenu()">
+          <i class="bi bi-arrow-left"></i>
+          Volver a menú
+        </button>
         <button class="btn-clear" (click)="clearCart()">
           <i class="bi bi-trash"></i>
           Vaciar carrito
         </button>
         <button class="btn-checkout" (click)="checkout()">
-          <i class="bi bi-credit-card"></i>
-          Proceder al pago
+          <i class="bi bi-receipt"></i>
+          Generar orden
         </button>
       </div>
     </div>

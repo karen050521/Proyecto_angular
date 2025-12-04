@@ -1,15 +1,15 @@
 import { Component, signal, ViewChild } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router } from '@angular/router';
 import { SlideBar } from './shared/components/slide-bar/slide-bar';
 import { HeaderComponent } from './shared/components/Header/header.Component';
 import { FloatingChatComponent } from './shared/components/floating-chat/floating-chat';
 import { CartSidebar } from './shared/components/cart-sidebar/cart-sidebar';
-import { ClientLayoutComponent } from './core/layouts/client-layout.component';
+import { OrderConfirmationModal } from './shared/components/order-confirmation-modal/order-confirmation-modal';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SlideBar, HeaderComponent, FloatingChatComponent, CartSidebar],
+  imports: [RouterOutlet, SlideBar, HeaderComponent, FloatingChatComponent, CartSidebar, OrderConfirmationModal],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -18,8 +18,10 @@ export class App {
   
   @ViewChild(SlideBar) slideBar!: SlideBar;
   
-  sidebarOpen = false; // Cerrado por defecto
+  sidebarOpen = false;
   sidebarMobile = false;
+  
+  constructor(private router: Router) {}
 
   onSidebarStateChange(state: { isOpen: boolean; isMobile: boolean }): void {
     this.sidebarOpen = state.isOpen;
@@ -33,7 +35,7 @@ export class App {
   }
 
   goToHome(): void {
-    // Activate the "inicio" section in the sidebar
+    this.router.navigate(['/restaurantes']);
     if (this.slideBar) {
       this.slideBar.setActiveSection('inicio');
     }

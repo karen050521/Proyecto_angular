@@ -1,3 +1,4 @@
+<!-- Header con SlideBar -->
 <app-header
   [class.sidebar-collapsed]="!sidebarOpen || sidebarMobile"
   [isMobile]="sidebarMobile"
@@ -12,7 +13,8 @@
   <div class="navbar-frosted-overlay"></div>
 }
 
-<app-slide-bar #sidebar (sidebarStateChange)="onSidebarStateChange($event)"> </app-slide-bar>
+<!-- ✅ SlideBar restaurado -->
+<app-slide-bar #sidebar (sidebarStateChange)="onSidebarStateChange($event)"></app-slide-bar>
 
 <main
   class="main-content"
@@ -26,6 +28,9 @@
 
 <!-- Sidebar del carrito de compras -->
 <app-cart-sidebar></app-cart-sidebar>
+
+<!-- Modal de confirmación de órdenes -->
+<app-order-confirmation-modal></app-order-confirmation-modal>
 
 <!-- Chat flotante - Accesible desde cualquier página -->
 <app-floating-chat></app-floating-chat>

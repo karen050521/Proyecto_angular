@@ -1,0 +1,139 @@
+<div class="orders-container">
+	<div class="orders-header">
+		<h1>Mis Órdenes</h1>
+		<div class="stats-cards">
+			<div class="stat-card">
+				<i class="bi bi-receipt"></i>
+				<div class="stat-info">
+					<span class="stat-value">{{ getTotalOrders() }}</span>
+					<span class="stat-label">Total órdenes</span>
+				</div>
+			</div>
+			<div class="stat-card">
+				<i class="bi bi-clock-history"></i>
+				<div class="stat-info">
+					<span class="stat-value">{{ getTotalByStatus('pending') }}</span>
+					<span class="stat-label">Pendientes</span>
+				</div>
+			</div>
+			<div class="stat-card">
+				<i class="bi bi-truck"></i>
+				<div class="stat-info">
+					<span class="stat-value">{{ getTotalByStatus('in_progress') }}</span>
+					<span class="stat-label">En camino</span>
+				</div>
+			</div>
+			<div class="stat-card success">
+				<i class="bi bi-check-circle"></i>
+				<div class="stat-info">
+					<span class="stat-value">{{ getTotalByStatus('delivered') }}</span>
+					<span class="stat-label">Entregadas</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Filtros -->
+	<div class="filters">
+		<button 
+			class="filter-btn" 
+			[class.active]="selectedStatus === 'all'"
+			(click)="filterByStatus('all')">
+			Todas
+		</button>
+		<button 
+			class="filter-btn" 
+			[class.active]="selectedStatus === 'pending'"
+			(click)="filterByStatus('pending')">
+			Pendientes
+		</button>
+		<button 
+			class="filter-btn" 
+			[class.active]="selectedStatus === 'in_progress'"
+			(click)="filterByStatus('in_progress')">
+			En proceso
+		</button>
+		<button 
+			class="filter-btn" 
+			[class.active]="selectedStatus === 'delivered'"
+			(click)="filterByStatus('delivered')">
+			Entregadas
+		</button>
+		<button 
+			class="filter-btn" 
+			[class.active]="selectedStatus === 'cancelled'"
+			(click)="filterByStatus('cancelled')">
+			Canceladas
+		</button>
+	</div>
+
+	<!-- Loading -->
+	<div *ngIf="loading" class="loading">
+		<i class="bi bi-hourglass-split"></i>
+		Cargando órdenes...
+	</div>
+
+	<!-- Error -->
+	<div *ngIf="error && !loading" class="error">
+		<i class="bi bi-exclamation-triangle"></i>
+		{{ error }}
+	</div>
+
+	<!-- Empty state -->
+	<div *ngIf="!loading && !error && filteredOrders.length === 0" class="empty">
+		<i class="bi bi-inbox"></i>
+		<p>No hay órdenes {{ selectedStatus !== 'all' ? 'con este estado' : '' }}</p>
+	</div>
+
+	<!-- Orders list -->
+	<div *ngIf="!loading && !error && filteredOrders.length > 0" class="orders-grid">
+		<div *ngFor="let order of filteredOrders" class="order-card">
+			<!-- Header de la orden -->
+			<div class="order-header">
+				<div class="order-number">
+					<i class="bi bi-receipt-cutoff"></i>
+					Orden #{{ order.id }}
+				</div>
+				<span class="order-status" [ngClass]="getStatusClass(order.status)">
+					{{ getStatusLabel(order.status) }}
+				</span>
+			</div>
+
+			<!-- Información del menú -->
+			<div class="order-body">
+				<div class="order-info">
+					<h3 class="product-name">
+						<i class="bi bi-bag"></i>
+						{{ order.menu?.product?.name || 'Producto' }}
+					</h3>
+					<p class="restaurant-name">
+						<i class="bi bi-shop"></i>
+						{{ order.menu?.restaurant?.name || 'Restaurante' }}
+					</p>
+					<div class="order-details">
+						<span class="quantity">
+							<i class="bi bi-cart"></i>
+							Cantidad: {{ order.quantity }}
+						</span>
+						<span class="price">
+							<i class="bi bi-currency-dollar"></i>
+							Total: ${{ order.total_price }}
+						</span>
+					</div>
+					<p class="order-date">
+						<i class="bi bi-calendar"></i>
+						{{ order.created_at | date: 'dd/MM/yyyy HH:mm' }}
+					</p>
+				</div>
+			</div>
+
+			<!-- Acciones -->
+			<div class="order-actions" *ngIf="order.status === 'pending'">
+				<button class="btn-cancel" (click)="cancelOrder(order.id!)">
+					<i class="bi bi-x-circle"></i>
+					Cancelar
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

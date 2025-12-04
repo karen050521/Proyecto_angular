@@ -15,3 +15,12 @@ export interface Order {
   customer?: Customer;
   menu?: Menu;
 }
+
+export interface OrderCreatePayload {
+  customer_id: number;
+  menu_id: number;
+  motorcycle_id?: number;
+  quantity: number;
+  total_price: number;
+  status: 'pending' | 'in_progress' | 'delivered' | 'cancelled';
+}

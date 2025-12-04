@@ -1,0 +1,50 @@
+<div class="modal-overlay" *ngIf="visible()" (click)="close()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <!-- ✅ Botón cerrar (X) -->
+    <button class="modal-close-btn" (click)="close()" aria-label="Cerrar modal">
+      <i class="bi bi-x-lg"></i>
+    </button>
+
+    <!-- Icono de éxito -->
+    <div class="success-icon">
+      <i class="bi bi-check-circle-fill"></i>
+    </div>
+
+    <!-- Título -->
+    <h2>¡Orden Generada Exitosamente!</h2>
+
+    <!-- Detalles de la orden -->
+    <div class="order-details">
+      <div class="detail-row">
+        <span class="label">Productos ordenados:</span>
+        <span class="value">{{ orderCount() }}</span>
+      </div>
+      <div class="detail-row total">
+        <span class="label">Total a pagar:</span>
+        <span class="value">${{ totalAmount().toFixed(0) }}</span>
+      </div>
+      <div class="status-badge">
+        <i class="bi bi-clock-history"></i>
+        Estado: Pendiente
+      </div>
+    </div>
+
+    <!-- Mensaje -->
+    <p class="message">
+      Tu orden ha sido recibida y está siendo procesada. 
+      Pronto será asignada a un domiciliario.
+    </p>
+
+    <!-- Botones -->
+    <div class="modal-actions">
+      <button class="btn-secondary" (click)="continueShopping()">
+        <i class="bi bi-shop"></i>
+        Continuar comprando
+      </button>
+      <button class="btn-primary" (click)="goToOrders()">
+        <i class="bi bi-receipt"></i>
+        Ver mis órdenes
+      </button>
+    </div>
+  </div>
+</div>
