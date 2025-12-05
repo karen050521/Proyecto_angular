@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CartStore } from '../../../core/services/cart.store';
 import { CheckoutService } from '../../../core/services/checkout.service';
-import { OrderConfirmationService } from '../../../core/services/order-confirmation.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
+import { OrderConfirmationService } from '../../../core/services/order-confirmation-modal.service';
 
 /**
  * CartSidebar Component - Responsabilidad única: UI del carrito
@@ -25,9 +25,9 @@ import { ConfirmationService } from '../../../core/services/confirmation.service
 export class CartSidebar {
   private router = inject(Router);
   private checkoutService = inject(CheckoutService);
-  private confirmationService = inject(OrderConfirmationService);
   private notificationService = inject(NotificationService);
   private confirmService = inject(ConfirmationService);
+  private orderConfirmationService = inject(OrderConfirmationService);
   
   // Servicios públicos para el template
   cartStore = inject(CartStore);
@@ -103,9 +103,8 @@ export class CartSidebar {
         this.closeSidebar();
         
         // Mostrar modal de confirmación con datos correctos
-        // Guardamos el ID de la primera orden para el tracking
-        const firstOrderId = orders[0]?.id || null;
-        this.confirmationService.showConfirmation(totalProducts, total, firstOrderId);
+        const firstOrderId = orders && orders.length > 0 ? orders[0].id : null;
+        this.orderConfirmationService.showConfirmation(totalProducts, total, firstOrderId);
       },
       error: (err) => {
         this.notificationService.showError('Error al generar la orden. Por favor intenta de nuevo.');

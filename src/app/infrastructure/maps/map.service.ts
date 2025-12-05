@@ -101,6 +101,10 @@ export class MapService {
     this.map.setView([lat, lng], zoom ?? this.map.getZoom());
   }
 
+  centerMap(lat: number, lng: number, zoom?: number) {
+    this.setView(lat, lng, zoom);
+  }
+
   fitBounds(bounds: any, options?: any) {
     if (!this.map) return;
     this.map.fitBounds(bounds, options);

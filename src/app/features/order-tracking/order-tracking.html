@@ -124,20 +124,43 @@
         </div>
       </div>
 
-      <!-- Mapa con ubicación del restaurante -->
+      <!-- Mapa con tracking en tiempo real del repartidor -->
       <div class="map-section">
-        <h3><i class="bi bi-geo-alt"></i> Ubicación del Restaurante</h3>
+        <h3>
+          <i class="bi bi-broadcast"></i> 
+          {{ motorcycle ? 'Ubicación en Tiempo Real del Repartidor' : 'Ubicación del Restaurante' }}
+        </h3>
+        
+        <!-- Si hay repartidor asignado, mostrar tracking en tiempo real -->
         <app-restaurant-map
-          *ngIf="order?.menu?.restaurant"
+          *ngIf="motorcycle && order?.menu?.restaurant"
+          [trackingMode]="true"
+          [motorcyclePlate]="motorcycle.license_plate"
+          [autoStart]="true"
+          [latitude]="4.5339"
+          [longitude]="-75.6811"
+          [height]="500"
+        ></app-restaurant-map>
+
+        <!-- Si no hay repartidor, mostrar ubicación del restaurante -->
+        <app-restaurant-map
+          *ngIf="!motorcycle && order?.menu?.restaurant"
           [restaurantName]="order?.menu?.restaurant?.name || 'Restaurante'"
           [address]="order?.menu?.restaurant?.address || 'Sin dirección'"
           [latitude]="4.5339"
           [longitude]="-75.6811"
           [height]="400"
         ></app-restaurant-map>
+        
         <div class="map-placeholder" *ngIf="!order?.menu?.restaurant">
           <i class="bi bi-map"></i>
           <p>Información del restaurante no disponible</p>
+        </div>
+
+        <!-- Indicador de tracking activo -->
+        <div class="tracking-status" *ngIf="motorcycle">
+          <i class="bi bi-circle-fill pulse"></i>
+          <span>Tracking GPS activo - Actualizando cada 5 segundos</span>
         </div>
       </div>
 

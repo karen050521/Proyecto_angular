@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map, switchMap, of } from 'rxjs';
+import { Observable, map, switchMap, of, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Motorcycle, MotorcycleCreatePayload } from '../models/motorcycle.model';
 
@@ -8,6 +8,7 @@ import { Motorcycle, MotorcycleCreatePayload } from '../models/motorcycle.model'
 export class MotorcycleService {
   private http = inject(HttpClient);
   private base = `${environment.apiBase}/motorcycles`;
+  private trackingBase = environment.trackingServer || 'http://localhost:5000';
 
   getAll(): Observable<Motorcycle[]> {
     return this.http.get<Motorcycle[]>(this.base);
@@ -70,6 +71,34 @@ export class MotorcycleService {
           })
         );
       })
+    );
+  }
+
+  /**
+   * Inicia el tracking GPS de una motocicleta
+   * @param plate Placa de la motocicleta
+   */
+  startTracking(plate: string): Observable<{ message: string }> {
+    console.log(`🚀 Iniciando tracking de placa: ${plate}`);
+    return this.http.post<{ message: string }>(
+      `${this.trackingBase}/motorcycles/track/${plate}`,
+      {}
+    ).pipe(
+      tap(response => console.log('✅ Tracking iniciado:', response))
+    );
+  }
+
+  /**
+   * Detiene el tracking GPS de una motocicleta
+   * @param plate Placa de la motocicleta
+   */
+  stopTracking(plate: string): Observable<{ message: string }> {
+    console.log(`🛑 Deteniendo tracking de placa: ${plate}`);
+    return this.http.post<{ message: string }>(
+      `${this.trackingBase}/motorcycles/stop/${plate}`,
+      {}
+    ).pipe(
+      tap(response => console.log('✅ Tracking detenido:', response))
     );
   }
 }

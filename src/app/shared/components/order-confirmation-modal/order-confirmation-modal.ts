@@ -1,7 +1,7 @@
 import { Component, inject, computed, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { OrderConfirmationService } from '../../../core/services/order-confirmation.service';
+import { OrderConfirmationService } from '../../../core/services/order-confirmation-modal.service';
 
 @Component({
   selector: 'app-order-confirmation-modal',

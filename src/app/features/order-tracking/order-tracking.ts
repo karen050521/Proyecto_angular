@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,7 +6,6 @@ import { OrderService } from '../../core/services/order.service';
 import { AddressService } from '../../core/services/address.service';
 import { MotorcycleService } from '../../core/services/motorcycle.service';
 import { ConfirmationService } from '../../core/services/confirmation.service';
-import { NotificationService } from '../../core/services/notification.service';
 import { Order } from '../../core/models/order.model';
 import { Address } from '../../core/models/address.model';
 import { Motorcycle } from '../../core/models/motorcycle.model';
@@ -25,7 +24,8 @@ export class OrderTrackingComponent implements OnInit {
   private addressService = inject(AddressService);
   private motorcycleService = inject(MotorcycleService);
   private confirmService = inject(ConfirmationService);
-  private notificationService = inject(NotificationService);
+
+  @ViewChild(RestaurantMapComponent) mapComponent?: RestaurantMapComponent;
 
   orderId!: number;
   order: Order | null = null;
@@ -153,36 +153,53 @@ export class OrderTrackingComponent implements OnInit {
       type: 'info'
     });
 
-    if (!confirmed) return;
+    if (!confirmed) {
+      return;
+    }
 
     this.loading = true;
 
     // Actualizar el estado de la orden a "delivered"
     this.orderService.update(this.order.id!, { status: 'delivered' }).subscribe({
       next: () => {
-        // Si hay un repartidor asignado, marcarlo como disponible
-        if (this.order!.motorcycle_id) {
+        // Detener el tracking del WebSocket
+        if (this.mapComponent && this.motorcycle) {
+          console.log('🛑 Deteniendo tracking por orden completada');
+          this.mapComponent.stopTracking();
+        }
+
+        // Si hay un repartidor asignado, detener tracking y marcarlo como disponible
+        if (this.order!.motorcycle_id && this.motorcycle) {
+          // Detener tracking en el backend
+          this.motorcycleService.stopTracking(this.motorcycle.license_plate).subscribe({
+            next: () => {
+              console.log('✅ Tracking detenido en backend');
+            },
+            error: (err) => {
+              console.error('❌ Error al detener tracking:', err);
+            }
+          });
+
+          // Marcar repartidor como disponible
           this.motorcycleService.update(this.order!.motorcycle_id, { status: 'available' }).subscribe({
             next: () => {
               this.loadOrderData();
-              this.notificationService.showSuccess('Orden completada. El repartidor está ahora disponible.');
+              // Información - no se muestra nada, solo se recarga
             },
             error: () => {
               this.loadOrderData();
-              this.notificationService.showWarning('Orden completada, pero hubo un error al actualizar el repartidor.');
+              // Información - no se muestra nada, solo se recarga
             }
           });
         } else {
           this.loadOrderData();
-          this.notificationService.showSuccess('Orden completada exitosamente.');
+          // Información - no se muestra nada, solo se recarga
         }
       },
       error: () => {
         this.error = 'Error al completar la orden';
         this.loading = false;
-        this.notificationService.showError('Error al completar la orden');
       }
     });
   }
 }
-
