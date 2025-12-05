@@ -226,6 +226,7 @@
   align-items: center;
   gap: 1rem;
   z-index: 1;
+  flex-shrink: 0; /* Evitar que se encoja */
 }
 
 /* Botones de acción (notificaciones, etc) */
@@ -531,9 +532,9 @@
    ============================================ */
 @media (max-width: 767px) {
   .navbar {
-    padding: 0 1rem 0 0; /* Sin padding izquierdo */
+    padding: 0 0.75rem 0 0; /* Padding derecho para dar espacio */
     height: 64px;
-    gap: 0.75rem;
+    gap: 0.5rem; /* Gap reducido */
   }
   
   .hamburger-btn {
@@ -549,6 +550,7 @@
   /* Mantener botón hamburguesa visible pero ocultar el título */
   .navbar-left {
     gap: 0; /* Sin separación en móvil */
+    flex-shrink: 0; /* No permitir que se encoja */
   }
 
   .navbar-left .page-info {
@@ -559,11 +561,19 @@
   .navbar-center {
     flex: 1;
     max-width: none;
+    min-width: 0; /* Permite que se encoja si es necesario */
   }
   
   .search-input {
     padding: 0.6rem 0.8rem 0.6rem 2.5rem;
     font-size: 0.85rem;
+    min-width: 100px; /* Ancho mínimo más pequeño */
+    width: 100%; /* Ocupar el espacio disponible */
+  }
+  
+  .search-container {
+    min-width: 100px; /* Permitir que se encoja más */
+    max-width: 250px; /* Limitar el ancho máximo en móvil */
   }
   
   .search-container i {
@@ -573,10 +583,12 @@
   
   /* Acciones en móvil */
   .navbar-right {
-    gap: 0.5rem;
+    gap: 0.4rem; /* Gap muy reducido para que todo quepa */
+    flex-shrink: 0; /* No permitir que se encoja */
   }
   
-  .nav-action-btn {
+  .nav-action-btn,
+  .cart-icon-btn {
     width: 40px;
     height: 40px;
   }
@@ -886,7 +898,7 @@
     font-size: 1.3rem;
   }
 
-  .page-info {
+  .navbar-left .page-info {
     display: none; /* Ocultar título de página en móvil */
   }
 
@@ -896,13 +908,15 @@
     min-width: 180px;
   }
 
-  .nav-action-btn {
+  .nav-action-btn,
+  .cart-icon-btn {
     width: 42px;
     height: 42px;
     font-size: 1.1rem;
   }
 
-  .notification-badge {
+  .notification-badge,
+  .cart-badge {
     width: 16px;
     height: 16px;
     font-size: 0.65rem;
@@ -966,7 +980,8 @@
     padding: 0.4rem 0.75rem;
   }
 
-  .nav-action-btn {
+  .nav-action-btn,
+  .cart-icon-btn {
     width: 38px;
     height: 38px;
     font-size: 1rem;
@@ -1008,12 +1023,14 @@
     font-size: 0.75rem;
   }
 
-  .nav-action-btn {
+  .nav-action-btn,
+  .cart-icon-btn {
     width: 36px;
     height: 36px;
   }
 
-  .notification-badge {
+  .notification-badge,
+  .cart-badge {
     width: 14px;
     height: 14px;
     font-size: 0.6rem;

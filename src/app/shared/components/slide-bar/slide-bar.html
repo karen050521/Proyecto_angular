@@ -1,3 +1,8 @@
+<!-- Overlay para móvil -->
+@if (isMobile && isOpen) {
+  <div class="sidebar-overlay" (click)="close()"></div>
+}
+
 <!-- Sidebar responsive con iconos Bootstrap -->
 <nav class="sidebar" 
      [class.open]="isOpen" 
@@ -24,7 +29,7 @@
     <li>
       <a href="#" 
          [class.active]="activeSection === 'inicio'"
-         (click)="setActiveSection('inicio'); $event.preventDefault()">
+         (click)="setActiveSection('inicio'); $event.preventDefault(); isMobile && close()">
         <i class="bi bi-house-door"></i>
         <span class="label">Inicio</span>
       </a>
@@ -33,13 +38,13 @@
       <a [routerLink]="'/dashboard'" 
          routerLinkActive="active"
          [class.active]="activeSection === 'dashboard'"
-         (click)="setActiveSection('dashboard')">
+         (click)="setActiveSection('dashboard'); isMobile && close()">
         <i class="bi bi-graph-up"></i>
         <span class="label">Dashboard</span>
       </a>
     </li>
     <li>
-      <a [routerLink]="'/restaurantes'" routerLinkActive="active" [class.active]="activeSection === 'restaurantes'" (click)="setActiveSection('restaurantes')">
+      <a [routerLink]="'/restaurantes'" routerLinkActive="active" [class.active]="activeSection === 'restaurantes'" (click)="setActiveSection('restaurantes'); isMobile && close()">
         <i class="bi bi-shop"></i>
         <span class="label">Restaurantes</span>
       </a>
@@ -48,7 +53,7 @@
       <a [routerLink]="'/orders'" 
          routerLinkActive="active"
          [class.active]="activeSection === 'pedidos'"
-         (click)="setActiveSection('pedidos')">
+         (click)="setActiveSection('pedidos'); isMobile && close()">
         <i class="bi bi-cart"></i>
         <span class="label">Pedidos</span>
       </a>

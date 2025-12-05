@@ -266,3 +266,62 @@
         grid-template-columns: 1fr;
       }
     }
+
+/* Tablets (992px) */
+@media (max-width: 992px) {
+  .addresses-container {
+    padding: 1.5rem;
+  }
+
+  .addresses-list {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+/* Móviles (576px) */
+@media (max-width: 576px) {
+  .addresses-container {
+    padding: 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .form-card {
+    padding: 1.25rem;
+  }
+
+  .card {
+    padding: 1.25rem;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}
+
+/* Móviles pequeños (480px) */
+@media (max-width: 480px) {
+  .addresses-container {
+    padding: 0.75rem;
+  }
+
+  .form-card, .card {
+    padding: 1rem;
+  }
+
+  .header h2 {
+    font-size: 1.3rem;
+  }
+
+  .card-header h3 {
+    font-size: 1.1rem;
+  }
+}

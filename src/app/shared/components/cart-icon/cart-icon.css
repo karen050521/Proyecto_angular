@@ -3,31 +3,30 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
-  color: var(--navbar-text);
+  color: var(--navbar-text, #fff);
   cursor: pointer;
-  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+  font-size: 1.2rem;
 }
 
 .cart-icon-btn:hover {
-  background: var(--hover-bg);
-  border-color: var(--accent);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--accent, #3b82f6);
+  transform: scale(1.05);
 }
 
 .cart-icon-btn:active {
-  transform: translateY(0);
+  transform: scale(1);
 }
 
 .cart-icon-btn i {
-  font-size: 1.25rem;
-  color: var(--accent);
+  font-size: 1.2rem;
+  color: var(--accent, #3b82f6);
   transition: transform 200ms ease;
 }
 
@@ -42,25 +41,23 @@
 /* Badge de cantidad */
 .cart-badge {
   position: absolute;
-  top: -6px;
-  right: -6px;
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  top: -5px;
+  right: -5px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white;
-  font-size: 0.8rem;
-  font-weight: 800;
-  min-width: 22px;
-  height: 22px;
-  border-radius: 11px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 12px;
+  min-width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 0.4rem;
-  border: 2.5px solid var(--navbar-bg);
-  box-shadow: 0 3px 10px rgba(239, 68, 68, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.3);
+  border: 2px solid var(--navbar-bg, #1f2937);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
   animation: badgePulse 2s ease-in-out infinite;
   z-index: 10;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  letter-spacing: 0.02em;
 }
 
 /* Animaciones */
@@ -76,23 +73,11 @@
 @keyframes badgePulse {
   0%, 100% {
     transform: scale(1);
-    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+    opacity: 1;
   }
   50% {
     transform: scale(1.1);
-    box-shadow: 0 4px 8px rgba(239, 68, 68, 0.6);
-  }
-}
-
-/* Responsive */
-@media (max-width: 767px) {
-  .cart-icon-btn {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .cart-icon-btn i {
-    font-size: 1.1rem;
+    opacity: 0.9;
   }
 }
 

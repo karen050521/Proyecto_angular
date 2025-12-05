@@ -343,6 +343,20 @@
   }
 }
 
+@media (max-width: 992px) {
+  .dashboard-container {
+    padding: 1.5rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .chart-container {
+    height: 300px;
+  }
+}
+
 @media (max-width: 768px) {
   .dashboard-container {
     padding: 1rem;
@@ -388,6 +402,28 @@
 
   .chart-container {
     height: 280px;
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard-container {
+    padding: 0.875rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .header-title h1 {
+    font-size: 1.4rem;
+  }
+
+  .chart-container {
+    height: 260px;
   }
 }
 
