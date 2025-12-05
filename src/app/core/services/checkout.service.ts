@@ -4,8 +4,10 @@ import { map } from 'rxjs/operators';
 import { OrderService } from './order.service';
 import { MotorcycleService } from './motorcycle.service';
 import { NotificationService } from './notification.service';
+import { AddressService } from './address.service';
 import { Order, OrderCreatePayload } from '../models/order.model';
 import { CartItem } from '../models/cart-item.model';
+import { Address } from '../models/address.model';
 
 /**
  * CheckoutService - Responsabilidad única: procesar el checkout
@@ -21,6 +23,7 @@ export class CheckoutService {
   private orderService = inject(OrderService);
   private motorcycleService = inject(MotorcycleService);
   private notificationService = inject(NotificationService);
+  private addressService = inject(AddressService);
   
   // Customer ID hardcoded (TODO: integrar con sistema de autenticación)
   private readonly DEFAULT_CUSTOMER_ID = 1;
@@ -30,12 +33,17 @@ export class CheckoutService {
    * y asigna un repartidor disponible
    * 
    * @param items Items del carrito a procesar
+   * @param deliveryAddress Dirección de entrega seleccionada
    * @param customerId ID del cliente (opcional, usa default si no se provee)
    * @returns Observable con array de órdenes creadas
    */
-  processCheckout(items: CartItem[], customerId?: number): Observable<Order[]> {
+  processCheckout(items: CartItem[], deliveryAddress: Address, customerId?: number): Observable<Order[]> {
     if (items.length === 0) {
       throw new Error('No hay items en el carrito');
+    }
+
+    if (!deliveryAddress) {
+      throw new Error('Dirección de entrega requerida');
     }
     
     const effectiveCustomerId = customerId || this.DEFAULT_CUSTOMER_ID;
@@ -65,20 +73,60 @@ export class CheckoutService {
         
         return forkJoin(orderRequests).pipe(
           tap(orders => {
-            console.log('✅ Órdenes creadas:', orders);
-            console.log('📊 Estructura de órdenes:', {
-              length: orders.length,
-              firstOrder: orders[0],
-              firstOrderId: orders[0]?.id,
-              isArray: Array.isArray(orders[0])
+            console.log('📦 Órdenes creadas (raw):', orders);
+          }),
+          switchMap(orders => {
+            // El backend devuelve [orden, statusCode], necesitamos extraer solo la orden
+            const flatOrders = orders.map((response: any) => {
+              // Si es un array con [orden, statusCode], tomar el primer elemento
+              if (Array.isArray(response) && response.length === 2 && typeof response[1] === 'number') {
+                return response[0];
+              }
+              // Si ya es un objeto orden, devolverlo tal cual
+              return response;
             });
             
-            // Aplanar el array si es necesario
-            const flatOrders = Array.isArray(orders[0]) ? orders[0] : orders;
-            const firstValidOrder = flatOrders[0];
+            console.log('📦 Órdenes procesadas:', flatOrders);
+            
+            // Validar que todas las órdenes tengan ID
+            const invalidOrders = flatOrders.filter((order: Order) => !order.id);
+            if (invalidOrders.length > 0) {
+              console.error('❌ Órdenes sin ID:', invalidOrders);
+              throw new Error('Error: algunas órdenes no tienen ID');
+            }
+            
+            // Crear/actualizar las direcciones para cada orden
+            const addressRequests = flatOrders.map((order: Order) => {
+              const addressData = {
+                order_id: order.id!,
+                street: deliveryAddress.street,
+                city: deliveryAddress.city,
+                state: deliveryAddress.state,
+                postal_code: deliveryAddress.postal_code,
+                additional_info: deliveryAddress.additional_info || ''
+              };
+              
+              console.log('📍 Creando dirección para orden:', { 
+                order_id: addressData.order_id,
+                street: addressData.street 
+              });
+              
+              return this.addressService.create(addressData);
+            });
+            
+            // Esperar a que se creen todas las direcciones
+            return forkJoin(addressRequests).pipe(
+              map(() => flatOrders) // Retornar las órdenes procesadas
+            );
+          }),
+          tap(orders => {
+            console.log('✅ Órdenes completadas:', orders);
+            
+            // Las órdenes ya vienen procesadas correctamente
+            const firstValidOrder = orders[0];
             
             // Crear notificación cuando se asigna el pedido
-            if (assignedDriver && flatOrders.length > 0 && firstValidOrder?.id) {
+            if (assignedDriver && orders.length > 0 && firstValidOrder?.id) {
               const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
               const totalPrice = items.reduce((sum, item) => sum + item.subtotal, 0);
               const driverName = assignedDriver.driver_name || `Conductor #${assignedDriver.id}`;
@@ -97,7 +145,7 @@ export class CheckoutService {
             } else {
               console.warn('⚠️ No se creó notificación:', { 
                 hasDriver: !!assignedDriver, 
-                hasOrders: flatOrders.length > 0,
+                hasOrders: orders.length > 0,
                 hasOrderId: !!firstValidOrder?.id,
                 firstValidOrder
               });

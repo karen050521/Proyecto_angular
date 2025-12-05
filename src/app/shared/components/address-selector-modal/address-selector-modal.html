@@ -1,0 +1,92 @@
+@if (isOpen()) {
+  <div class="modal-overlay" (click)="onOverlayClick($event)">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+      <!-- Header -->
+      <div class="modal-header">
+        <div class="header-content">
+          <i class="bi bi-geo-alt"></i>
+          <h2>Dirección de Entrega</h2>
+        </div>
+        <button class="close-btn" (click)="cancel()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <!-- Content -->
+      <div class="modal-body">
+        @if (loading()) {
+          <div class="loading">
+            <div class="spinner"></div>
+            <p>Procesando...</p>
+          </div>
+        } @else {
+          <!-- Formulario de dirección -->
+          <div class="address-form">
+            <h3>Ingresa la dirección de entrega</h3>
+            
+            <div class="form-group">
+              <label>Calle y Número *</label>
+              <input 
+                type="text" 
+                [(ngModel)]="addressForm.street"
+                placeholder="Ej: Av. Principal 123" 
+                class="form-input" />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Ciudad *</label>
+                <input 
+                  type="text" 
+                  [(ngModel)]="addressForm.city"
+                  placeholder="Ciudad" 
+                  class="form-input" />
+              </div>
+
+              <div class="form-group">
+                <label>Estado *</label>
+                <input 
+                  type="text" 
+                  [(ngModel)]="addressForm.state"
+                  placeholder="Estado" 
+                  class="form-input" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Código Postal *</label>
+              <input 
+                type="text" 
+                [(ngModel)]="addressForm.postal_code"
+                placeholder="12345" 
+                class="form-input" />
+            </div>
+
+            <div class="form-group">
+              <label>Referencias (opcional)</label>
+              <textarea 
+                [(ngModel)]="addressForm.additional_info"
+                placeholder="Casa blanca, portón negro, piso 3, etc." 
+                class="form-input"
+                rows="3"></textarea>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="cancel()">
+          Cancelar
+        </button>
+        <button 
+          class="btn-confirm" 
+          (click)="confirmAddress()"
+          [disabled]="loading()">
+          <i class="bi bi-check-lg"></i>
+          Continuar con esta dirección
+        </button>
+      </div>
+    </div>
+  </div>
+}

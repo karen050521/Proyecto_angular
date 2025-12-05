@@ -543,7 +543,30 @@
   background: rgba(0, 0, 0, 0.3);
 }
 
-/* Responsive */
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+/* Tablets grandes (≤992px) */
+@media (max-width: 992px) {
+  .cart-sidebar {
+    width: 420px;
+  }
+
+  .cart-item {
+    padding: 1rem;
+  }
+
+  .item-name {
+    font-size: 0.95rem;
+  }
+
+  .item-price {
+    font-size: 0.9rem;
+  }
+}
+
+/* Tablets (≤768px) */
 @media (max-width: 768px) {
   .cart-sidebar {
     width: 100%;
@@ -555,8 +578,87 @@
   }
 
   .cart-item {
-    grid-template-columns: 50px 1fr auto;
+    grid-template-columns: 60px 1fr auto;
+    gap: 0.875rem;
+    padding: 0.875rem;
+  }
+
+  .item-image {
+    width: 60px;
+    height: 60px;
+  }
+
+  .item-name {
+    font-size: 0.9rem;
+  }
+
+  .item-restaurant {
+    font-size: 0.75rem;
+  }
+
+  .item-controls {
+    align-items: center;
     gap: 0.75rem;
+  }
+
+  .quantity-controls {
+    gap: 0.625rem;
+  }
+
+  .quantity-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+  }
+
+  .quantity-value {
+    min-width: 28px;
+    font-size: 0.9rem;
+  }
+
+  .cart-actions {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  
+  .btn-back {
+    grid-column: 1 / -1;
+    order: 1;
+  }
+
+  .btn-clear {
+    order: 2;
+  }
+
+  .btn-checkout {
+    order: 3;
+  }
+}
+
+/* Móviles (≤576px) */
+@media (max-width: 576px) {
+  .cart-header {
+    padding: 1.25rem 1rem;
+  }
+
+  .cart-header h2 {
+    font-size: 1.125rem;
+  }
+
+  .close-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+  }
+
+  .cart-content {
+    padding: 0.875rem;
+  }
+
+  .cart-item {
+    grid-template-columns: 50px 1fr;
+    gap: 0.75rem;
+    padding: 0.75rem;
   }
 
   .item-image {
@@ -565,30 +667,31 @@
   }
 
   .item-controls {
-    align-items: center;
+    grid-column: 1 / -1;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
   }
 
-  .cart-actions {
-    grid-template-columns: 1fr;
-  }
-  
-  .btn-back {
-    grid-column: 1;
+  .quantity-controls {
+    gap: 0.5rem;
   }
 
-  .btn-clear,
-  .btn-checkout {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .cart-header {
-    padding: 1rem;
+  .quantity-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 0.85rem;
   }
 
-  .cart-content {
-    padding: 0.75rem;
+  .quantity-value {
+    min-width: 26px;
+    font-size: 0.85rem;
+  }
+
+  .item-price {
+    font-size: 0.95rem;
   }
 
   .cart-footer {
@@ -596,13 +699,126 @@
   }
 
   .total-label {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .total-amount {
     font-size: 1.5rem;
   }
+
+  .cart-actions {
+    grid-template-columns: 1fr;
+    gap: 0.625rem;
+  }
+
+  .btn-back,
+  .btn-clear,
+  .btn-checkout {
+    order: initial;
+    width: 100%;
+  }
+
+  .empty-cart p {
+    font-size: 0.95rem;
+  }
+
+  .btn-browse {
+    font-size: 0.9rem;
+    padding: 0.75rem 1.5rem;
+  }
 }
+
+/* Móviles pequeños (≤480px) */
+@media (max-width: 480px) {
+  .cart-header {
+    padding: 1rem 0.875rem;
+  }
+
+  .cart-header h2 {
+    font-size: 1rem;
+  }
+
+  .close-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+
+  .cart-content {
+    padding: 0.75rem;
+  }
+
+  .cart-item {
+    padding: 0.625rem;
+  }
+
+  .item-image {
+    width: 45px;
+    height: 45px;
+  }
+
+  .item-name {
+    font-size: 0.85rem;
+  }
+
+  .item-restaurant {
+    font-size: 0.7rem;
+  }
+
+  .item-price {
+    font-size: 0.875rem;
+  }
+
+  .quantity-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 0.8rem;
+  }
+
+  .quantity-value {
+    min-width: 24px;
+    font-size: 0.8rem;
+  }
+
+  .remove-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+  }
+
+  .cart-footer {
+    padding: 0.875rem 0.75rem;
+  }
+
+  .total-label {
+    font-size: 0.95rem;
+  }
+
+  .total-amount {
+    font-size: 1.375rem;
+  }
+
+  .btn-back,
+  .btn-clear,
+  .btn-checkout {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .empty-cart i {
+    font-size: 3rem;
+  }
+
+  .empty-cart p {
+    font-size: 0.875rem;
+  }
+
+  .btn-browse {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.85rem;
+  }
+}
+
 
 /* Animaciones */
 @keyframes slideIn {

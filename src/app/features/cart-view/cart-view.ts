@@ -2,6 +2,8 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CartStore } from '../../core/services/cart.store';
+import { ConfirmationService } from '../../core/services/confirmation.service';
+import { NotificationService } from '../../core/services/notification.service';
 import { CartItem } from '../../core/models/cart-item.model';
 
 @Component({
@@ -13,6 +15,8 @@ import { CartItem } from '../../core/models/cart-item.model';
 })
 export class CartViewComponent {
   private router = inject(Router);
+  private confirmService = inject(ConfirmationService);
+  private notificationService = inject(NotificationService);
   cartStore = inject(CartStore);
   
   incrementQuantity(itemId: string): void {
@@ -29,14 +33,30 @@ export class CartViewComponent {
     }
   }
   
-  removeItem(itemId: string): void {
-    if (confirm('¿Eliminar este producto del carrito?')) {
+  async removeItem(itemId: string): Promise<void> {
+    const confirmed = await this.confirmService.confirm({
+      title: 'Eliminar Producto',
+      message: '¿Eliminar este producto del carrito?',
+      confirmText: 'Eliminar',
+      cancelText: 'Cancelar',
+      type: 'warning'
+    });
+
+    if (confirmed) {
       this.cartStore.removeItem(itemId);
     }
   }
   
-  clearCart(): void {
-    if (confirm('¿Vaciar todo el carrito de compras?')) {
+  async clearCart(): Promise<void> {
+    const confirmed = await this.confirmService.confirm({
+      title: 'Vaciar Carrito',
+      message: '¿Vaciar todo el carrito de compras?',
+      confirmText: 'Sí, vaciar',
+      cancelText: 'Cancelar',
+      type: 'warning'
+    });
+
+    if (confirmed) {
       this.cartStore.clearCart();
     }
   }
@@ -46,8 +66,8 @@ export class CartViewComponent {
   }
   
   checkout(): void {
-    // TODO: Implementar checkout
-    alert('🚧 Checkout en construcción...\n\nTotal: $' + this.cartStore.total());
+    // TODO: Implementar checkout completo
+    this.notificationService.showInfo(`Checkout en construcción. Total: $${this.cartStore.total()}`);
   }
   
   getImageUrl(item: CartItem): string {

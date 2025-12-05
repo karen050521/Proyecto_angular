@@ -6,6 +6,8 @@ import { CheckoutService } from '../../../core/services/checkout.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { OrderConfirmationService } from '../../../core/services/order-confirmation-modal.service';
+import { AddressSelectorService } from '../../../core/services/address-selector.service';
+import { AddressSelectorModal } from '../address-selector-modal/address-selector-modal';
 
 /**
  * CartSidebar Component - Responsabilidad única: UI del carrito
@@ -18,7 +20,7 @@ import { OrderConfirmationService } from '../../../core/services/order-confirmat
 @Component({
   selector: 'app-cart-sidebar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AddressSelectorModal],
   templateUrl: './cart-sidebar.html',
   styleUrl: './cart-sidebar.css'
 })
@@ -28,6 +30,7 @@ export class CartSidebar {
   private notificationService = inject(NotificationService);
   private confirmService = inject(ConfirmationService);
   private orderConfirmationService = inject(OrderConfirmationService);
+  private addressSelectorService = inject(AddressSelectorService);
   
   // Servicios públicos para el template
   cartStore = inject(CartStore);
@@ -78,10 +81,18 @@ export class CartSidebar {
       return;
     }
     
-    // Confirmar con el usuario
+    // PASO 1: Seleccionar dirección de entrega
+    const selectedAddress = await this.addressSelectorService.open();
+    
+    if (!selectedAddress) {
+      // Usuario canceló la selección de dirección
+      return;
+    }
+    
+    // PASO 2: Confirmar con el usuario
     const confirmed = await this.confirmService.confirm({
       title: 'Confirmar Orden',
-      message: `¿Confirmar orden de ${items.length} producto(s) por $${this.cartStore.total()}?`,
+      message: `¿Confirmar orden de ${items.length} producto(s) por $${this.cartStore.total()}?\n\nDirección de entrega:\n${selectedAddress.street}, ${selectedAddress.city}, ${selectedAddress.state}`,
       confirmText: 'Confirmar',
       cancelText: 'Cancelar',
       type: 'info'
@@ -91,9 +102,11 @@ export class CartSidebar {
       return;
     }
     
-    // Procesar checkout usando el servicio
-    this.checkoutService.processCheckout(items).subscribe({
+    // PASO 3: Procesar checkout con la dirección seleccionada
+    this.checkoutService.processCheckout(items, selectedAddress).subscribe({
       next: (orders) => {
+        console.log('✅ Checkout completado:', orders);
+        
         // Calcular el total y la cantidad de productos desde los items del carrito
         const total = items.reduce((sum, item) => sum + item.subtotal, 0);
         const totalProducts = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -107,7 +120,14 @@ export class CartSidebar {
         this.orderConfirmationService.showConfirmation(totalProducts, total, firstOrderId);
       },
       error: (err) => {
-        this.notificationService.showError('Error al generar la orden. Por favor intenta de nuevo.');
+        console.error('❌ Error en checkout:', err);
+        console.error('❌ Detalles del error:', {
+          status: err.status,
+          message: err.message,
+          error: err.error,
+          url: err.url
+        });
+        this.notificationService.showError(`Error al generar la orden: ${err.error?.message || err.message || 'Error desconocido'}`);
       }
     });
   }

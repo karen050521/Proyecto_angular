@@ -2,6 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { OrderService } from '../../core/services/order.service';
+import { NotificationService } from '../../core/services/notification.service';
+import { ConfirmationService } from '../../core/services/confirmation.service';
 import { Order } from '../../core/models/order.model';
 
 @Component({
@@ -14,6 +16,8 @@ import { Order } from '../../core/models/order.model';
 export class OrdersView implements OnInit {
   private orderService = inject(OrderService);
   private router = inject(Router);
+  private notificationService = inject(NotificationService);
+  private confirmService = inject(ConfirmationService);
 
   orders: Order[] = [];
   loading = true;
@@ -69,36 +73,52 @@ export class OrdersView implements OnInit {
     return classes[status] || '';
   }
 
-  cancelOrder(orderId: number): void {
-    if (!confirm('¿Estás seguro de cancelar esta orden?')) {
+  async cancelOrder(orderId: number): Promise<void> {
+    const confirmed = await this.confirmService.confirm({
+      title: 'Cancelar Orden',
+      message: '¿Estás seguro de cancelar esta orden?',
+      confirmText: 'Sí, cancelar',
+      cancelText: 'No',
+      type: 'warning'
+    });
+
+    if (!confirmed) {
       return;
     }
 
     this.orderService.update(orderId, { status: 'cancelled' }).subscribe({
       next: () => {
-        alert('✅ Orden cancelada exitosamente');
+        this.notificationService.showSuccess('Orden cancelada exitosamente');
         this.loadOrders();
       },
       error: (err) => {
         console.error('Error al cancelar orden:', err);
-        alert('❌ Error al cancelar la orden');
+        this.notificationService.showError('Error al cancelar la orden');
       }
     });
   }
 
-  deleteOrder(orderId: number): void {
-    if (!confirm('¿Estás seguro de eliminar esta orden? Esta acción no se puede deshacer.')) {
+  async deleteOrder(orderId: number): Promise<void> {
+    const confirmed = await this.confirmService.confirm({
+      title: 'Eliminar Orden',
+      message: '¿Estás seguro de eliminar esta orden? Esta acción no se puede deshacer.',
+      confirmText: 'Sí, eliminar',
+      cancelText: 'Cancelar',
+      type: 'danger'
+    });
+
+    if (!confirmed) {
       return;
     }
 
     this.orderService.delete(orderId).subscribe({
       next: () => {
-        alert('✅ Orden eliminada exitosamente');
+        this.notificationService.showSuccess('Orden eliminada exitosamente');
         this.loadOrders();
       },
       error: (err) => {
         console.error('Error al eliminar orden:', err);
-        alert('❌ Error al eliminar la orden');
+        this.notificationService.showError('Error al eliminar la orden');
       }
     });
   }

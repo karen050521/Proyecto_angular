@@ -1,6 +1,8 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrderService } from '../../../core/services/order.service';
+import { NotificationService } from '../../../core/services/notification.service';
+import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { CustomerService } from '../../../core/services/customer.service';
 import { MotorcycleService } from '../../../core/services/motorcycle.service';
 import { MenuService } from '../../../core/services/menu.service';
@@ -99,12 +101,22 @@ export class OrderManagerComponent implements OnInit {
   }
 
   async handleDelete(orderId: any): Promise<void> {
-    if (window.confirm('¿Eliminar este pedido?')) {
+    const confirmed = await this.confirmService.confirm({
+      title: 'Eliminar Pedido',
+      message: '¿Estás seguro de eliminar este pedido?',
+      confirmText: 'Sí, eliminar',
+      cancelText: 'Cancelar',
+      type: 'danger'
+    });
+
+    if (confirmed) {
       try {
         await this.orderService.delete(orderId).toPromise();
         this.orders = this.orders.filter((o: any) => o.id !== orderId);
+        this.notificationService.showSuccess('Pedido eliminado exitosamente');
       } catch (err) {
-        alert('Error eliminando pedido');
+        console.error('Error eliminando pedido:', err);
+        this.notificationService.showError('Error al eliminar el pedido');
       }
     }
   }
@@ -116,14 +128,17 @@ export class OrderManagerComponent implements OnInit {
         this.orders = this.orders.map((o: any) =>
           o.id === this.editingOrder.id ? updated : o
         );
+        this.notificationService.showSuccess('Pedido actualizado exitosamente');
       } else {
         const created = await this.orderService.create(formData).toPromise();
         this.orders = [...this.orders, created];
+        this.notificationService.showSuccess('Pedido creado exitosamente');
       }
       this.showForm = false;
       this.editingOrder = null;
     } catch (err) {
-      alert('Error guardando pedido');
+      console.error('Error guardando pedido:', err);
+      this.notificationService.showError('Error al guardar el pedido');
     }
   }
 
@@ -138,6 +153,8 @@ export class OrderManagerComponent implements OnInit {
     private customerService: CustomerService,
     private motorcycleService: MotorcycleService,
     private menuService: MenuService,
-    private productService: ProductService
+    private productService: ProductService,
+    private notificationService: NotificationService,
+    private confirmService: ConfirmationService
   ) {}
 }

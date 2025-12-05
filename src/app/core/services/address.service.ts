@@ -20,6 +20,15 @@ export class AddressService {
     return this.http.get<Address>(`${this.base}/${id}`);
   }
 
+  /**
+   * Obtiene las direcciones de un usuario específico
+   * @param userId ID del usuario
+   * @returns Observable con las direcciones del usuario
+   */
+  getUserAddresses(userId: number): Observable<Address[]> {
+    return this.http.get<Address[]>(`${this.base}/user/${userId}`);
+  }
+
   create(data: Omit<Address, 'id' | 'created_at'>): Observable<Address> {
     return this.http.post<Address>(this.base, data);
   }
