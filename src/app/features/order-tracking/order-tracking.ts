@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../../core/services/order.service';
 import { AddressService } from '../../core/services/address.service';
 import { MotorcycleService } from '../../core/services/motorcycle.service';
+import { ConfirmationService } from '../../core/services/confirmation.service';
+import { NotificationService } from '../../core/services/notification.service';
 import { Order } from '../../core/models/order.model';
 import { Address } from '../../core/models/address.model';
 import { Motorcycle } from '../../core/models/motorcycle.model';
@@ -22,6 +24,8 @@ export class OrderTrackingComponent implements OnInit {
   private orderService = inject(OrderService);
   private addressService = inject(AddressService);
   private motorcycleService = inject(MotorcycleService);
+  private confirmService = inject(ConfirmationService);
+  private notificationService = inject(NotificationService);
 
   orderId!: number;
   order: Order | null = null;
@@ -138,12 +142,18 @@ export class OrderTrackingComponent implements OnInit {
     this.router.navigate(['/restaurantes']);
   }
 
-  completeOrder(): void {
+  async completeOrder(): Promise<void> {
     if (!this.order) return;
 
-    if (!confirm('¿Marcar esta orden como completada?')) {
-      return;
-    }
+    const confirmed = await this.confirmService.confirm({
+      title: 'Completar Orden',
+      message: '¿Marcar esta orden como completada?',
+      confirmText: 'Completar',
+      cancelText: 'Cancelar',
+      type: 'info'
+    });
+
+    if (!confirmed) return;
 
     this.loading = true;
 
@@ -155,21 +165,22 @@ export class OrderTrackingComponent implements OnInit {
           this.motorcycleService.update(this.order!.motorcycle_id, { status: 'available' }).subscribe({
             next: () => {
               this.loadOrderData();
-              alert('✅ Orden completada. El repartidor está ahora disponible.');
+              this.notificationService.showSuccess('Orden completada. El repartidor está ahora disponible.');
             },
             error: () => {
               this.loadOrderData();
-              alert('✅ Orden completada, pero hubo un error al actualizar el repartidor.');
+              this.notificationService.showWarning('Orden completada, pero hubo un error al actualizar el repartidor.');
             }
           });
         } else {
           this.loadOrderData();
-          alert('✅ Orden completada exitosamente.');
+          this.notificationService.showSuccess('Orden completada exitosamente.');
         }
       },
       error: () => {
         this.error = 'Error al completar la orden';
         this.loading = false;
+        this.notificationService.showError('Error al completar la orden');
       }
     });
   }

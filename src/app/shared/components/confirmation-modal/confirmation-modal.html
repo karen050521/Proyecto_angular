@@ -1,0 +1,54 @@
+<!-- Overlay oscuro -->
+<div 
+  class="modal-overlay" 
+  [class.active]="isOpen()"
+  (click)="onOverlayClick($event)"
+  (keydown)="onKeyDown($event)"
+  tabindex="0"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-hidden]="!isOpen()">
+  
+  <!-- Modal de confirmación -->
+  <div 
+    class="modal-dialog" 
+    [class.open]="isOpen()"
+    [class.warning]="config()?.type === 'warning'"
+    [class.danger]="config()?.type === 'danger'"
+    [class.info]="config()?.type === 'info'">
+    
+    <!-- Icono según el tipo -->
+    <div class="modal-icon">
+      @if (config()?.type === 'danger') {
+        <i class="bi bi-exclamation-triangle-fill"></i>
+      } @else if (config()?.type === 'warning') {
+        <i class="bi bi-question-circle-fill"></i>
+      } @else {
+        <i class="bi bi-info-circle-fill"></i>
+      }
+    </div>
+
+    <!-- Título -->
+    <h2 class="modal-title">{{ config()?.title }}</h2>
+
+    <!-- Mensaje -->
+    <p class="modal-message">{{ config()?.message }}</p>
+
+    <!-- Botones de acción -->
+    <div class="modal-actions">
+      <button 
+        class="btn-cancel" 
+        (click)="cancel()"
+        type="button">
+        {{ config()?.cancelText || 'Cancelar' }}
+      </button>
+      <button 
+        class="btn-confirm" 
+        (click)="confirm()"
+        type="button"
+        [class.danger]="config()?.type === 'danger'">
+        {{ config()?.confirmText || 'Aceptar' }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -36,7 +36,7 @@ export interface AllChartsResponse {
   providedIn: 'root'
 })
 export class ChartsService {
-  private baseUrl = 'http://localhost:3001/api/charts';
+  private baseUrl = 'http://localhost:3002/api/charts';
 
   constructor(private http: HttpClient) { }
 

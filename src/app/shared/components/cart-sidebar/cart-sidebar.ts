@@ -5,6 +5,7 @@ import { CartStore } from '../../../core/services/cart.store';
 import { CheckoutService } from '../../../core/services/checkout.service';
 import { OrderConfirmationService } from '../../../core/services/order-confirmation.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { ConfirmationService } from '../../../core/services/confirmation.service';
 
 /**
  * CartSidebar Component - Responsabilidad única: UI del carrito
@@ -26,6 +27,7 @@ export class CartSidebar {
   private checkoutService = inject(CheckoutService);
   private confirmationService = inject(OrderConfirmationService);
   private notificationService = inject(NotificationService);
+  private confirmService = inject(ConfirmationService);
   
   // Servicios públicos para el template
   cartStore = inject(CartStore);
@@ -52,13 +54,21 @@ export class CartSidebar {
     this.cartStore.removeItem(itemId);
   }
 
-  clearCart(): void {
-    if (this.notificationService.confirm('¿Estás seguro de vaciar el carrito?')) {
+  async clearCart(): Promise<void> {
+    const confirmed = await this.confirmService.confirm({
+      title: 'Vaciar Carrito',
+      message: '¿Estás seguro de vaciar el carrito?',
+      confirmText: 'Sí, vaciar',
+      cancelText: 'Cancelar',
+      type: 'warning'
+    });
+    
+    if (confirmed) {
       this.cartStore.clearCart();
     }
   }
 
-  checkout(): void {
+  async checkout(): Promise<void> {
     const items = this.cartStore.items();
     
     // Validar carrito
@@ -69,9 +79,13 @@ export class CartSidebar {
     }
     
     // Confirmar con el usuario
-    const confirmed = this.notificationService.confirm(
-      `¿Confirmar orden de ${items.length} producto(s) por $${this.cartStore.total()}?`
-    );
+    const confirmed = await this.confirmService.confirm({
+      title: 'Confirmar Orden',
+      message: `¿Confirmar orden de ${items.length} producto(s) por $${this.cartStore.total()}?`,
+      confirmText: 'Confirmar',
+      cancelText: 'Cancelar',
+      type: 'info'
+    });
     
     if (!confirmed) {
       return;

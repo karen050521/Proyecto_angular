@@ -13,7 +13,26 @@
 				<img [src]="menu.product?.imageUrl" [alt]="menu.product?.name" />
 			</div>
 			<div class="menu-image menu-image-placeholder" *ngIf="!menu.product?.imageUrl">
-				<span>🍽️</span>
+				<!-- Patrón decorativo de fondo -->
+				<div class="placeholder-pattern">
+					<i class="bi bi-circle-fill pattern-dot"></i>
+					<i class="bi bi-circle-fill pattern-dot"></i>
+					<i class="bi bi-circle-fill pattern-dot"></i>
+					<i class="bi bi-circle-fill pattern-dot"></i>
+					<i class="bi bi-circle-fill pattern-dot"></i>
+					<i class="bi bi-circle-fill pattern-dot"></i>
+				</div>
+				<!-- Iconos decorativos flotantes -->
+				<div class="placeholder-icons">
+					<i class="bi bi-cup-hot floating-icon icon-1"></i>
+					<i class="bi bi-egg-fried floating-icon icon-2"></i>
+					<i class="bi bi-basket-fill floating-icon icon-3"></i>
+				</div>
+				<!-- Icono principal -->
+				<div class="placeholder-main">
+					<i class="bi bi-dish-fill main-dish-icon"></i>
+					<p class="placeholder-text">{{ menu.product?.name || 'Delicioso platillo' }}</p>
+				</div>
 			</div>
 
 			<!-- Información del producto -->
@@ -38,13 +57,12 @@
 							<button class="qty-btn-card" (click)="increaseQuantity(menu.id)">
 								<i class="bi bi-plus"></i>
 							</button>
-						</div>
-						<!-- Icono de carrito al lado -->
-						<button class="btn-cart-icon" (click)="openCart()" title="Ver carrito">
-							<i class="bi bi-cart3"></i>
-							<span class="cart-mini-badge">{{ cartStore.itemCount() }}</span>
-						</button>
 					</div>
+					<!-- Icono de carrito al lado SIN badge -->
+					<button class="btn-cart-icon" (click)="openCart()" title="Ver carrito">
+						<i class="bi bi-cart3"></i>
+					</button>
+				</div>
 				} @else {
 					<!-- Botón agregar al carrito cuando no está -->
 					<button class="btn-add-cart" (click)="addToCart(menu)">

@@ -22,7 +22,25 @@
         />
       </div>
       <div class="restaurant-image restaurant-placeholder" *ngIf="!restaurant.imageUrl">
-        <span>🍽️</span>
+        <!-- Patrón decorativo de fondo -->
+        <div class="placeholder-pattern">
+          <i class="bi bi-circle-fill pattern-dot"></i>
+          <i class="bi bi-circle-fill pattern-dot"></i>
+          <i class="bi bi-circle-fill pattern-dot"></i>
+          <i class="bi bi-circle-fill pattern-dot"></i>
+          <i class="bi bi-circle-fill pattern-dot"></i>
+          <i class="bi bi-circle-fill pattern-dot"></i>
+        </div>
+        <!-- Iconos decorativos flotantes -->
+        <div class="placeholder-icons">
+          <i class="bi bi-cup-hot floating-icon icon-1"></i>
+          <i class="bi bi-egg-fried floating-icon icon-2"></i>
+          <i class="bi bi-basket-fill floating-icon icon-3"></i>
+        </div>
+        <!-- Icono principal -->
+        <div class="placeholder-main">
+          <i class="bi bi-shop-window main-restaurant-icon"></i>
+        </div>
       </div>
 
       <!-- Información del restaurante -->

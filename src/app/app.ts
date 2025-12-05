@@ -5,11 +5,12 @@ import { HeaderComponent } from './shared/components/Header/header.Component';
 import { FloatingChatComponent } from './shared/components/floating-chat/floating-chat';
 import { CartSidebar } from './shared/components/cart-sidebar/cart-sidebar';
 import { OrderConfirmationModal } from './shared/components/order-confirmation-modal/order-confirmation-modal';
+import { ConfirmationModalComponent } from './shared/components/confirmation-modal/confirmation-modal';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SlideBar, HeaderComponent, FloatingChatComponent, CartSidebar, OrderConfirmationModal],
+  imports: [RouterOutlet, SlideBar, HeaderComponent, FloatingChatComponent, CartSidebar, OrderConfirmationModal, ConfirmationModalComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

@@ -38,7 +38,7 @@ export class ChatComponent {
 
     try {
       // Lógica para consumir el backend local que llama a Gemini
-      const response = await fetch('http://localhost:3001/api/gemini', {
+      const response = await fetch('http://localhost:3002/api/gemini', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

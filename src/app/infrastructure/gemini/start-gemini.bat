@@ -17,7 +17,7 @@ if not exist "node_modules\" (
 )
 
 echo.
-echo Iniciando servidor en http://localhost:3001
+echo Iniciando servidor en http://localhost:3002
 echo Presiona Ctrl+C para detener el servidor
 echo ========================================
 echo.

@@ -40,7 +40,14 @@
         <div class="cart-item" *ngFor="let item of cartStore.items()">
           <!-- Imagen del producto (placeholder) -->
           <div class="item-image">
-            <i class="bi bi-image-fill"></i>
+            <!-- Patrón decorativo de fondo -->
+            <div class="cart-placeholder-pattern">
+              <i class="bi bi-circle-fill cart-pattern-dot"></i>
+              <i class="bi bi-circle-fill cart-pattern-dot"></i>
+              <i class="bi bi-circle-fill cart-pattern-dot"></i>
+            </div>
+            <!-- Icono principal -->
+            <i class="bi bi-dish-fill"></i>
           </div>
 
           <!-- Info del item -->

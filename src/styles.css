@@ -204,3 +204,44 @@ html {
   }
 }
 
+/* ===== ICONOS BOOTSTRAP - COLOR AZUL GLOBAL ===== */
+/* Todos los iconos Bootstrap Icons son azules por defecto */
+.bi,
+[class^="bi-"],
+[class*=" bi-"] {
+  color: #2563eb !important;
+}
+
+/* Excepciones específicas donde se necesita otro color */
+.bi.text-white,
+.bi-white,
+.placeholder-icons .bi,
+.placeholder-icons i,
+.floating-icon,
+.pattern-dot,
+.main-dish-icon,
+.main-restaurant-icon,
+.placeholder-text,
+.placeholder-pattern i,
+.cart-placeholder-pattern i {
+  color: white !important;
+}
+
+.bi.text-red,
+.bi-danger,
+.cart-mini-badge {
+  color: #ef4444 !important;
+}
+
+.bi.text-green,
+.bi-success {
+  color: #10b981 !important;
+}
+
+/* Hover states mantienen el azul pero más oscuro */
+button:hover .bi,
+a:hover .bi,
+.clickable:hover .bi {
+  color: #1d4ed8 !important;
+}
+

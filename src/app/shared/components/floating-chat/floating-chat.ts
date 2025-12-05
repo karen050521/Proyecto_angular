@@ -64,7 +64,7 @@ export class FloatingChatComponent implements AfterViewChecked {
 
     try {
       // Llamar al backend de Gemini
-      const response = await fetch('http://localhost:3001/api/gemini', {
+      const response = await fetch('http://localhost:3002/api/gemini', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -102,7 +102,7 @@ export class FloatingChatComponent implements AfterViewChecked {
       
       this.messages.push({
         id: this.messages.length + 1,
-        text: 'Lo siento, hubo un error al procesar tu mensaje. Asegúrate de que el servidor de Gemini esté ejecutándose en http://localhost:3001',
+        text: 'Lo siento, hubo un error al procesar tu mensaje. Asegúrate de que el servidor de Gemini esté ejecutándose en http://localhost:3002',
         time: errorTimeStr,
         type: 'received'
       });
